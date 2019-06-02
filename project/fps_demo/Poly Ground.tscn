@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://tutorial/basic_metal.material" type="Material" id=1]
+[ext_resource path="res://tutorial/ground.material" type="Material" id=2]
+
+[sub_resource type="PlaneMesh" id=12]
+size = Vector2( 10, 10 )
+
+[sub_resource type="BoxShape" id=13]
+extents = Vector3( 10.0533, 0.0272487, 10.0304 )
+
+[sub_resource type="CubeMesh" id=3]
+size = Vector3( 2, 2, 20 )
+
+[sub_resource type="BoxShape" id=4]
+extents = Vector3( 1, 1.50414, 10.0084 )
+
+[node name="Poly Ground" type="Spatial"]
+
+[node name="FloorPlane" type="MeshInstance" parent="."]
+mesh = SubResource( 12 )
+material/0 = ExtResource( 2 )
+
+[node name="StaticBody" type="StaticBody" parent="FloorPlane"]
+
+[node name="CollisionShape" type="CollisionShape" parent="FloorPlane/StaticBody"]
+shape = SubResource( 13 )
+
+[node name="WallPlane1" type="MeshInstance" parent="."]
+transform = Transform( 1.2, 0, 0, 0, 0.173648, 0.984808, 0, -0.984808, 0.173648, -1.16992, 9.50499, 10.1673 )
+mesh = SubResource( 12 )
+material/0 = ExtResource( 2 )
+
+[node name="StaticBody" type="StaticBody" parent="WallPlane1"]
+
+[node name="CollisionShape" type="CollisionShape" parent="WallPlane1/StaticBody"]
+shape = SubResource( 13 )
+
+[node name="WallPlane2" type="MeshInstance" parent="."]
+transform = Transform( -5.24537e-08, 0.707107, -0.707107, 0, 0.707107, 0.707107, 1.2, 3.09086e-08, -3.09086e-08, -14.1414, 6.41905, 1.12248 )
+mesh = SubResource( 12 )
+material/0 = ExtResource( 2 )
+
+[node name="StaticBody" type="StaticBody" parent="WallPlane2"]
+
+[node name="CollisionShape" type="CollisionShape" parent="WallPlane2/StaticBody"]
+shape = SubResource( 13 )
+
+[node name="Ledge1" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1.5, 0 )
+mesh = SubResource( 3 )
+material/0 = ExtResource( 1 )
+
+[node name="StaticBody" type="StaticBody" parent="Ledge1"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Ledge1/StaticBody"]
+shape = SubResource( 4 )
+
+[node name="Ledge2" type="MeshInstance" parent="."]
+transform = Transform( -4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, -0.5, -10 )
+mesh = SubResource( 3 )
+material/0 = ExtResource( 1 )
+
+[node name="StaticBody" type="StaticBody" parent="Ledge2"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Ledge2/StaticBody"]
+shape = SubResource( 4 )
