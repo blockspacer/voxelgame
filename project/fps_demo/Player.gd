@@ -1,6 +1,6 @@
 extends KinematicBody
 
-onready var Line = preload("res://tutorial/DrawLine3D.gd").new() 
+onready var Line = preload("res://fps_demo/DrawLine3D.gd").new() 
 var i:int = 0
 
 
