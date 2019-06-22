@@ -29,14 +29,55 @@ var i:int = 0
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	terrain = get_node("../VoxelTerrain")
-	
 	add_child(Line)
+	#Line.DrawCube(Vector3(0, 55, -14), 1, Color(0.8,0.52,0.25, 1), 1) 
+	
+	#terrain = get_node("/root/Spatial").terrain 
+	terrain = get_node("../VoxelTerrain")
+	assert terrain!=null
 
 
-func _process(delta):
-	$"../UI/FPS".text = "FPS: " + String(Engine.get_frames_per_second())	
-			
+
+
+func draw_ground_box(center_pos):
+	var purple = Color(1,0,1,1)
+	var left_front  = Vector3(-1.5, 1,-1.5)
+	var left_back   = Vector3(-1.5, 1, 1.5)
+	var right_front = Vector3( 1.5, 1,-1.5)
+	var right_back  = Vector3( 1.5, 1, 1.5)
+	var DOWN = Vector3(0, -1, 0)
+	
+	var points = [] # [center, left_front, right_front, left_back, right_back ]
+	
+	var hit = center_pos+Vector3(0, -2.25, 0)
+	points.append(hit)
+	#terrain.raycast(center_pos, DOWN, 10)
+	#if(hit):	points.append(hit.prev_position)
+	hit = terrain.raycast(center_pos + left_front, DOWN, 40)
+	if(hit):	points.append(hit.prev_position)
+	hit = terrain.raycast(center_pos + right_front, DOWN, 40)
+	if(hit):	points.append(hit.prev_position)
+	hit = terrain.raycast(center_pos + left_back, DOWN, 40)
+	if(hit):	points.append(hit.prev_position)
+	hit = terrain.raycast(center_pos + right_back, DOWN, 40)
+	if(hit):	points.append(hit.prev_position)
+
+	var c = points.size()
+	if(c>1):
+		Line.DrawLine(points[1], points[0], purple, 0.0167)
+	if(c>2): 
+		Line.DrawLine(points[2], points[0], purple, 0.0167)
+		Line.DrawLine(points[1], points[2], purple, 0.0167)
+	if(c>3): 
+		Line.DrawLine(points[3], points[0], purple, 0.0167)
+		Line.DrawLine(points[1], points[3], purple, 0.0167)
+	if(c>4): 
+		Line.DrawLine(points[4], points[0], purple, 0.0167)
+		Line.DrawLine(points[4], points[2], purple, 0.0167)
+		Line.DrawLine(points[4], points[3], purple, 0.0167)
+
+
+
 	
 func _physics_process(delta):
 		
@@ -45,9 +86,16 @@ func _physics_process(delta):
 	var head_position = get_translation()
 	snap = -1
 
-	#Line.DrawRay(head_position, direction*100.0, Color(1,0,0), 1)
-	#Line.DrawRay(knee_position, direction*50, Color(0,1,0), 1)
-	#Line.DrawRay(foot_position, direction*50, Color(0,0,1), 1)
+
+	$"../UI/VBox/FPS".text = "FPS: " + String(Engine.get_frames_per_second())	
+	$"../UI/VBox/Position".text = "Position: " + String(head_position)	
+	#Line.DrawCube(head_position+Vector3(0,-1.25,0), 2, Color(0,0,0, 1), 0.0167) 
+	
+	#draw_ground_box(head_position)		# Do something with this slope information
+	
+	
+
+
 	
 	
 	if Input.is_action_pressed("move_forward"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
@@ -69,9 +117,9 @@ func _physics_process(delta):
 	# Apply gravity to downward velocity
 	velocity.y += delta*GRAVITY
 	# But clamp it if we hit the ground
-	if terrain.raycast(head_position, Vector3(0,-1,0), 1.75): #PLAYER_HEIGHT): # At <=1.5 ride gets very bumpy
-		velocity.y = clamp(velocity.y, 0, 999999999999)
-		on_ground = true 
+#	if terrain.raycast(head_position, Vector3(0,-1,0), 1.75): #PLAYER_HEIGHT): # At <=1.5 ride gets very bumpy
+#		velocity.y = clamp(velocity.y, 0, 999999999)
+#		on_ground = true 
 
 	var hvelocity = velocity				# Apply desired direction to horizontal velocity
 	hvelocity.y = 0
@@ -102,6 +150,7 @@ func _physics_process(delta):
 
 # Raycast collision (Smooth)	
 func test_and_move(pos, dir) -> Vector3:
+	return dir
 	# If raycast hits at feet level (-1.5)
 	if terrain.raycast(Vector3(pos.x, pos.y-1.5, pos.z), dir, 1):
 	
