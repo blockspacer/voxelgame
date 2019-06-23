@@ -117,9 +117,9 @@ func _physics_process(delta):
 	# Apply gravity to downward velocity
 	velocity.y += delta*GRAVITY
 	# But clamp it if we hit the ground
-#	if terrain.raycast(head_position, Vector3(0,-1,0), 1.75): #PLAYER_HEIGHT): # At <=1.5 ride gets very bumpy
-#		velocity.y = clamp(velocity.y, 0, 999999999)
-#		on_ground = true 
+	if terrain.raycast(head_position, Vector3(0,-1,0), 1.75): #PLAYER_HEIGHT): # At <=1.5 ride gets very bumpy
+		velocity.y = clamp(velocity.y, 0, 999999999)
+		on_ground = true 
 
 	var hvelocity = velocity				# Apply desired direction to horizontal velocity
 	hvelocity.y = 0
@@ -150,7 +150,7 @@ func _physics_process(delta):
 
 # Raycast collision (Smooth)	
 func test_and_move(pos, dir) -> Vector3:
-	return dir
+	#return dir
 	# If raycast hits at feet level (-1.5)
 	if terrain.raycast(Vector3(pos.x, pos.y-1.5, pos.z), dir, 1):
 	

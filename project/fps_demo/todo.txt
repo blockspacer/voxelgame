@@ -1,18 +1,15 @@
+* Work on shaders and normal texturing, blending based on normal
+
+* UI controls shadow performance, full screen, quit, stats, shader details
+
+* Use slope of ground to improve collision
 
 * Combine scenes into one
 	- Create terrains with code
 
-* UI controls shadow performance, full screen, quit, stats, shader details
-
-* Work on shaders and normal texturing, blending based on normal
-
-
-* Use slope of ground to improve collision
-
-
 
 * Implement firing add/destroy boxes
 
-* Cave generation algorithm
+* Cave generation algorithm (yt)
 
 * Add grass

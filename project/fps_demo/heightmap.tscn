@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://fps_demo/scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://fps_demo/assets/new.material" type="Material" id=2]
+[ext_resource path="res://fps_demo/assets/shaders/new_tri.material" type="Material" id=2]
 [ext_resource path="res://blocky_terrain/noise_distorted.png" type="Image" id=3]
 [ext_resource path="res://fps_demo/assets/desert_environment.tres" type="Environment" id=4]
-[ext_resource path="res://fps_demo/assets/basic_metal.material" type="Material" id=6]
+[ext_resource path="res://fps_demo/assets/materials/visaul-shader.material" type="Material" id=5]
+[ext_resource path="res://fps_demo/assets/materials/basic_metal.material" type="Material" id=6]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 5, 5 )
@@ -57,11 +58,10 @@ environment = ExtResource( 4 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="WorldEnvironment"]
 transform = Transform( 0.74221, 0.398819, -0.53858, 0, 0.803649, 0.595103, 0.670168, -0.441692, 0.596476, 0, 0, 0 )
-visible = false
 light_energy = 1.5
 shadow_enabled = true
 shadow_color = Color( 0.537255, 0.537255, 0.537255, 1 )
-directional_shadow_normal_bias = 0.0
+directional_shadow_normal_bias = 0.1
 directional_shadow_depth_range = 1
 directional_shadow_max_distance = 1024.0
 
@@ -70,7 +70,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 50.5, -5.25 )
 
 [node name="FloorPlane" type="MeshInstance" parent="Poly Ground"]
 mesh = SubResource( 1 )
-material/0 = ExtResource( 2 )
+material/0 = ExtResource( 5 )
 
 [node name="StaticBody" type="StaticBody" parent="Poly Ground/FloorPlane"]
 
@@ -118,7 +118,7 @@ material/0 = ExtResource( 6 )
 shape = SubResource( 4 )
 
 [node name="CSGPolygon" type="CSGPolygon" parent="Poly Ground"]
-transform = Transform( 0.268361, 0, -0.963318, 0, 1, 0, 0.963318, 0, 0.268361, 2.93218, 1.09826, 2.20933 )
+transform = Transform( 0.489783, 0, -2.4785, 0, 2.52643, 0, 2.4785, 0, 0.489783, -12.4658, 1.09826, -2.16464 )
 operation = 1
 mode = 1
 spin_degrees = 360.0
@@ -131,9 +131,9 @@ operation = 1
 material = ExtResource( 2 )
 
 [node name="Sphere" type="MeshInstance" parent="Poly Ground"]
-transform = Transform( -1.35793, 1.45788, -0.174932, -1.36834, -1.17002, 0.871027, 0.532589, 0.711082, 1.79185, 0.207328, 1.94851, 4.53739 )
+transform = Transform( 0.331986, -1.93844, -0.363617, 1.78509, 0.138552, 0.891204, -0.83858, -0.472477, 1.75316, -0.62105, 1.94851, -3.21797 )
 mesh = SubResource( 5 )
-material/0 = null
+material/0 = ExtResource( 2 )
 
 [node name="Cube" type="MeshInstance" parent="Poly Ground"]
 transform = Transform( 1.48339, 0, 1.34148, 0, 2, 0, -1.34148, 0, 1.48339, -6.80339, 2.06481, -4.45605 )
