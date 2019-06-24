@@ -37,6 +37,15 @@ func _ready():
 	assert terrain!=null
 
 
+#if event is InputEventKey and Input.is_key_pressed(KEY_P):		
+	var s = get_node("../Poly Ground/Sphere")
+	print ("Node: ", s.name)
+	print ("Surfaces: ", s.get_surface_material_count())
+	var sm = s.get_surface_material(0)
+	print ("Resource name: ", sm.resource_name)
+	print ("Tex channel: ", sm.ao_texture_channel)
+	print ("Tex width: ", sm.ao_texture.get_width())
+	print ("Tex light affect: ", sm.ao_light_affect)
 
 
 func draw_ground_box(center_pos):
@@ -200,5 +209,6 @@ func _input(event):
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
-		
+
+
 			

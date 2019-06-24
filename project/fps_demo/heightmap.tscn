@@ -4,8 +4,8 @@
 [ext_resource path="res://fps_demo/assets/shaders/new_tri.material" type="Material" id=2]
 [ext_resource path="res://blocky_terrain/noise_distorted.png" type="Image" id=3]
 [ext_resource path="res://fps_demo/assets/desert_environment.tres" type="Environment" id=4]
-[ext_resource path="res://fps_demo/assets/materials/visaul-shader.material" type="Material" id=5]
 [ext_resource path="res://fps_demo/assets/materials/basic_metal.material" type="Material" id=6]
+[ext_resource path="res://fps_demo/assets/materials/terrain-spatial.material" type="Material" id=8]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 5, 5 )
@@ -70,7 +70,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 50.5, -5.25 )
 
 [node name="FloorPlane" type="MeshInstance" parent="Poly Ground"]
 mesh = SubResource( 1 )
-material/0 = ExtResource( 5 )
+material/0 = ExtResource( 8 )
 
 [node name="StaticBody" type="StaticBody" parent="Poly Ground/FloorPlane"]
 
@@ -117,26 +117,18 @@ material/0 = ExtResource( 6 )
 [node name="CollisionShape" type="CollisionShape" parent="Poly Ground/Ledge4/StaticBody"]
 shape = SubResource( 4 )
 
-[node name="CSGPolygon" type="CSGPolygon" parent="Poly Ground"]
-transform = Transform( 0.489783, 0, -2.4785, 0, 2.52643, 0, 2.4785, 0, 0.489783, -12.4658, 1.09826, -2.16464 )
-operation = 1
-mode = 1
-spin_degrees = 360.0
-spin_sides = 8
-material = ExtResource( 2 )
-
-[node name="CSGSphere" type="CSGSphere" parent="Poly Ground/CSGPolygon"]
-transform = Transform( 1, 0, -5.96046e-08, 0, 1, 0, 5.96046e-08, 0, 1, 0, 0.00677109, -0.247498 )
-operation = 1
-material = ExtResource( 2 )
-
 [node name="Sphere" type="MeshInstance" parent="Poly Ground"]
-transform = Transform( 0.331986, -1.93844, -0.363617, 1.78509, 0.138552, 0.891204, -0.83858, -0.472477, 1.75316, -0.62105, 1.94851, -3.21797 )
+transform = Transform( -0.474944, -1.53563, 1.19007, 1.78509, 0.138552, 0.891204, -0.76672, 1.27382, 1.33773, -1.60074, 2.40347, -4.18782 )
+mesh = SubResource( 5 )
+material/0 = ExtResource( 8 )
+
+[node name="Sphere2" type="MeshInstance" parent="Poly Ground"]
+transform = Transform( -0.550789, -1.39746, 1.32051, -1.28181, -0.756913, -1.33569, 1.43303, -1.21415, -0.687195, 2.20599, 2.49675, -3.37938 )
 mesh = SubResource( 5 )
 material/0 = ExtResource( 2 )
 
 [node name="Cube" type="MeshInstance" parent="Poly Ground"]
-transform = Transform( 1.48339, 0, 1.34148, 0, 2, 0, -1.34148, 0, 1.48339, -6.80339, 2.06481, -4.45605 )
+transform = Transform( 0.620375, 0, 1.90135, 0, 2, 0, -1.90135, 0, 0.620375, 5.70022, 1.9331, -0.757108 )
 mesh = SubResource( 6 )
 material/0 = ExtResource( 2 )
 
