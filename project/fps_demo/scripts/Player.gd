@@ -44,7 +44,7 @@ func _ready():
 	var sm = s.get_surface_material(0)
 	print ("Resource name: ", sm.resource_name)
 	print ("Tex channel: ", sm.ao_texture_channel)
-	print ("Tex width: ", sm.ao_texture.get_width())
+	#print ("Tex width: ", sm.ao_texture.get_width())
 	print ("Tex light affect: ", sm.ao_light_affect)
 
 

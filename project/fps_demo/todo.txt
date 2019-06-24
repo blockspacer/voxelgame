@@ -1,4 +1,5 @@
-* Work on shaders and normal texturing, blending based on normal
+* Blend between top & bottom
+* Add noise option to obscure tiling
 
 * UI controls shadow performance, full screen, quit, stats, shader details
 
@@ -6,6 +7,7 @@
 
 * Combine scenes into one
 	- Create terrains with code
+	- Move textures to one folder
 
 
 * Implement firing add/destroy boxes
