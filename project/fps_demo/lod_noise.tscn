@@ -1,14 +1,10 @@
 [gd_scene load_steps=14 format=2]
 
-[ext_resource path="res://fps_demo/_archive/visaul-shader.material" type="Material" id=1]
+[ext_resource path="res://fps_demo/materials/block_wall.material" type="Material" id=1]
 [ext_resource path="res://fps_demo/scripts/Player.gd" type="Script" id=2]
 [ext_resource path="res://fps_demo/textures/desert_environment.tres" type="Environment" id=3]
-[ext_resource path="res://fps_demo/_archive/basic_metal.material" type="Material" id=4]
-[ext_resource path="res://dmc_terrain/dmc_terrain_material.tres" type="Material" id=5]
-
-
-
-
+[ext_resource path="res://fps_demo/materials/metal.material" type="Material" id=4]
+[ext_resource path="res://fps_demo/materials/grass-rock.material" type="Material" id=5]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 5, 5 )
@@ -97,7 +93,6 @@ material/0 = ExtResource( 4 )
 shape = SubResource( 4 )
 
 [node name="VoxelTerrain" type="VoxelLodTerrain" parent="."]
-visible = false
 stream = SubResource( 6 )
 viewer_path = NodePath("../Player")
 material = ExtResource( 5 )

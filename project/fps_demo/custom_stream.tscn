@@ -1,14 +1,10 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://fps_demo/_archive/visaul-shader.material" type="Material" id=1]
+[ext_resource path="res://fps_demo/materials/block_wall.material" type="Material" id=1]
 [ext_resource path="res://fps_demo/scripts/Player.gd" type="Script" id=2]
 [ext_resource path="res://fps_demo/textures/desert_environment.tres" type="Environment" id=3]
-[ext_resource path="res://fps_demo/_archive/basic_metal.material" type="Material" id=4]
+[ext_resource path="res://fps_demo/materials/metal.material" type="Material" id=4]
 [ext_resource path="res://fps_demo/scripts/CodeTerrain.gd" type="Script" id=6]
-
-
-
-
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 5, 5 )

@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/dirt_albedo.png-d3b532acfbbcc43390739fe9698c56b4.s3tc.stex"
-path.etc2="res://.import/dirt_albedo.png-d3b532acfbbcc43390739fe9698c56b4.etc2.stex"
+path.s3tc="res://.import/grass01_albedo.jpg-7f3e3f45d2894df0a2c0ee7e82bc6a1a.s3tc.stex"
+path.etc2="res://.import/grass01_albedo.jpg-7f3e3f45d2894df0a2c0ee7e82bc6a1a.etc2.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc2" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://fps_demo/textures/dirt_albedo.png"
-dest_files=[ "res://.import/dirt_albedo.png-d3b532acfbbcc43390739fe9698c56b4.s3tc.stex", "res://.import/dirt_albedo.png-d3b532acfbbcc43390739fe9698c56b4.etc2.stex" ]
+source_file="res://fps_demo/textures/grass01_albedo.jpg"
+dest_files=[ "res://.import/grass01_albedo.jpg-7f3e3f45d2894df0a2c0ee7e82bc6a1a.s3tc.stex", "res://.import/grass01_albedo.jpg-7f3e3f45d2894df0a2c0ee7e82bc6a1a.etc2.stex" ]
 
 [params]
 

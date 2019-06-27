@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/forrest_ground_01_rough_ao_1k.jpg-57cbf8a006d17280b9ac1477e493f530.stex"
+path="res://.import/grass01_height.png-b4e65e9c9253c246252b99ef0e1d6c94.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://fps_demo/textures/forrest_ground/forrest_ground_01_rough_ao_1k.jpg"
-dest_files=[ "res://.import/forrest_ground_01_rough_ao_1k.jpg-57cbf8a006d17280b9ac1477e493f530.stex" ]
+source_file="res://fps_demo/textures/grass01_height.png"
+dest_files=[ "res://.import/grass01_height.png-b4e65e9c9253c246252b99ef0e1d6c94.stex" ]
 
 [params]
 

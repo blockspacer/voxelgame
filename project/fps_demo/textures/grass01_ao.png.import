@@ -2,8 +2,8 @@
 
 importer="texture"
 type="StreamTexture"
-path.s3tc="res://.import/forrest_ground_01_ao_1k.jpg-d39a4941dd277b6105c5438af05eea16.s3tc.stex"
-path.etc2="res://.import/forrest_ground_01_ao_1k.jpg-d39a4941dd277b6105c5438af05eea16.etc2.stex"
+path.s3tc="res://.import/grass01_ao.png-4ac82059c55d6528130d32f34bbebd2c.s3tc.stex"
+path.etc2="res://.import/grass01_ao.png-4ac82059c55d6528130d32f34bbebd2c.etc2.stex"
 metadata={
 "imported_formats": [ "s3tc", "etc2" ],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://fps_demo/textures/forrest_ground/forrest_ground_01_ao_1k.jpg"
-dest_files=[ "res://.import/forrest_ground_01_ao_1k.jpg-d39a4941dd277b6105c5438af05eea16.s3tc.stex", "res://.import/forrest_ground_01_ao_1k.jpg-d39a4941dd277b6105c5438af05eea16.etc2.stex" ]
+source_file="res://fps_demo/textures/grass01_ao.png"
+dest_files=[ "res://.import/grass01_ao.png-4ac82059c55d6528130d32f34bbebd2c.s3tc.stex", "res://.import/grass01_ao.png-4ac82059c55d6528130d32f34bbebd2c.etc2.stex" ]
 
 [params]
 

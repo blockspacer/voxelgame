@@ -1,5 +1,7 @@
-* Blend between top & bottom
+
+* Ray casting on camera
 * Add noise option to obscure tiling
+http://www.iquilezles.org/www/articles/texturerepetition/texturerepetition.htm
 
 * UI controls shadow performance, full screen, quit, stats, shader details
 
