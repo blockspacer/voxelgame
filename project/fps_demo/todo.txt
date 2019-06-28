@@ -1,19 +1,41 @@
+* Raycasting on LOD
 
-* Ray casting on camera
+
 * Add noise option to obscure tiling
 http://www.iquilezles.org/www/articles/texturerepetition/texturerepetition.htm
 
-* UI controls shadow performance, full screen, quit, stats, shader details
+Figure out why/how VT is tiling the terrain panels and why it prevents the above
+
+
+
+* Ray casting on camera
 
 * Use slope of ground to improve collision
+
+* Add grass
+
+* UI controls shadow performance, full screen, quit, stats, shader details
 
 * Combine scenes into one
 	- Create terrains with code
 	- Move textures to one folder
 
-
 * Implement firing add/destroy boxes
 
 * Cave generation algorithm (yt)
 
-* Add grass
+
+* Rather than generating with opensimplexnoise, better to use existing GLSL code in a fragment shader?
+
+Voronoi, worley, musgrave noise
+
+
+Bugs:
+
+* Can't load material from code for terrain
+* Can't load LODterreain from code at all
+
+
+Low priority:
+* Sphinx documentation
+

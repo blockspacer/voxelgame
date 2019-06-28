@@ -4,7 +4,8 @@
 [ext_resource path="res://fps_demo/scripts/Player.gd" type="Script" id=2]
 [ext_resource path="res://fps_demo/textures/desert_environment.tres" type="Environment" id=3]
 [ext_resource path="res://fps_demo/materials/metal.material" type="Material" id=4]
-[ext_resource path="res://fps_demo/materials/grass-rock.material" type="Material" id=5]
+[ext_resource path="res://fps_demo/materials/grass-rock-dev.material" type="Material" id=5]
+
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 5, 5 )

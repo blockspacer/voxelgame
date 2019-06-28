@@ -1,12 +1,11 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://fps_demo/scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://fps_demo/materials/block_wall.material" type="Material" id=2]
 [ext_resource path="res://blocky_terrain/noise_distorted.png" type="Image" id=3]
 [ext_resource path="res://fps_demo/textures/desert_environment.tres" type="Environment" id=4]
 [ext_resource path="res://fps_demo/materials/metal.material" type="Material" id=5]
-[ext_resource path="res://fps_demo/materials/grass-rock.material" type="Material" id=6]
-[ext_resource path="res://fps_demo/materials/terrain-spatial.material" type="Material" id=8]
+[ext_resource path="res://fps_demo/materials/grass-rock.material" type="Material" id=7]
+[ext_resource path="res://fps_demo/materials/block-wall-spatial.material" type="Material" id=8]
 
 [sub_resource type="PlaneMesh" id=1]
 size = Vector2( 5, 5 )
@@ -21,7 +20,6 @@ size = Vector3( 0.5, 0.4, 9.166 )
 extents = Vector3( 0.25, 0.2, 3.5 )
 
 [sub_resource type="SphereMesh" id=5]
-material = ExtResource( 2 )
 
 [sub_resource type="CubeMesh" id=6]
 
@@ -128,12 +126,12 @@ material/0 = ExtResource( 5 )
 [node name="Sphere2" type="MeshInstance" parent="Poly Ground"]
 transform = Transform( 2, 0, 0, 0, 1.99999, 0, 0, 0, 2.00001, 2.20599, 2.49675, -3.37938 )
 mesh = SubResource( 5 )
-material/0 = ExtResource( 6 )
+material/0 = ExtResource( 7 )
 
 [node name="Cube" type="MeshInstance" parent="Poly Ground"]
 transform = Transform( 0.620375, 0, 1.90135, 0, 2, 0, -1.90135, 0, 0.620375, 5.70022, 1.9331, -0.757108 )
 mesh = SubResource( 6 )
-material/0 = ExtResource( 6 )
+material/0 = ExtResource( 8 )
 
 [node name="VoxelTerrain" type="VoxelTerrain" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.50109 )
@@ -142,7 +140,7 @@ voxel_library = SubResource( 10 )
 view_distance = 256
 viewer_path = NodePath("../Player")
 smooth_meshing_enabled = true
-material/0 = ExtResource( 6 )
+material/0 = ExtResource( 7 )
 
 [node name="Player" type="KinematicBody" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.1, 60, -5.25 )
@@ -162,6 +160,7 @@ mesh = SubResource( 12 )
 material/0 = null
 
 [node name="UI" type="Control" parent="."]
+visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 __meta__ = {

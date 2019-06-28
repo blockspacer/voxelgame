@@ -1,6 +1,6 @@
 [gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://fps_demo/materials/block_wall.material" type="Material" id=1]
+[ext_resource path="res://fps_demo/materials/block-wall-spatial.material" type="Material" id=1]
 [ext_resource path="res://fps_demo/scripts/Player.gd" type="Script" id=2]
 [ext_resource path="res://fps_demo/textures/desert_environment.tres" type="Environment" id=3]
 [ext_resource path="res://fps_demo/materials/metal.material" type="Material" id=4]
@@ -34,7 +34,7 @@ transform = Transform( 0.74221, 0.398819, -0.53858, 0, 0.803649, 0.595103, 0.670
 light_energy = 1.5
 shadow_enabled = true
 shadow_color = Color( 0.537255, 0.537255, 0.537255, 1 )
-directional_shadow_normal_bias = 0.0
+directional_shadow_normal_bias = 0.4
 
 [node name="Poly Ground" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 52, 0 )
