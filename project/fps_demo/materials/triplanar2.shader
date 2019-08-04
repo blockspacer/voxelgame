@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley;
+render_mode diffuse_burley,world_vertex_coords;
 
 // A is the top texture
 // B is the sides and bottom
@@ -15,7 +15,7 @@ uniform float 		A_ao_strength : hint_range(-1., 1.0) = 1.;
 uniform vec4 		A_ao_texture_channel = vec4(1., 0., 0., 0.);		// Only use one channel: Red, Green, Blue, Alpha
 uniform sampler2D 	A_ao_map : hint_white;
 uniform float 		A_tri_blend_sharpness : hint_range(0.001, 50.0) = 50.;
-uniform int 		A_uv_tiles : hint_range(1, 16) = 1;
+uniform float 		A_uv_scale : hint_range(0.01, .4) = .25;
 uniform vec3 		A_uv_offset;
 
 uniform bool		B_albedo_enabled = true;
@@ -29,7 +29,7 @@ uniform float 		B_ao_strength : hint_range(-1., 1.0) = 1.;
 uniform vec4 		B_ao_texture_channel = vec4(1., 0., 0., 0.);		// Only use one channel: Red, Green, Blue, Alpha
 uniform sampler2D 	B_ao_map : hint_white;
 uniform float 		B_tri_blend_sharpness : hint_range(0.001, 50.0) = 50.;
-uniform int 		B_uv_tiles : hint_range(1, 16) = 1;
+uniform float 		B_uv_scale : hint_range(0.01, .4) = 0.0625;
 uniform vec3 		B_uv_offset;
 
 uniform float 		AB_mix1 : hint_range(-10., 0.) = -6.;
@@ -54,24 +54,55 @@ void vertex() {
 
     A_uv_power_normal=pow(abs(NORMAL),vec3(A_tri_blend_sharpness));
     A_uv_power_normal/=dot(A_uv_power_normal,vec3(1.0));
-    A_uv_triplanar_pos = VERTEX * float(A_uv_tiles) / (16.) + A_uv_offset;			//On VoxelTerrain 16 is 100% size, so uv_tile is multiples of 16. 
+    A_uv_triplanar_pos = VERTEX * A_uv_scale  + A_uv_offset; 
 	A_uv_triplanar_pos *= vec3(1.0,-1.0, 1.0);
 	
     B_uv_power_normal=pow(abs(NORMAL),vec3(B_tri_blend_sharpness));
     B_uv_power_normal/=dot(B_uv_power_normal,vec3(1.0));
-    B_uv_triplanar_pos = VERTEX * float(B_uv_tiles) / (16.)  + B_uv_offset;
+    B_uv_triplanar_pos = VERTEX * B_uv_scale   + B_uv_offset;
 	B_uv_triplanar_pos *= vec3(1.0,-1.0, 1.0);
 	
 	v_world_normal = NORMAL;	
 }
 
 
+// This untiles textures with only two sample lookups
+// http://www.iquilezles.org/www/articles/texturerepetition/texturerepetition.htm
+uniform sampler2D 	noise_texture : hint_white;
+float sum( vec4 v ) { return v.x+v.y+v.z; }
+
+vec4 untiled_texture(sampler2D samp, in vec2 uv) {
+	 // sample variation pattern    
+	float k = texture( noise_texture, 0.005*uv ).x; // cheap (cache friendly) lookup    
+	
+	// compute index    
+	float index = k*8.0;
+	float i = floor( index );
+	float f = fract( index );
+	
+	// offsets for the different virtual patterns    
+	vec2 offa = sin(vec2(3.0,7.0)*(i+0.0)); // can replace with any other hash    
+	vec2 offb = sin(vec2(3.0,7.0)*(i+1.0)); // can replace with any other hash    
+	
+	// compute derivatives for mip-mapping    
+	vec2 dx = dFdx(uv);
+	vec2 dy = dFdy(uv);
+	
+	// sample the two closest virtual patterns    
+	vec4 cola = textureGrad( samp, uv + offa, dx, dy );
+	vec4 colb = textureGrad( samp, uv + offb, dx, dy );
+	
+	// interpolate between the two virtual patterns    
+	return mix( cola, colb, smoothstep(0.2,0.8,f-0.1*sum(cola-colb)) );
+}
+
+
 vec4 triplanar_texture(sampler2D p_sampler, vec3 p_weights, vec3 p_triplanar_pos) {
-        vec4 samp=vec4(0.0);
-        samp+= texture(p_sampler,p_triplanar_pos.xy) * p_weights.z;
-        samp+= texture(p_sampler,p_triplanar_pos.xz) * p_weights.y;
-        samp+= texture(p_sampler,p_triplanar_pos.zy * vec2(-1.0,1.0)) * p_weights.x;
-        return samp;
+	vec4 samp=vec4(0.0);
+	samp+= untiled_texture(p_sampler,p_triplanar_pos.xy) * p_weights.z;
+	samp+= untiled_texture(p_sampler,p_triplanar_pos.xz) * p_weights.y;
+	samp+= untiled_texture(p_sampler,p_triplanar_pos.zy * vec2(-1.0,1.0)) * p_weights.x;
+	return samp;
 }
 
 
@@ -120,4 +151,3 @@ void fragment() {
 		NORMALMAP_DEPTH = mix(B_normal_strength, A_normal_strength, clamp(AB_mix1 + 10.*normal.y + AB_mix2*A_albedo.b , 0., 1.));
 	}
 }
-
