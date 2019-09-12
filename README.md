@@ -1,9 +1,12 @@
 Game Demos for Voxel Tools for Godot
 ===============================
 
-This project contains several demos to show off the different features of [Voxel Tools for Godot](https://github.com/Zylann/godot_voxel).
+This project is a fork of [Zylann's demo scenes](https://github.com/Zylann/voxelgame) for [Voxel Tools for Godot](https://github.com/Zylann/godot_voxel), a C++ module for the [Godot game engine](https://godotengine.org). 
 
-Voxel Tools is a C++ module for the [Godot game engine](https://godotengine.org). Godot must be built from source with Voxel Tools compiled into it. An instruction guide is provided in the VT repository docs.
+
+This fork contains Zylann's upstream projects and a shooter game demo that I wrote. It will not be merged upstream.
+
+To use it, you must build Godot from source with Voxel Tools compiled into it. An instruction guide is provided in the Voxel Tools repository linked above.
 
 VT is still a work in progress and is not yet feature complete. These scenes are just demos to learn from. Most voxel related issues should be reported to the VT repository above.
 
@@ -18,21 +21,14 @@ Screenshots
 
 
 
-Available Demos
-==================
+FPS (and 3RD Person) Demo
+==========================
 
-Each demo is in a separate directory under the following names. Double click a scene, then press F6 to run it.
-
-
-### fps_demo ###
-
-Contributed by [Cory Petkovsek](https://github.com/tinmanjuggernaut/).
-
-This demo has several example scenes. All have the following controls:
+Found in the fps_demo directory. This demo has several example scenes. Double click a scene, then press F6 to run it. All have the following controls:
 
 *Controls*
 * W/A/S/D/Space - Move player, Jump
-* Mouse wheel - Zoom between follow camera and first person
+* Mouse wheel - Move the camera between 3rd person and first person
 * Left mouse button - Shoot a bullet that adds terrain
 * Right mouse button - Shoot a bullet that destroys terrain
 * CTRL+mouse button - Shoot a bouncy ball that grows
@@ -59,6 +55,9 @@ This demo has several example scenes. All have the following controls:
   * grass-rock and grass-rock2.material - These are shaders that allow for separate top and sides/bottom textures, each having triplanar mapped albedo, normal and AO maps. V2 also detiles the textures so when viewed from a distance you don't see the repeating pattern of a tiled texture. It is however a little more expensive.
   * uv_checker.material - A numbered texture map for evaluating UVs.
 
+
+Zylann's Demos
+================
 
 ### blocky_terrain ###
 * main.tscn - VoxelTerrain with the blocky mesher, using a heightmap image for the source data. 
