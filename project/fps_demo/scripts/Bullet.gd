@@ -10,13 +10,13 @@ enum BULLET_TYPE {
 
 
 var terrain
-var type 					= BULLET_TYPE.BALL
-var GROWTH_SPEED:Vector3 	= Vector3(0.01,0.01,0.01)
-var EDIT_SIZE:float			= 4
-var MIN_DISTANCE:float		= 2
-var LIFE_TIME:int			= 60
-var growth_ticker:int		= 0
-var sound_played:bool 		= false
+var type 						= BULLET_TYPE.BALL
+var GROWTH_SPEED:Vector3 		= Vector3(0.01,0.01,0.01)
+var EDIT_SIZE:float				= 3.5
+onready var MIN_DISTANCE:float	= EDIT_SIZE*.75
+var LIFE_TIME:int				= 60
+var growth_ticker:int			= 0
+var sound_played:bool 			= false
 
 
 func _ready():	
