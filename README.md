@@ -32,13 +32,17 @@ Found in the fps_demo directory. This demo has several example scenes. Double cl
 * Left mouse button - Shoot a bullet that adds terrain
 * Right mouse button - Shoot a bullet that destroys terrain
 * CTRL+mouse button - Shoot a bouncy ball that grows
+* P - rotate between render modes (normal, no shading, overdraw, wireframe)
+* F - toggle full screen
+* Tab - toggle UI
+* Esc - toggle mouse capture
 
 *Demos*
 1. **heightmap_smooth.tscn** - VoxelTerrain using the smooth Dual Marching Cubes (DMC) mesher, and a heightmap image as the data source.
 1. **heightmap_blocky.tscn** - VoxelTerrain using the blocky mesher and a heightmap image as the data source. Textured with vertex-color.
 1. **heightmap_smooth_lod.tscn** - VoxelLODTerrain using a heightmap image. Supports Levels Of Detail(LOD). Terrain is not yet editable.
-1. **noise_smooth_lod.tscn** - VoxelLODTerrain using the smooth DMC mesher and OpenSimplexNoise as the data source. Supports Levels Of Detail(LOD). Terrain is not yet editable. Press 'N' to generate a new random terrain.
-1. **custom_stream.tscn** - Generates a VoxelTerrain from code, and provides a data source from code. Read through CodeTerrain.gd to see what options you can turn on and off to try out the different types of terrains.
+1. **noise_smooth_lod.tscn** - VoxelLODTerrain using the smooth DMC mesher and OpenSimplexNoise as the data source. Supports Levels Of Detail(LOD). Terrain is not yet editable. Press 'N' to generate a new terrain with randomized noise values.
+1. **custom_stream.tscn** - Generates a VoxelTerrain from code, and provides a data source from code. Read through CodeTerrain.gd to see what options you can turn on and off to try out the different types of terrains. Press 'Delete' to free the terrain and 'N' to regenerate it.
 
 *Notes*
 * The Player object exports a `Jump_is_jetpack` option in the Inspector to toggle jump/jetpack mode. It also exports walk and jump speeds.
