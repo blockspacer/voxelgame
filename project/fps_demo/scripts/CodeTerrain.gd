@@ -1,6 +1,6 @@
 """ This file shows you how to create a Voxel Tools terrain from code """
 
-extends Spatial
+extends "WorldCommon.gd"
 
 const MyStream = preload ("MyStream.gd")
 
@@ -87,7 +87,7 @@ func create_terrain():
 
 ### 5. Stop - Applicable to all
 
-	terrain.viewer_path = "/root/Spatial/Player"
+	terrain.viewer_path = "/root/World/Player"
 	terrain.name = "VoxelTerrain"
 	add_child(terrain)
 

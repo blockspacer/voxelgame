@@ -6,7 +6,7 @@
 [ext_resource path="res://fps_demo/support/player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://fps_demo/scripts/CodeTerrain.gd" type="Script" id=6]
 
-[node name="Spatial" type="Spatial"]
+[node name="World" type="Spatial"]
 script = ExtResource( 6 )
 
 [node name="UI" parent="." instance=ExtResource( 3 )]

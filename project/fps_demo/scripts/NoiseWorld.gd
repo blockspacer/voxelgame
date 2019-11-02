@@ -1,21 +1,16 @@
-extends Spatial
+extends "WorldCommon.gd"
 
 onready var terrain = $VoxelTerrain
 
 const MATERIAL = preload("res://fps_demo/materials/grass-rock2.material")
 
 func _ready():
-	randomize()
 	update_noise_ui()
 	
 func _input(event):
 	if event is InputEventKey and Input.is_key_pressed(KEY_N):
 		randomize_terrain()
-		
-	if event is InputEventKey and Input.is_key_pressed(KEY_TAB):
-		$UI_Noise.visible = !$UI_Noise.visible
-		$UI.visible = !$UI.visible
-
+	
 
 func randomize_terrain():	
 	terrain.queue_free()
@@ -33,7 +28,7 @@ func randomize_terrain():
 		
 	terrain.lod_count = 8
 	terrain.lod_split_scale = 3
-	terrain.viewer_path = "/root/Spatial/Player"
+	terrain.viewer_path = "/root/World/Player"
 	terrain.set_material(MATERIAL)
 	add_child(terrain)
 
