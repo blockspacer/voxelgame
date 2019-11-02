@@ -25,9 +25,7 @@ var 	   	camera_pos_lerp:float		= 0.0						# Current lerp position between 0 and
 
 
 func _ready():
-	randomize()
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-
+	pass
 
 func _physics_process(delta):
 	
@@ -82,12 +80,6 @@ func _physics_process(delta):
 	if camera_max_lerp>0:
 		check_camera_bounds()
 		
-		
-	#### Update HUD
-	
-	$"../UI/VBox/FPS".text = "FPS: " + String(Engine.get_frames_per_second())	
-	$"../UI/VBox/Position".text = "Position: " + String(global_transform.origin)	
-
 
 
 # If follow camera is on, and hits the terrain, pull it in closer to the player 
@@ -149,12 +141,12 @@ func _input(event):
 		camera_max_lerp -= .1
 		camera_max_lerp = clamp(camera_max_lerp, 0, 1)
 
-	if event is InputEventMouseButton and Input.is_mouse_button_pressed(BUTTON_WHEEL_DOWN):
+	elif event is InputEventMouseButton and Input.is_mouse_button_pressed(BUTTON_WHEEL_DOWN):
 		camera_max_lerp += .1
 		camera_max_lerp = clamp(camera_max_lerp, 0, 1)
 		
 		
-	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
+	elif event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
 		
 		# Rotate the camera around the player vertically
 		$CamNode.rotate_x(deg2rad(-event.relative.y * MOUSE_SENSITIVITY * 0.90625))
@@ -173,15 +165,7 @@ func _input(event):
 		self.rotate_y(deg2rad(event.relative.x * MOUSE_SENSITIVITY * -1))
 
 
-	if event is InputEventKey and Input.is_action_pressed("ui_cancel"):
-		if Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-
-
-
-	if event is InputEventMouseButton:
+	elif event is InputEventMouseButton:
 		if Input.is_action_pressed("shoot_add"):
 			firing_type = Bullet.BULLET_TYPE.ADD
 			firing = true
