@@ -132,6 +132,7 @@ func shoot_bullet():
 
 	bullet.set_linear_velocity(velocity - $Body/Shoulder/Gun.global_transform.basis.y * 30)
 	bullet.connect("painting", self, "_on_terrain_addition")
+	bullet.add_to_group("bullets")
 	get_parent().add_child(bullet)
 
 

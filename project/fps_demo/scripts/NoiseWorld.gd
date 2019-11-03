@@ -13,7 +13,8 @@ func _input(event):
 	
 
 func randomize_terrain():	
-	terrain.queue_free()
+	get_tree().call_group("bullets", "free")
+	terrain.free()
 	terrain = VoxelLodTerrain.new()
 	terrain.name = "VoxelTerrain"
 	

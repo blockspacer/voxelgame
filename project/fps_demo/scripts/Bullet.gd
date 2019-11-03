@@ -54,7 +54,7 @@ func _on_bullet_hit(body):
 		scale += GROWTH_SPEED
 		mass += GROWTH_SPEED.x
 		growth_ticker = OS.get_ticks_msec()
-	if body.name == "VoxelTerrain" and type != BULLET_TYPE.BALL:
+	if type != BULLET_TYPE.BALL and body.name == "VoxelTerrain":
 		paint_sphere(global_transform.origin, EDIT_SIZE, type)
 		queue_free()
 
