@@ -1,14 +1,13 @@
 Game Demos for Voxel Tools for Godot
 ===============================
 
-This project is a fork of [Zylann's demo scenes](https://github.com/Zylann/voxelgame) for [Voxel Tools for Godot](https://github.com/Zylann/godot_voxel), a C++ module for the [Godot game engine](https://godotengine.org). 
+This project is a collection of demos for Zylann's [Voxel Tools for Godot](https://github.com/Zylann/godot_voxel), a C++ module for the [Godot game engine](https://godotengine.org).
 
+To use it, you need a version of Godot built with Voxel Tools. You can [download my binaries](http://tokisan.com/godot-binaries/). Or you can build Godot from source by following the instructions in the Voxel Tools repository linked above. 
 
-This fork contains Zylann's upstream projects and a shooter game demo that I wrote. It will not be merged upstream.
+Voxel Tools is alpha software and not yet feature complete. These scenes are just demos to learn from. Most voxel related issues should be reported to the Voxel Tools repository above.
 
-To use it, you must build Godot from source with Voxel Tools compiled into it. An instruction guide is provided in the Voxel Tools repository linked above.
-
-VT is still a work in progress and is not yet feature complete. These scenes are just demos to learn from. Most voxel related issues should be reported to the VT repository above.
+This project is a fork of [Zylann's demo scenes](https://github.com/Zylann/voxelgame). It contains all of his projects and an FPS/TPS shooter game demo that I wrote. It will not be merged upstream.
 
 
 Screenshots
@@ -21,7 +20,7 @@ Screenshots
 
 
 
-FPS (and 3RD Person) Demo
+FPS (and TPS) Demo
 ==========================
 
 Found in the fps_demo directory. This demo has several example scenes. Double click a scene, then press F6 to run it. All have the following controls:
