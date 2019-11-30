@@ -5,7 +5,7 @@ const  		GRAVITY:float				= -9.8
 const 		ACCEL:float					= 8.0
 const 		DEACCEL:float				= 16.0
 onready var MAX_FLOOR_ANGLE:float 		= deg2rad(60)
-export var	WALK_SPEED:float 			= 12.0
+export var	WALK_SPEED:float 			= 15.0
 export var  JUMP_SPEED:float			= 15.0
 export var	jump_is_jetpack:bool		= false
 var   		velocity:Vector3			= Vector3()  # Current velocity direction
@@ -24,11 +24,9 @@ var			camera_max_lerp:float		= 1.0						# User set max lerp position between 0 a
 var 	   	camera_pos_lerp:float		= 0.0						# Current lerp position between 0 and camera_max_lerp 
 
 
-func _ready():
-	pass
 
 func _physics_process(delta):
-	
+
 	#### Update Player
 	
 	var direction = Vector3() 						# Where does the player want to move

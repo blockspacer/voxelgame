@@ -25,11 +25,10 @@ script = ExtResource( 7 )
 [node name="WorldEnvironment" parent="." instance=ExtResource( 3 )]
 
 [node name="Platform" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1170.85, 197.34, 888.8 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 57, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1171, 202, 888 )
-WALK_SPEED = 20.0
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, 0 )
 jump_is_jetpack = true
 
 [node name="VoxelTerrain" type="VoxelLodTerrain" parent="."]
@@ -40,6 +39,6 @@ viewer_path = NodePath("../Player")
 material = ExtResource( 5 )
 
 [node name="Water" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1024, 10, 1024 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0 )
 mesh = SubResource( 2 )
 material/0 = null

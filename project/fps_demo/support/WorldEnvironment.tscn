@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://fps_demo/support/procedural_environment_fog.tres" type="Environment" id=1]
+[ext_resource path="res://fps_demo/support/procedural_environment.tres" type="Environment" id=1]
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = ExtResource( 1 )
