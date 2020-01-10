@@ -74,7 +74,7 @@ func paint_sphere(center, fradius, type):
 		return
 	
 	if "smooth_meshing_enabled" in terrain and terrain.smooth_meshing_enabled:
-		vt.channel = VoxelBuffer.CHANNEL_ISOLEVEL
+		vt.channel = VoxelBuffer.CHANNEL_SDF
 	
 	if(type == BULLET_TYPE.ADD):
 		vt.mode = VoxelTool.MODE_ADD
