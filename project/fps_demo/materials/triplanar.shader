@@ -72,9 +72,35 @@ vec4 triplanar_texture(sampler2D p_sampler, vec3 p_weights, vec3 p_triplanar_pos
         return samp;
 }
 
+/* Optional shader function that is supposed to help patch seams, but I think it looks slightly worse.
+*  To use it, uncomment this block, and the call in the first line of vertex()
+
+// Bitmask telling which of the 6 faces of the block are bordered by a block of lower resolution
+uniform int u_transition_mask;
+
+vec3 get_transvoxel_position(vec3 vertex_pos, vec4 vertex_col) {
+
+	int border_mask = int(vertex_col.a);
+	int cell_border_mask = border_mask & 63; // Which sides the cell is touching
+	int vertex_border_mask = (border_mask >> 6) & 63; // Which sides the vertex is touching
+
+	// If the vertex is near a side where there is a low-resolution neighbor,
+	// move it to secondary position
+	int m = u_transition_mask & (cell_border_mask & 63);
+	float t = float(m != 0);
+
+	// If the vertex lies on one or more sides, and at least one side has no low-resolution neighbor,
+	// don't move the vertex.
+	t *= float((vertex_border_mask & ~u_transition_mask) == 0);
+
+	// Position to use when border mask matches
+	vec3 secondary_position = vertex_col.rgb;
+	return mix(vertex_pos, secondary_position, t);
+}
+*/
 
 void vertex() {
-	NORMAL = normalize(NORMAL+vec3(0.,0.001,0.)); 			// Fix black faces Voxel Tools issue #59
+//	VERTEX = get_transvoxel_position(VERTEX, COLOR);
 	vertex_normal = NORMAL;
 
     TANGENT = vec3(0.0,0.0,-1.0) * abs(NORMAL.x);

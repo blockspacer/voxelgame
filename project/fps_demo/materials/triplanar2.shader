@@ -107,7 +107,6 @@ vec4 triplanar_texture(sampler2D p_sampler, vec3 p_weights, vec3 p_triplanar_pos
 
 
 void vertex() {
-	NORMAL = normalize(NORMAL+vec3(0.,0.001,0.)); 			// Fix black faces Voxel Tools issue #59
 	vertex_normal = NORMAL;
 
     TANGENT = vec3(0.0,0.0,-1.0) * abs(NORMAL.x);
