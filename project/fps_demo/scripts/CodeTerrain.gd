@@ -23,29 +23,30 @@ func _input(event):
 	
 func create_terrain():
 	
-### Folllow the instructions to use the various types of terrains available
+##### Folllow the instructions to use the various types of terrains available
 	
-### 1. Choose VoxelTerrain or VoxelLodTerrain
+##### 1. Choose VoxelTerrain or VoxelLodTerrain
 
 	terrain = VoxelTerrain.new()
 #	terrain = VoxelLodTerrain.new()
 
 
-### 2. Select Blocky=0 or Smooth=1  (VLT is always smooth)
+##### 2. Select Blocky=0 or Smooth=1  (VLT is always smooth)
 
-	var voxel_type = 1
+	var voxel_channel = 0
+#	var voxel_channel = 1
 	
 	
-### 3. Pick one of the following three example sections:
+##### 3. Pick one of the following three example sections:
 	
 ## A. Custom GDScript stream 
 ## This generates a 3D sine wave with GDScript
 
 	terrain.stream = MyStream.new()
-	terrain.stream.voxel_type = voxel_type
+	terrain.stream.voxel_channel = voxel_channel
 	
 
-## B. C++ Stream (VT Only)
+## B. C++ Stream (Example is VT Only)
 ## This generates a 3D sine wave from C++ and is considerably faster.
 ## This example is hard coded to draw blocky voxels so doesn't work with VLT, but you could write your own in C++.
 
@@ -56,36 +57,38 @@ func create_terrain():
 
 #	terrain.stream = VoxelStreamImage.new()
 #	terrain.stream.image = HEIGHT_MAP
-#	terrain.stream.channel = voxel_type
+#	terrain.stream.channel = voxel_channel
 #	$Player.translate(Vector3(0,35,0))		# Not required, just aids the demo
 
 
-## D. 3D Noise stream (Smooth only)
+## D. 3D Noise stream
 
 #	terrain.stream = VoxelStreamNoise.new()
 #	terrain.stream.noise = OpenSimplexNoise.new()
+#	terrain.stream.channel = voxel_channel
 #	$Player.translate(Vector3(0,200,0))		# Not required, just aids the demo
 
 
-### 4. Uncomment the one appropriate block below
+##### 4. Uncomment the block that matches #1
 
-## VoxelTerrain	
+## A. VoxelTerrain
 
 	terrain.voxel_library = VoxelLibrary.new()
-	if voxel_type==1:
+	if voxel_channel==1:
 		terrain.smooth_meshing_enabled = true	
 	terrain.view_distance = 256	
 	terrain.set_material(0, MATERIAL)
 
 
-## VoxelLodTerrain		
+## B. VoxelLodTerrain
 
-#	terrain.lod_count = 8
+#	terrain.view_distance = 2048
+#	terrain.lod_count = 6
 #	terrain.lod_split_scale = 3
 #	terrain.set_material(MATERIAL)
 
 
-### 5. Stop - Applicable to all
+##### 5. Stop - Applicable to all
 
 	terrain.viewer_path = "/root/World/Player"
 	terrain.name = "VoxelTerrain"

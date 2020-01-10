@@ -4,7 +4,7 @@
 [ext_resource path="res://fps_demo/support/platform.tscn" type="PackedScene" id=2]
 [ext_resource path="res://fps_demo/support/WorldEnvironment.tscn" type="PackedScene" id=3]
 [ext_resource path="res://fps_demo/support/player.tscn" type="PackedScene" id=4]
-[ext_resource path="res://fps_demo/materials/grass-rock.material" type="Material" id=5]
+[ext_resource path="res://fps_demo/materials/grass-rock2.material" type="Material" id=5]
 [ext_resource path="res://fps_demo/support/UI.tscn" type="PackedScene" id=6]
 [ext_resource path="res://fps_demo/scripts/WorldCommon.gd" type="Script" id=7]
 [ext_resource path="res://fps_demo/materials/water.material" type="Material" id=8]
@@ -29,7 +29,6 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 57, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, 0 )
-JUMP_SPEED = 12.0
 jump_is_jetpack = true
 
 [node name="VoxelTerrain" type="VoxelLodTerrain" parent="."]

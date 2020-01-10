@@ -8,16 +8,16 @@
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 1, 2, 0.4 )
 
-[sub_resource type="SphereMesh" id=3]
+[sub_resource type="SphereMesh" id=2]
 radius = 0.25
 height = 0.5
 
-[sub_resource type="CylinderMesh" id=2]
+[sub_resource type="CylinderMesh" id=3]
 
-[sub_resource type="RayShape" id=8]
+[sub_resource type="RayShape" id=4]
 length = 2.0
 
-[sub_resource type="CapsuleShape" id=9]
+[sub_resource type="CapsuleShape" id=5]
 radius = 0.680461
 height = 0.505174
 
@@ -40,7 +40,7 @@ material/0 = ExtResource( 3 )
 
 [node name="Head" type="MeshInstance" parent="Body"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25561, 0 )
-mesh = SubResource( 3 )
+mesh = SubResource( 2 )
 material/0 = ExtResource( 3 )
 
 [node name="Shoulder" type="Spatial" parent="Body"]
@@ -48,16 +48,16 @@ transform = Transform( 1, 0, 0, 0, 0.970296, 0.241922, 0, -0.241922, 0.970296, 0
 
 [node name="Gun" type="MeshInstance" parent="Body/Shoulder"]
 transform = Transform( 0.1, 0, 0, 0, -3.27835e-08, -0.1, 0, 0.75, -4.37114e-09, 0.5, -0.017, -0.7 )
-mesh = SubResource( 2 )
+mesh = SubResource( 3 )
 material/0 = ExtResource( 2 )
 
 [node name="BodyCollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0, 0 )
-shape = SubResource( 8 )
+shape = SubResource( 4 )
 
 [node name="CameraCollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 0.173484, -0.207686 )
-shape = SubResource( 9 )
+shape = SubResource( 5 )
 
 [node name="GunCollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 0.1, 0, 0, 0, 0.18507, -0.0970296, 0, 0.742276, 0.0241922, 0.5, -0.268852, -0.675192 )
