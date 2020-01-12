@@ -16,7 +16,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Voxel Tools Demo"
-run/main_scene="res://fps_demo/heightmap_smooth_lod.tscn"
+run/main_scene="res://fps_demo/noise_smooth_lod.tscn"
 config/icon="res://icon.png"
 
 [autoload]
