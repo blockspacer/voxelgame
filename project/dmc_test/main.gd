@@ -73,7 +73,7 @@ func generate_with_stats():
 
 
 func generate():
-	_voxels.fill_f(1.0, VoxelBuffer.CHANNEL_ISOLEVEL)
+	_voxels.fill_f(1.0, VoxelBuffer.CHANNEL_SDF)
 	
 	var vt = VoxelIsoSurfaceTool.new()
 	vt.set_iso_scale(_iso_scale)
@@ -184,7 +184,7 @@ func _input(event):
 				_need_generate = true
 
 			elif event.scancode == KEY_P:
-				print_buffer_to_images(_voxels, VoxelBuffer.CHANNEL_ISOLEVEL, "isolevel", 10)
+				print_buffer_to_images(_voxels, VoxelBuffer.CHANNEL_SDF, "isolevel", 10)
 
 			elif event.scancode == KEY_R:
 				_need_generate = true

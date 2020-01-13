@@ -2,11 +2,8 @@
 
 [ext_resource path="res://transvoxel_test/transvoxel_test.gd" type="Script" id=1]
 [ext_resource path="res://common/axes.tscn" type="PackedScene" id=2]
-[ext_resource path="res://common/spectator_avatar.tscn" type="PackedScene" id=3]
-[ext_resource path="res://common/grid.gd" type="Script" id=4]
-
-
-
+[ext_resource path="res://common/grid.gd" type="Script" id=3]
+[ext_resource path="res://common/spectator_avatar.tscn" type="PackedScene" id=4]
 
 [sub_resource type="SpatialMaterial" id=1]
 albedo_color = Color( 0.7, 0.7, 0.7, 1 )
@@ -31,11 +28,11 @@ directional_shadow_normal_bias = 0.2
 directional_shadow_bias_split_scale = 0.1
 
 [node name="grid" type="MeshInstance" parent="."]
-script = ExtResource( 4 )
+script = ExtResource( 3 )
 step = 1
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource( 2 )
 
-[node name="SpectatorAvatar" parent="." instance=ExtResource( 3 )]
+[node name="SpectatorAvatar" parent="." instance=ExtResource( 4 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 8.80608, 11.0698, 35.9803 )

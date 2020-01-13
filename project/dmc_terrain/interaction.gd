@@ -55,7 +55,7 @@ func print_map_slice():
 	var pos = _head.global_transform.origin
 	var buffer = VoxelBuffer.new()
 	buffer.create(2*r, h, 2*r)
-	var channel = VoxelBuffer.CHANNEL_ISOLEVEL
+	var channel = VoxelBuffer.CHANNEL_SDF
 	
 	var minp = pos - Vector3(r, h/2, r)
 	#print("Printing ", minp, " ; ", buffer.get_size())

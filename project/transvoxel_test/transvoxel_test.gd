@@ -28,7 +28,7 @@ func generate():
 	
 	var size = 32
 	voxels.create(size,size,size)
-	var channel = VoxelBuffer.CHANNEL_ISOLEVEL
+	var channel = VoxelBuffer.CHANNEL_SDF
 	
 	voxels.fill(255, channel)
 	
