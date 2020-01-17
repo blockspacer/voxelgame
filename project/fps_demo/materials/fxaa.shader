@@ -2,6 +2,19 @@ shader_type canvas_item;
 
 // see https://godotengine.org/qa/54752/no-fxaa-support-in-3-1-1
 
+/*
+If you are using GLES3, use this: https://gist.github.com/cart/7d2da58eb28c75c0952787f29f3e562f
+
+If you are using GLES2, use this: https://github.com/atomius0/Godot-3.1-FXAA-Shader/blob/master/project/fxaa/fxaa.shader
+
+Steps to apply FXAA:
+
+Create ColorRect Node
+Set Layout to "Full Rect" so that it covers whole screen
+Create new Shader Material and assign shader script in your ColorRect node you just created.
+Run the game.
+*/
+
 // Godot Nvidia FXAA 3.11 Port
 
 // Usage: Drop this in to any 3D scene for FXAA! This is a port of the \"PC High Quality Preset 39\". However the medium quality
