@@ -4,7 +4,10 @@ onready var terrain = $VoxelTerrain
 
 const MATERIAL = preload("res://fps_demo/materials/grass-rock2.material")
 
+export (NodePath) var UI_Noise # Directional light for the sun
+
 func _ready():
+	UI_Noise = get_node(UI_Noise)
 	update_noise_ui()
 	
 func _input(event):
@@ -35,8 +38,8 @@ func randomize_terrain():
 
 
 func update_noise_ui():
-	$UI_Noise/Seed.text = "Seed: " + String(terrain.stream.noise.seed)
-	$UI_Noise/Octaves.text = "Octaves: " + String(terrain.stream.noise.octaves)
-	$UI_Noise/Period.text = "Period: " + String(terrain.stream.noise.period).substr(0,4)
-	$UI_Noise/Persistence.text = "Persistence: " + String(terrain.stream.noise.persistence).substr(0,4)
-	$UI_Noise/Lacunarity.text = "Lacunarity: " + String(terrain.stream.noise.lacunarity).substr(0,4)
+	UI_Noise.get_child(0).text = "Seed: " + String(terrain.stream.noise.seed)
+	UI_Noise.get_child(1).text = "Octaves: " + String(terrain.stream.noise.octaves)
+	UI_Noise.get_child(2).text = "Period: " + String(terrain.stream.noise.period).substr(0,4)
+	UI_Noise.get_child(3).text = "Persistence: " + String(terrain.stream.noise.persistence).substr(0,4)
+	UI_Noise.get_child(4).text = "Lacunarity: " + String(terrain.stream.noise.lacunarity).substr(0,4)

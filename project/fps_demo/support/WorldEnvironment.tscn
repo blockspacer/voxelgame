@@ -1,12 +1,191 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://fps_demo/support/procedural_environment.tres" type="Environment" id=1]
+[ext_resource path="res://fps_demo/support/WorldEnvironment.gd" type="Script" id=2]
+[ext_resource path="res://fps_demo/support/Clouds.gd" type="Script" id=3]
+
+[sub_resource type="OpenSimplexNoise" id=8]
+seed = 3
+octaves = 2
+period = 128.0
+persistence = 0.257
+
+[sub_resource type="NoiseTexture" id=9]
+seamless = true
+noise = SubResource( 8 )
+
+[sub_resource type="Shader" id=1]
+code = "shader_type spatial;
+render_mode blend_mix,depth_draw_never,cull_disabled,diffuse_burley,specular_disabled,unshaded;
+uniform vec4 cloud_color : hint_color;
+uniform vec4 lining_color : hint_color;
+uniform vec4 sun_color : hint_color;
+uniform vec4 sky_color : hint_color;
+uniform vec4 horizon_color : hint_color;
+uniform sampler2D texture_noise;
+uniform sampler2D texture_stars;
+
+uniform float cloudiness : hint_range(0.0, 1.0) = 0.5;
+uniform float fluffiness : hint_range(0.0, 1.0) = 1.0;
+uniform vec2 wind_uv_offset = vec2(0.0, 0.0);
+uniform vec2 wind_dir = vec2(1.0, 0.0);
+uniform float wind_speed = 0.01;
+uniform float camera_y = 0.0;
+uniform vec3 sun_dir = vec3(1.0, 0.0, 0.0);
+
+
+varying float a1;
+varying float a2;
+varying float b1;
+varying float b2;
+
+
+
+void vertex() {
+	float t = 0.1 * fluffiness;
+	a1 = clamp(cloudiness - t, 0.0, 1.0 - t);
+	a2 = clamp(cloudiness + t, 0.0 + t, 1.0);
+	
+	t = 0.1;
+	b1 = clamp(cloudiness - t, 0.0, 1.0 - t);
+	b2 = clamp(cloudiness + t, 0.0 + t, 1.0);
+}
+
+
+
+
+void fragment() {
+	// Get projected UV for the clouds
+	vec4 invcamx = INV_CAMERA_MATRIX[0];
+	vec4 invcamy = INV_CAMERA_MATRIX[1];
+	vec4 invcamz = INV_CAMERA_MATRIX[2];
+	mat3 invcam = mat3(invcamx.xyz, invcamy.xyz, invcamz.xyz);
+	vec3 world_pos = (VERTEX) * invcam + camera_y;
+	vec3 normal = normalize(world_pos);
+	vec2 uv = normal.xz / (1.5+abs(normal.y) * 10.0);
+	vec2 uv_stars = normal.xz / (1.5+abs(normal.y) * 2.0);
+	vec2 uv2 = uv / 2.0;
+	uv += wind_uv_offset / 80.0;
+	uv2 += wind_uv_offset / 600.0;
+	uv_stars += vec2(-TIME, 0.0) / 180.0;
+	
+	vec4 stars_tex = textureLod(texture_stars, uv_stars * 2.0, 0.0);
+	
+	// Cloud noise
+	float noise = textureLod(texture_noise, uv, 0.0).r;
+	noise += textureLod(texture_noise, uv2, 0.0).r;
+	noise /= 2.0;
+	float noise2 = textureLod(texture_noise, uv * 1.5, 0.0).r;
+	
+	// Cloudiness
+	float a = 1.0 - smoothstep(a1, a2, noise);
+	float b = 1.0 - smoothstep(b1, b2, noise);
+	
+	// Final mix
+//	vec3 bg = textureLod( SCREEN_TEXTURE, SCREEN_UV, smoothstep(128.0, 512.0, -world_pos.z) * 2.0).rgb;
+	
+	vec3 near_sun = mix(cloud_color.rgb, sun_color.rgb, 1.0 - b * noise2);
+	vec3 opposite_sun = mix(cloud_color.rgb, lining_color.rgb, b * noise2);
+	float sun_dot = dot(normal, sun_dir);
+	ALBEDO = mix(opposite_sun, near_sun, smoothstep(0.5, 1.0, sun_dot));
+	ALBEDO = mix(horizon_color.rgb, ALBEDO, smoothstep(0.0, 0.2, abs(normal.y)));
+//	ALPHA = a;
+	
+	
+	// Starsky
+	float star = smoothstep(0.8, 1.0, stars_tex.r);
+	float sdot = sun_dot / 2.0 + 0.5;
+	star *= (1.0 - smoothstep(-0.5, 0.3, sun_dir.y)) * (1.0 - sdot);
+	ALBEDO += vec3(star / 2.0) * (1.0 - a);
+	float alpha = max(a, star);
+
+	
+	// Mix clouds and stars with bg sky
+	alpha = clamp(alpha, 0.0, 1.0);
+	float ny = 1.0 - abs(normal.y);
+	ny = ny * ny * ny * ny;
+	ny = clamp(ny, 0.0, 1.0);
+	vec3 sky = mix(sky_color.rgb, horizon_color.rgb, ny);
+	
+	// Sun halo
+	sky = mix(sky, sun_color.rgb, smoothstep(0.0, 1.0, sun_dot * pow(sun_dot, 2.0)) * ny);
+	// Sun
+	sky = mix(sky, sun_color.rgb * 2.0, smoothstep(0.99, 1.0, sun_dot * abs(sun_dot)));
+	
+	ALBEDO = mix(ALBEDO, sky, 1.0 - alpha);
+//	ALPHA = 1.0; // alpha;
+
+	ALBEDO.r = clamp(ALBEDO.r, 0.0, 1.0);
+	ALBEDO.g = clamp(ALBEDO.g, 0.0, 1.0);
+	ALBEDO.b = clamp(ALBEDO.b, 0.0, 1.0);
+}
+"
+
+[sub_resource type="OpenSimplexNoise" id=4]
+
+[sub_resource type="NoiseTexture" id=5]
+width = 1024
+height = 1024
+seamless = true
+noise = SubResource( 4 )
+
+[sub_resource type="OpenSimplexNoise" id=6]
+period = 17.3
+persistence = 0.19
+lacunarity = 2.34
+
+[sub_resource type="NoiseTexture" id=7]
+width = 2048
+height = 2048
+noise = SubResource( 6 )
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/cloud_color = Color( 0.839216, 0.533333, 0.6, 1 )
+shader_param/lining_color = Color( 1, 1, 1, 1 )
+shader_param/sun_color = Color( 0, 0, 0, 1 )
+shader_param/sky_color = Color( 0.34902, 0.435294, 0.717647, 1 )
+shader_param/horizon_color = Color( 0.709804, 0.823529, 0.94902, 1 )
+shader_param/cloudiness = 0.482
+shader_param/fluffiness = 0.5
+shader_param/wind_uv_offset = Vector2( 0, 0 )
+shader_param/wind_dir = Vector2( 1, 0 )
+shader_param/wind_speed = 0.01
+shader_param/camera_y = 0.0
+shader_param/sun_dir = Vector3( 1, 0, 0 )
+shader_param/texture_noise = SubResource( 5 )
+shader_param/texture_stars = SubResource( 7 )
+
+[sub_resource type="QuadMesh" id=3]
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = ExtResource( 1 )
+script = ExtResource( 2 )
+dlabel = NodePath("Label")
+wind_tex = SubResource( 9 )
+sun = NodePath("Sun")
+clouds = NodePath("Clouds")
 
-[node name="DirectionalLight" type="DirectionalLight" parent="."]
-transform = Transform( 0.739631, 0.515558, -0.432604, 0, 0.642788, 0.766044, 0.673013, -0.56659, 0.475426, 0, 3.25678, 0 )
+[node name="Sun" type="DirectionalLight" parent="."]
+transform = Transform( -0.999164, -0.0254671, -0.0319928, -0.0390482, 0.826483, 0.561607, 0.012139, 0.562387, -0.826785, 0, 0, 0 )
+light_bake_mode = 0
 shadow_enabled = true
 shadow_color = Color( 0.6, 0.6, 0.6, 1 )
-directional_shadow_blend_splits = true
+
+[node name="Clouds" type="MeshInstance" parent="." groups=[
+"Wind",
+]]
+transform = Transform( 13.238, 0, 0, 0, 13.238, 0, 0, 0, 13.238, 0, 6.73303, 0 )
+material_override = SubResource( 2 )
+cast_shadow = 0
+mesh = SubResource( 3 )
+material/0 = null
+script = ExtResource( 3 )
+sun = NodePath("../Sun")
+
+[node name="Label" type="Label" parent="."]
+margin_right = 40.0
+margin_bottom = 14.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
