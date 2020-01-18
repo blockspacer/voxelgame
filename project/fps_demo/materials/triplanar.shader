@@ -132,7 +132,7 @@ void fragment() {
 	// Calculate Albedo 
 	
 	vec3 A_albedo, B_albedo;
-	/*float AB_mix_factor;
+	float AB_mix_factor;
 	if(A_albedo_enabled) {
 		ALBEDO = A_albedo = A_albedo_tint.rgb * triplanar_texture(A_albedo_map,A_uv_power_normal,A_uv_triplanar_pos).rgb;
 		AB_mix_factor = clamp( AB_mix_normal*dot(vec3(0.,1.,0.), vertex_normal) + AB_mix_offset + AB_mix_blend*A_albedo.g, 0., 1.);
@@ -142,11 +142,8 @@ void fragment() {
 	}
 	if(A_albedo_enabled==true && B_albedo_enabled==true) {
 		ALBEDO = mix(B_albedo, A_albedo, AB_mix_factor);
-	}*/
-	
-	ALBEDO = B_albedo = B_albedo_tint.rgb * triplanar_texture(B_albedo_map,B_uv_power_normal,B_uv_triplanar_pos).rgb;
+	}
 
-/*
 	// Calculate Normals
 	
 	vec3 A_normal=vec3(0.5,0.5,0.5);
@@ -175,7 +172,6 @@ void fragment() {
 		AO = mix(B_ao, A_ao, AB_mix_factor);
 		AO_LIGHT_AFFECT = mix(B_ao_strength, A_ao_strength, AB_mix_factor);
 	}
-*/
 	
 }
 

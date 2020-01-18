@@ -108,10 +108,6 @@ func _process(delta):
 	
 	upd_time_of_day(delta)
 	
-	#var minutes = int(time_of_day) % 60
-	# update frequency
-	#if(minutes > 0):
-	
 	upd_wind(delta)
 	upd_sun()
 	upd_fog()
@@ -160,14 +156,17 @@ func upd_wind(delta):
 		n.material_override.set_shader_param("wind_speed", wind_speed)
 	
 func upd_sun():
+	var a = day_phase + PI/3.0
 	
 	# Directional Light angle
-	var pos = sun.get_global_transform().origin
-	var a = day_phase + PI/3.0
-	var celesial_pole = Vector3(0, 1, -1).normalized()
-	var dir = Vector3(1, 0, 0)
-	dir = dir.rotated(celesial_pole, -a)
-	sun.look_at(pos + dir, Vector3(0,1,0))
+	var minutes = int(time_of_day) % 60
+	# update frequency
+	if(minutes % 5 == 0):
+		var pos = sun.get_global_transform().origin
+		var celesial_pole = Vector3(0, 1, -1).normalized()
+		var dir = Vector3(1, 0, 0)
+		dir = dir.rotated(celesial_pole, -a)
+		sun.look_at(pos + dir, Vector3(0,1,0))
 	
 
 	

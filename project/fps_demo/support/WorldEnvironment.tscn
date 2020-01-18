@@ -168,9 +168,15 @@ clouds = NodePath("Clouds")
 
 [node name="Sun" type="DirectionalLight" parent="."]
 transform = Transform( -0.999164, -0.0254671, -0.0319928, -0.0390482, 0.826483, 0.561607, 0.012139, 0.562387, -0.826785, 0, 0, 0 )
+light_indirect_energy = 0.0
 light_bake_mode = 0
 shadow_enabled = true
-shadow_color = Color( 0.6, 0.6, 0.6, 1 )
+shadow_bias = 0.2
+directional_shadow_mode = 1
+directional_shadow_split_1 = 0.08
+directional_shadow_normal_bias = 1.0
+directional_shadow_bias_split_scale = 0.3
+directional_shadow_max_distance = 400.0
 
 [node name="Clouds" type="MeshInstance" parent="." groups=[
 "Wind",

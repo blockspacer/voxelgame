@@ -14,12 +14,12 @@ sun_energy = 30.0
 [resource]
 background_mode = 5
 background_sky = SubResource( 1 )
-ambient_light_color = Color( 0.501961, 0.501961, 0.501961, 1 )
 ambient_light_energy = 0.1
-ambient_light_sky_contribution = 0.1
+ambient_light_sky_contribution = 0.0
 fog_enabled = true
-fog_color = Color( 0.384, 0.482133, 0.64, 1 )
-fog_sun_color = Color( 1, 0.901961, 0.701961, 1 )
+fog_color = Color( 0.137255, 0.192157, 0.247059, 1 )
+fog_sun_color = Color( 0.227451, 0.211765, 0.180392, 1 )
+fog_depth_end = 1000.0
 tonemap_mode = 2
 auto_exposure_enabled = true
 auto_exposure_scale = 0.3
