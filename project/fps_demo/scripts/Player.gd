@@ -24,7 +24,20 @@ var			camera_max_lerp:float		= 1.0						# User set max lerp position between 0 a
 var 	   	camera_pos_lerp:float		= 0.0						# Current lerp position between 0 and camera_max_lerp 
 
 
-
+func _ready():
+	$CamNode.get_viewport().set_clear_mode(Viewport.CLEAR_MODE_NEVER)
+	$CamNode.get_viewport().render_target_clear_mode = Viewport.CLEAR_MODE_NEVER
+	$CamNode/Camera.get_viewport().set_clear_mode(Viewport.CLEAR_MODE_NEVER)
+	$CamNode/Camera.get_viewport().render_target_clear_mode = Viewport.CLEAR_MODE_NEVER
+	#$CamNode.get_viewport().set_update_mode(Viewport.UPDATE_ONCE)
+	#$CamNode/Camera.get_viewport().set_update_mode(Viewport.UPDATE_ONCE)
+	#$CamNode/Camera.get_viewport().render_target_v_flip = true
+	#$CamNode/Camera.get_viewport().set_msaa(Viewport.MSAA_4X)
+	#$CamNode/Camera.get_viewport().render_target_update_mode = Viewport.UPDATE_ONCE
+	#$CamNode/Camera.get_viewport().set_render_target_update_mode(Viewport.RENDER_TARGET_UPDATE_DISABLED)
+	#set_msaa(MSAA_2X)
+	print('Player ready')
+	
 func _physics_process(delta):
 
 	#### Update Player
