@@ -23,10 +23,58 @@ export var 	CAMERA_POS_FAR:Vector3		= Vector3(0, 3.5, 7)
 var			camera_max_lerp:float		= 1.0						# User set max lerp position between 0 and 1
 var 	   	camera_pos_lerp:float		= 0.0						# Current lerp position between 0 and camera_max_lerp 
 
+export(NodePath) var edit_cursor_sphere_path = null
+export(NodePath) var edit_cursor_box_path = null
+export(NodePath) var world_path = null
+export(NodePath) var terrain_path = null
+export(Material) var cursor_material_on_add_action = null
+export(Material) var cursor_material_on_remove_action = null
+
+var _world = null
+var _terrain = null
+var edit_cursor = null
+var edit_shape					= Bullet.BULLET_SHAPE.SPHERE
+
+onready var raycaster = $CamNode/Camera/RayCast
+var last_raycast_on_terrain = null
+
+func hide_edit_cursors():
+	get_node(edit_cursor_sphere_path).hide()
+	get_node(edit_cursor_box_path).hide()
+	
+
+func _ready():
+	_world = get_node(world_path)
+	_terrain = get_node(terrain_path)
+	hide_edit_cursors()
+	edit_cursor = get_node(edit_cursor_sphere_path)
 
 
+func get_pointed_voxel():
+	var origin = $CamNode/Camera.global_transform.origin
+	var forward = -$CamNode/Camera.get_transform().basis.z.normalized()
+	var hit = _terrain.raycast(origin, forward, 10)
+	return hit
+	
 func _physics_process(delta):
-
+	if _terrain == null:
+		return
+	
+	if(raycaster.enabled and raycaster.is_colliding()):
+		var hit = raycaster.get_collider()
+		if (hit != null and hit.get_name() == "VoxelTerrain"):
+			last_raycast_on_terrain = raycaster.get_collision_point()
+			var offset = Vector3(0.5,0.5,0.5)
+			if(edit_shape == Bullet.BULLET_SHAPE.BOX):
+				offset = Vector3(1.0,1.0,1.0)
+			edit_cursor.set_translation(last_raycast_on_terrain + offset)
+			edit_cursor.material_override = (cursor_material_on_add_action)
+			edit_cursor.show()
+		else:
+			edit_cursor.hide()
+	else:
+		edit_cursor.hide()
+		
 	#### Update Player
 	
 	var direction = Vector3() 						# Where does the player want to move
@@ -70,8 +118,9 @@ func _physics_process(delta):
 	#### Continuous fire
 	if firing and OS.get_ticks_msec()-firing_tick>FIRING_DELAY:
 		firing_tick = OS.get_ticks_msec()
-		shoot_bullet()
-		
+		#shoot_bullet()
+		if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
+			Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape)
 	
 	#### Update Camera
 	
@@ -106,13 +155,11 @@ func check_camera_bounds():
 			move_camera(camera_pos_lerp)
 
 
-
 func move_camera(lerp_val:float) -> void:
 	var t = $CamNode/Camera.get_transform()
 	var offset = CAMERA_POS_CLOSE.linear_interpolate(CAMERA_POS_FAR, lerp_val)
 	t.origin = CAMERA_POS_CLOSE + offset
 	$CamNode/Camera.set_transform(t)
-
 
 
 func shoot_bullet():
@@ -133,16 +180,46 @@ func shoot_bullet():
 	bullet.add_to_group("bullets")
 	get_parent().add_child(bullet)
 
-
-func _input(event):
+func inc_edit_cursor_size(size:float) -> void:
+	var max_size = 5.0
+	if(edit_shape == Bullet.BULLET_SHAPE.SPHERE):
+		max_size = 10.0
+		
+	if((edit_cursor.scale.x + size) > 0.0 and (edit_cursor.scale.x + size) < max_size):
+		edit_cursor.scale += Vector3(size,size,size)
+		
+func get_edit_cursor_size() -> Vector3:
+	if(edit_shape == Bullet.BULLET_SHAPE.SPHERE):
+		return Vector3(edit_cursor.get_transformed_aabb().size.x/2.0,edit_cursor.get_transformed_aabb().size.y/2.0,edit_cursor.get_transformed_aabb().size.z/2.0)
+	return edit_cursor.get_transformed_aabb().size
 	
+func _input(event):
+	if event is InputEventKey and event.pressed:
+		if event.scancode == KEY_1:
+			edit_shape = Bullet.BULLET_SHAPE.POINT
+			hide_edit_cursors()
+			edit_cursor = get_node(edit_cursor_sphere_path)
+			print("firing_shape = 0 (do_point)")
+		if event.scancode == KEY_2:
+			edit_shape = Bullet.BULLET_SHAPE.SPHERE
+			hide_edit_cursors()
+			edit_cursor = get_node(edit_cursor_sphere_path)
+			print("firing_shape = 1 (do_sphere)")
+		if event.scancode == KEY_3:
+			edit_shape = Bullet.BULLET_SHAPE.BOX
+			hide_edit_cursors()
+			edit_cursor = get_node(edit_cursor_box_path)
+			print("firing_shape = 2 (do_box)")
+			
 	if event is InputEventMouseButton and Input.is_mouse_button_pressed(BUTTON_WHEEL_UP):
-		camera_max_lerp -= .1
-		camera_max_lerp = clamp(camera_max_lerp, 0, 1)
+		#camera_max_lerp -= .1
+		#camera_max_lerp = clamp(camera_max_lerp, 0, 1)
+		inc_edit_cursor_size(1)
 
 	elif event is InputEventMouseButton and Input.is_mouse_button_pressed(BUTTON_WHEEL_DOWN):
-		camera_max_lerp += .1
-		camera_max_lerp = clamp(camera_max_lerp, 0, 1)
+		#camera_max_lerp += .1
+		#camera_max_lerp = clamp(camera_max_lerp, 0, 1)
+		inc_edit_cursor_size(-1)
 		
 		
 	elif event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -169,12 +246,16 @@ func _input(event):
 			firing_type = Bullet.BULLET_TYPE.ADD
 			firing = true
 			firing_tick = OS.get_ticks_msec()
-			shoot_bullet()
+			#shoot_bullet()
+			if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
+				Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape)
 		elif Input.is_action_pressed("shoot_del"):
 			firing_type = Bullet.BULLET_TYPE.DELETE
 			firing = true
 			firing_tick = OS.get_ticks_msec()
-			shoot_bullet()
+			#shoot_bullet()
+			if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
+				Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape)
 		elif Input.is_action_just_released("shoot_add") or Input.is_action_just_released("shoot_del"):
 			firing = false
 

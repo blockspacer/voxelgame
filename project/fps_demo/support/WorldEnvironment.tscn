@@ -4,17 +4,17 @@
 [ext_resource path="res://fps_demo/support/WorldEnvironment.gd" type="Script" id=2]
 [ext_resource path="res://fps_demo/support/Clouds.gd" type="Script" id=3]
 
-[sub_resource type="OpenSimplexNoise" id=8]
+[sub_resource type="OpenSimplexNoise" id=1]
 seed = 3
 octaves = 2
 period = 128.0
 persistence = 0.257
 
-[sub_resource type="NoiseTexture" id=9]
+[sub_resource type="NoiseTexture" id=2]
 seamless = true
-noise = SubResource( 8 )
+noise = SubResource( 1 )
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id=3]
 code = "shader_type spatial;
 render_mode blend_mix,depth_draw_never,cull_disabled,diffuse_burley,specular_disabled,unshaded;
 uniform vec4 cloud_color : hint_color;
@@ -139,8 +139,8 @@ width = 2048
 height = 2048
 noise = SubResource( 6 )
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+[sub_resource type="ShaderMaterial" id=8]
+shader = SubResource( 3 )
 shader_param/cloud_color = Color( 0.839216, 0.533333, 0.6, 1 )
 shader_param/lining_color = Color( 1, 1, 1, 1 )
 shader_param/sun_color = Color( 0, 0, 0, 1 )
@@ -156,13 +156,13 @@ shader_param/sun_dir = Vector3( 1, 0, 0 )
 shader_param/texture_noise = SubResource( 5 )
 shader_param/texture_stars = SubResource( 7 )
 
-[sub_resource type="QuadMesh" id=3]
+[sub_resource type="QuadMesh" id=9]
 
 [node name="WorldEnvironment" type="WorldEnvironment"]
 environment = ExtResource( 1 )
 script = ExtResource( 2 )
 dlabel = NodePath("Label")
-wind_tex = SubResource( 9 )
+wind_tex = SubResource( 2 )
 sun = NodePath("Sun")
 clouds = NodePath("Clouds")
 
@@ -182,9 +182,9 @@ directional_shadow_max_distance = 400.0
 "Wind",
 ]]
 transform = Transform( 13.238, 0, 0, 0, 13.238, 0, 0, 0, 13.238, 0, 6.73303, 0 )
-material_override = SubResource( 2 )
+material_override = SubResource( 8 )
 cast_shadow = 0
-mesh = SubResource( 3 )
+mesh = SubResource( 9 )
 material/0 = null
 script = ExtResource( 3 )
 sun = NodePath("../Sun")

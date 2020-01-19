@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://fps_demo/scripts/NoiseWorld.gd" type="Script" id=1]
 [ext_resource path="res://fps_demo/support/UI.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://fps_demo/materials/grass-rock.material" type="Material" id=6]
 [ext_resource path="res://fps_demo/materials/fxaa.shader" type="Shader" id=7]
 [ext_resource path="res://fps_demo/scripts/Screenshot.gd" type="Script" id=8]
+[ext_resource path="res://fps_demo/materials/edit_cursor.material" type="Material" id=10]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 7 )
@@ -20,6 +21,10 @@ shader_param/lumaScale = 6.0
 
 [sub_resource type="VoxelStreamNoise" id=3]
 noise = SubResource( 2 )
+
+[sub_resource type="SphereMesh" id=4]
+
+[sub_resource type="CubeMesh" id=5]
 
 [node name="World" type="Spatial"]
 script = ExtResource( 1 )
@@ -83,6 +88,18 @@ margin_right = 40.0
 margin_bottom = 86.0
 text = "Seed: "
 
+[node name="dynamic_memory_usage" type="Label" parent="UI/UI_Noise"]
+margin_top = 90.0
+margin_right = 40.0
+margin_bottom = 104.0
+text = "Seed: "
+
+[node name="static_memory_usage" type="Label" parent="UI/UI_Noise"]
+margin_top = 108.0
+margin_right = 40.0
+margin_bottom = 122.0
+text = "Seed: "
+
 [node name="WorldEnvironment" parent="." instance=ExtResource( 3 )]
 
 [node name="Platform" parent="." instance=ExtResource( 4 )]
@@ -91,6 +108,11 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1170.85, 197.34, 888.8 )
 [node name="Player" parent="." instance=ExtResource( 5 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1171, 202, 888 )
 jump_is_jetpack = true
+edit_cursor_sphere_path = NodePath("../edit_cursor_sphere")
+edit_cursor_box_path = NodePath("../edit_cursor_box")
+world_path = NodePath("..")
+terrain_path = NodePath("../VoxelTerrain")
+cursor_material_on_add_action = ExtResource( 10 )
 
 [node name="VoxelTerrain" type="VoxelLodTerrain" parent="."]
 stream = SubResource( 3 )
@@ -101,3 +123,15 @@ material = ExtResource( 6 )
 
 [node name="Screenshot" type="Node" parent="."]
 script = ExtResource( 8 )
+
+[node name="edit_cursor_sphere" type="MeshInstance" parent="."]
+transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, 38.6091, 0, 0 )
+cast_shadow = 0
+mesh = SubResource( 4 )
+material/0 = ExtResource( 10 )
+
+[node name="edit_cursor_box" type="MeshInstance" parent="."]
+transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, 38.6091, 0, 0 )
+cast_shadow = 0
+mesh = SubResource( 5 )
+material/0 = ExtResource( 10 )

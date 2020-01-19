@@ -36,7 +36,17 @@ func randomize_terrain():
 	terrain.set_material(MATERIAL)
 	add_child(terrain)
 
+static func _format_memory(m):
+	var mb = m / 1000000
+	var mbr = m % 1000000
+	return str(mb, ".", mbr, " Mb")
 
+func _process(delta):
+	var dm = OS.get_dynamic_memory_usage()
+	var sm = OS.get_static_memory_usage()
+	UI_Noise.get_child(5).text = "Dynamic memory: " + _format_memory(dm)
+	UI_Noise.get_child(6).text = "Static memory: " + _format_memory(sm)
+	
 func update_noise_ui():
 	UI_Noise.get_child(0).text = "Seed: " + String(terrain.stream.noise.seed)
 	UI_Noise.get_child(1).text = "Octaves: " + String(terrain.stream.noise.octaves)
