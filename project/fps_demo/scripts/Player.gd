@@ -79,7 +79,7 @@ func _physics_process(delta):
 	
 	var direction = Vector3() 						# Where does the player want to move
 	var facing_direction = global_transform.basis	# Get camera facing direction
-
+	
 	if Input.is_action_pressed("move_forward"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
 		direction -= facing_direction.z			
 	if Input.is_action_pressed("move_backward"):
@@ -184,9 +184,9 @@ func inc_edit_cursor_size(size:float) -> void:
 	var max_size = 5.0
 	if(edit_shape == Bullet.BULLET_SHAPE.SPHERE):
 		max_size = 10.0
-		
 	if((edit_cursor.scale.x + size) > 0.0 and (edit_cursor.scale.x + size) < max_size):
 		edit_cursor.scale += Vector3(size,size,size)
+	edit_cursor.get_child(0).omni_range = edit_cursor.scale.x + 0.5
 		
 func get_edit_cursor_size() -> Vector3:
 	if(edit_shape == Bullet.BULLET_SHAPE.SPHERE):
@@ -194,6 +194,13 @@ func get_edit_cursor_size() -> Vector3:
 	return edit_cursor.get_transformed_aabb().size
 	
 func _input(event):
+	
+	if Input.is_action_pressed("throw_grenade"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
+		shoot_bullet()
+	if Input.is_action_pressed("toggle_weapon_spotlight"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
+		$CamNode/Camera/SpotLight.visible = !$CamNode/Camera/SpotLight.visible
+	
+	
 	if event is InputEventKey and event.pressed:
 		if event.scancode == KEY_1:
 			edit_shape = Bullet.BULLET_SHAPE.POINT

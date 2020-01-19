@@ -35,6 +35,7 @@ far = 1000.0
 
 [node name="SpotLight" type="SpotLight" parent="CamNode/Camera"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.35285 )
+visible = false
 light_energy = 3.0
 shadow_enabled = true
 spot_range = 10.7863
