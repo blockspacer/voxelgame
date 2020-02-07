@@ -6,7 +6,7 @@ var use_only_lod = false # Not used
 func _ready():
 	sun = get_node(sun)
 
-func _process(delta):
+func _process(_delta):
 	call_deferred("follow_camera")
 
 func follow_camera():

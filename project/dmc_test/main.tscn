@@ -4,8 +4,6 @@
 [ext_resource path="res://common/axes.tscn" type="PackedScene" id=2]
 [ext_resource path="res://common/spectator_avatar.tscn" type="PackedScene" id=3]
 
-
-
 [sub_resource type="ProceduralSky" id=1]
 sky_top_color = Color( 0.388235, 0.533333, 0.615686, 1 )
 sun_curve = 0.018301

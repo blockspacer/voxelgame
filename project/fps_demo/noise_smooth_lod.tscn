@@ -1,30 +1,30 @@
 [gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://fps_demo/scripts/NoiseWorld.gd" type="Script" id=1]
-[ext_resource path="res://fps_demo/support/UI.tscn" type="PackedScene" id=2]
-[ext_resource path="res://fps_demo/support/WorldEnvironment.tscn" type="PackedScene" id=3]
-[ext_resource path="res://fps_demo/support/platform.tscn" type="PackedScene" id=4]
-[ext_resource path="res://fps_demo/support/player.tscn" type="PackedScene" id=5]
-[ext_resource path="res://fps_demo/materials/grass-rock.material" type="Material" id=6]
-[ext_resource path="res://fps_demo/materials/fxaa.shader" type="Shader" id=7]
-[ext_resource path="res://fps_demo/scripts/Screenshot.gd" type="Script" id=8]
-[ext_resource path="res://fps_demo/materials/edit_cursor.material" type="Material" id=10]
+[ext_resource path="res://fps_demo/materials/fxaa.shader" type="Shader" id=2]
+[ext_resource path="res://fps_demo/support/UI.tscn" type="PackedScene" id=8]
+[ext_resource path="res://fps_demo/support/WorldEnvironment.tscn" type="PackedScene" id=9]
+[ext_resource path="res://fps_demo/support/platform.tscn" type="PackedScene" id=10]
+[ext_resource path="res://fps_demo/support/player.tscn" type="PackedScene" id=11]
+[ext_resource path="res://fps_demo/materials/edit_cursor.material" type="Material" id=12]
+[ext_resource path="res://fps_demo/materials/grass-rock.material" type="Material" id=13]
+[ext_resource path="res://fps_demo/scripts/Screenshot.gd" type="Script" id=14]
 
 [sub_resource type="ShaderMaterial" id=1]
-shader = ExtResource( 7 )
+shader = ExtResource( 2 )
 shader_param/qualitySubpix = 1.0
 shader_param/qualityEdgeThreshold = 0.0
 shader_param/qualityEdgeThresholdMin = 0.0
 shader_param/lumaScale = 6.0
 
-[sub_resource type="OpenSimplexNoise" id=2]
+[sub_resource type="OpenSimplexNoise" id=4]
 
-[sub_resource type="VoxelStreamNoise" id=3]
-noise = SubResource( 2 )
+[sub_resource type="VoxelStreamNoise" id=5]
+noise = SubResource( 4 )
 
-[sub_resource type="SphereMesh" id=4]
+[sub_resource type="SphereMesh" id=6]
 
-[sub_resource type="CubeMesh" id=5]
+[sub_resource type="CubeMesh" id=7]
 
 [node name="World" type="Spatial"]
 script = ExtResource( 1 )
@@ -34,101 +34,98 @@ UI_Noise = NodePath("UI/UI_Noise")
 material = SubResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -0.28479
+margin_right = -0.28479
 size_flags_horizontal = 3
 size_flags_vertical = 3
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="UI" parent="." instance=ExtResource( 2 )]
-anchor_left = 0.000881344
-anchor_top = 0.22412
-anchor_right = 0.000881344
-anchor_bottom = 0.22412
+[node name="UI" parent="." instance=ExtResource( 8 )]
+margin_left = -0.475647
+margin_right = -0.475647
 
 [node name="UI_Noise" type="VBoxContainer" parent="UI"]
-anchor_left = 0.11305
-anchor_top = 4.22054
-anchor_right = 0.11305
-anchor_bottom = 4.22054
-margin_left = 0.950695
-margin_top = 35.1318
-margin_right = 40.9507
-margin_bottom = 121.132
+visible = false
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -122.0
 __meta__ = {
-"_edit_use_anchors_": true
+"_edit_use_anchors_": false
 }
 
 [node name="Seed" type="Label" parent="UI/UI_Noise"]
-margin_right = 40.0
+margin_right = 1024.0
 margin_bottom = 14.0
 text = "Seed: "
 
 [node name="Octaves" type="Label" parent="UI/UI_Noise"]
 margin_top = 18.0
-margin_right = 40.0
+margin_right = 1024.0
 margin_bottom = 32.0
 text = "Seed: "
 
 [node name="Period" type="Label" parent="UI/UI_Noise"]
 margin_top = 36.0
-margin_right = 40.0
+margin_right = 1024.0
 margin_bottom = 50.0
 text = "Seed: "
 
 [node name="Persistence" type="Label" parent="UI/UI_Noise"]
 margin_top = 54.0
-margin_right = 40.0
+margin_right = 1024.0
 margin_bottom = 68.0
 text = "Seed: "
 
 [node name="Lacunarity" type="Label" parent="UI/UI_Noise"]
 margin_top = 72.0
-margin_right = 40.0
+margin_right = 1024.0
 margin_bottom = 86.0
 text = "Seed: "
 
 [node name="dynamic_memory_usage" type="Label" parent="UI/UI_Noise"]
 margin_top = 90.0
-margin_right = 40.0
+margin_right = 1024.0
 margin_bottom = 104.0
 text = "Seed: "
 
 [node name="static_memory_usage" type="Label" parent="UI/UI_Noise"]
 margin_top = 108.0
-margin_right = 40.0
+margin_right = 1024.0
 margin_bottom = 122.0
 text = "Seed: "
 
-[node name="WorldEnvironment" parent="." instance=ExtResource( 3 )]
+[node name="WorldEnvironment" parent="." instance=ExtResource( 9 )]
 
-[node name="Platform" parent="." instance=ExtResource( 4 )]
+[node name="Platform" parent="." instance=ExtResource( 10 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1170.85, 197.34, 888.8 )
 
-[node name="Player" parent="." instance=ExtResource( 5 )]
+[node name="Player" parent="." instance=ExtResource( 11 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1171, 202, 888 )
 jump_is_jetpack = true
 edit_cursor_sphere_path = NodePath("../edit_cursor_sphere")
 edit_cursor_box_path = NodePath("../edit_cursor_box")
 world_path = NodePath("..")
 terrain_path = NodePath("../VoxelTerrain")
-cursor_material_on_add_action = ExtResource( 10 )
+cursor_material_on_add_action = ExtResource( 12 )
 
 [node name="VoxelTerrain" type="VoxelLodTerrain" parent="."]
-stream = SubResource( 3 )
+stream = SubResource( 5 )
 view_distance = 1024
 lod_count = 6
 viewer_path = NodePath("../Player")
-material = ExtResource( 6 )
+material = ExtResource( 13 )
 
 [node name="Screenshot" type="Node" parent="."]
-script = ExtResource( 8 )
+script = ExtResource( 14 )
 
 [node name="edit_cursor_sphere" type="MeshInstance" parent="."]
 transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, 38.6091, 0, 0 )
 cast_shadow = 0
-mesh = SubResource( 4 )
-material/0 = ExtResource( 10 )
+mesh = SubResource( 6 )
+material/0 = ExtResource( 12 )
 
 [node name="edit_cursor_sphere_OmniLight" type="OmniLight" parent="edit_cursor_sphere"]
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
@@ -138,10 +135,12 @@ shadow_enabled = true
 [node name="edit_cursor_box" type="MeshInstance" parent="."]
 transform = Transform( 5, 0, 0, 0, 5, 0, 0, 0, 5, 38.6091, 0, 0 )
 cast_shadow = 0
-mesh = SubResource( 5 )
-material/0 = ExtResource( 10 )
+mesh = SubResource( 7 )
+material/0 = ExtResource( 12 )
 
 [node name="edit_cursor_box_OmniLight" type="OmniLight" parent="edit_cursor_box"]
 transform = Transform( 0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0 )
 light_color = Color( 0.0235294, 0.662745, 0.454902, 1 )
 shadow_enabled = true
+[connection signal="mouse_captured" from="." to="UI" method="_on_World_mouse_captured"]
+[connection signal="mouse_visible" from="." to="UI" method="_on_World_mouse_visible"]

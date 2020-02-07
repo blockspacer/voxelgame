@@ -28,22 +28,22 @@ var day_phase = 0.0 # -PI -> PI
 var game_timescale = 60.0 # 1.0 = realtime
 
 # Sky and light colors
-export var day_color_sun = Color(1,1,1,1)
-export var day_color_sky = Color(0.388235,0.490196,0.890196,1)
-export var day_color_horizon = Color(0.817383,0.883606,0.96875,1)
-export var sunset_color_sun = Color(1,0.376471,0,1)
-export var sunset_color_sky = Color(0,0.007843,0.215686,1)
-export var sunset_color_horizon = Color(0.545098,0.167647,0.105882,1)
-export var night_color_sun = Color(0.117647,0.12549,0.219608,1)
-export var night_color_sky = Color(0.023529,0.023529,0.031373,1)
-export var night_color_horizon = Color(0.047059,0.054902,0.164706,1)
-export var dawn_color_sun = Color(1,0.678431,0,1)
-export var dawn_color_sky = Color(0,0.082353,0.215686,1)
-export var dawn_color_horizon = Color(0.545098,0.188235,0.105882,1)
-var sun_c = day_color_sun
-var sky_c = day_color_sky
-var hor_c = day_color_horizon
-var fog_c = hor_c
+export var day_color_sun:Color = Color(1,1,1,1)
+export var day_color_sky:Color = Color(0.388235,0.490196,0.890196,1)
+export var day_color_horizon:Color = Color(0.817383,0.883606,0.96875,1)
+export var sunset_color_sun:Color = Color(1,0.376471,0,1)
+export var sunset_color_sky:Color = Color(0,0.007843,0.215686,1)
+export var sunset_color_horizon:Color = Color(0.545098,0.167647,0.105882,1)
+export var night_color_sun:Color = Color(0.117647,0.12549,0.219608,1)
+export var night_color_sky:Color = Color(0.023529,0.023529,0.031373,1)
+export var night_color_horizon:Color = Color(0.047059,0.054902,0.164706,1)
+export var dawn_color_sun:Color = Color(1,0.678431,0,1)
+export var dawn_color_sky:Color = Color(0,0.082353,0.215686,1)
+export var dawn_color_horizon:Color = Color(0.545098,0.188235,0.105882,1)
+var sun_c:Color = day_color_sun
+var sky_c:Color = day_color_sky
+var hor_c:Color = day_color_horizon
+var fog_c:Color = hor_c
 
 func _ready():
 	dlabel = get_node(dlabel)
@@ -53,7 +53,7 @@ func _ready():
 	#water = get_node(water)
 	env = get_environment()
 	
-	var vp = get_viewport()
+	#var vp = get_viewport()
 #	vp.size = vp.size / 2.0
 	
 #	print("\nexport var day_color_sun = Color(",day_color_sun,")")

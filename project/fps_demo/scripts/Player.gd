@@ -22,6 +22,7 @@ export var 	CAMERA_POS_CLOSE:Vector3 	= Vector3(0, 0.3, 0)		# Vectors that the t
 export var 	CAMERA_POS_FAR:Vector3		= Vector3(0, 3.5, 7)
 var			camera_max_lerp:float		= 1.0						# User set max lerp position between 0 and 1
 var 	   	camera_pos_lerp:float		= 0.0						# Current lerp position between 0 and camera_max_lerp 
+var SDF_VALUE:float				= 0.0
 
 export(NodePath) var edit_cursor_sphere_path = null
 export(NodePath) var edit_cursor_box_path = null
@@ -30,8 +31,7 @@ export(NodePath) var terrain_path = null
 export(Material) var cursor_material_on_add_action = null
 export(Material) var cursor_material_on_remove_action = null
 
-var _world = null
-var _terrain = null
+var _terrain:VoxelLodTerrain = null
 var edit_cursor = null
 var edit_shape					= Bullet.BULLET_SHAPE.SPHERE
 
@@ -44,8 +44,7 @@ func hide_edit_cursors():
 	
 
 func _ready():
-	_world = get_node(world_path)
-	_terrain = get_node(terrain_path)
+	_terrain = get_node(terrain_path) as VoxelLodTerrain
 	hide_edit_cursors()
 	edit_cursor = get_node(edit_cursor_sphere_path)
 
@@ -120,7 +119,7 @@ func _physics_process(delta):
 		firing_tick = OS.get_ticks_msec()
 		#shoot_bullet()
 		if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
-			Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape)
+			Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape, SDF_VALUE)
 	
 	#### Update Camera
 	
@@ -176,7 +175,9 @@ func shoot_bullet():
 		bullet.type = firing_type
 
 	bullet.set_linear_velocity(velocity - $Body/Shoulder/Gun.global_transform.basis.y * 30)
-	bullet.connect("painting", self, "_on_terrain_addition")
+	if true: # scope
+		var err = bullet.connect("painting", self, "_on_terrain_addition")
+		DebUtil.debCheck(!err, "logic error")
 	bullet.add_to_group("bullets")
 	get_parent().add_child(bullet)
 
@@ -195,74 +196,82 @@ func get_edit_cursor_size() -> Vector3:
 	
 func _input(event):
 	
-	if Input.is_action_pressed("throw_grenade"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
-		shoot_bullet()
-	if Input.is_action_pressed("toggle_weapon_spotlight"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
-		$CamNode/Camera/SpotLight.visible = !$CamNode/Camera/SpotLight.visible
+	var is_menu_overlay_visible = Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE
+	if not is_menu_overlay_visible:
+		if Input.is_action_pressed("throw_grenade"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
+			shoot_bullet()
+		if Input.is_action_pressed("toggle_weapon_spotlight"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
+			$CamNode/Camera/SpotLight.visible = !$CamNode/Camera/SpotLight.visible
+		
+		
+		if event is InputEventKey and event.pressed:
+			if Input.is_action_pressed("sdf_add"):
+				SDF_VALUE+=5.0;
+				print('SDF_VALUE', SDF_VALUE)
+			if Input.is_action_pressed("sdf_del"):
+				SDF_VALUE-=5.0;
+				print('SDF_VALUE', SDF_VALUE)
+			if event.scancode == KEY_1:
+				edit_shape = Bullet.BULLET_SHAPE.POINT
+				hide_edit_cursors()
+				edit_cursor = get_node(edit_cursor_sphere_path)
+				print("firing_shape = 0 (do_point)")
+			if event.scancode == KEY_2:
+				edit_shape = Bullet.BULLET_SHAPE.SPHERE
+				hide_edit_cursors()
+				edit_cursor = get_node(edit_cursor_sphere_path)
+				print("firing_shape = 1 (do_sphere)")
+			if event.scancode == KEY_3:
+				edit_shape = Bullet.BULLET_SHAPE.BOX
+				hide_edit_cursors()
+				edit_cursor = get_node(edit_cursor_box_path)
+				print("firing_shape = 2 (do_box)")
+				
+		if event is InputEventMouseButton and Input.is_mouse_button_pressed(BUTTON_WHEEL_UP):
+			#camera_max_lerp -= .1
+			#camera_max_lerp = clamp(camera_max_lerp, 0, 1)
+			inc_edit_cursor_size(1)
 	
-	
-	if event is InputEventKey and event.pressed:
-		if event.scancode == KEY_1:
-			edit_shape = Bullet.BULLET_SHAPE.POINT
-			hide_edit_cursors()
-			edit_cursor = get_node(edit_cursor_sphere_path)
-			print("firing_shape = 0 (do_point)")
-		if event.scancode == KEY_2:
-			edit_shape = Bullet.BULLET_SHAPE.SPHERE
-			hide_edit_cursors()
-			edit_cursor = get_node(edit_cursor_sphere_path)
-			print("firing_shape = 1 (do_sphere)")
-		if event.scancode == KEY_3:
-			edit_shape = Bullet.BULLET_SHAPE.BOX
-			hide_edit_cursors()
-			edit_cursor = get_node(edit_cursor_box_path)
-			print("firing_shape = 2 (do_box)")
+		elif event is InputEventMouseButton and Input.is_mouse_button_pressed(BUTTON_WHEEL_DOWN):
+			#camera_max_lerp += .1
+			#camera_max_lerp = clamp(camera_max_lerp, 0, 1)
+			inc_edit_cursor_size(-1)
 			
-	if event is InputEventMouseButton and Input.is_mouse_button_pressed(BUTTON_WHEEL_UP):
-		#camera_max_lerp -= .1
-		#camera_max_lerp = clamp(camera_max_lerp, 0, 1)
-		inc_edit_cursor_size(1)
-
-	elif event is InputEventMouseButton and Input.is_mouse_button_pressed(BUTTON_WHEEL_DOWN):
-		#camera_max_lerp += .1
-		#camera_max_lerp = clamp(camera_max_lerp, 0, 1)
-		inc_edit_cursor_size(-1)
-		
-		
-	elif event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
-		
-		# Rotate the camera around the player vertically
-		$CamNode.rotate_x(deg2rad(-event.relative.y * MOUSE_SENSITIVITY * 0.90625))
-		var rot = $CamNode.rotation_degrees
-		rot.x = clamp(rot.x, -60, 85)
-		$CamNode.rotation_degrees = rot
-
-		# Rotate the gun up and down aligned with the player 
-		$Body/Shoulder.rotate_x(deg2rad(-event.relative.y * MOUSE_SENSITIVITY))
-		rot = $Body/Shoulder.rotation_degrees
-		rot.x = clamp(rot.x, -80, 80)
-		$Body/Shoulder.rotation_degrees = rot
-		$GunCollisionShape.global_transform = $Body/Shoulder/Gun.global_transform
-		
-		# Rotate Player left and right
-		self.rotate_y(deg2rad(event.relative.x * MOUSE_SENSITIVITY * -1))
-
-
-	elif event is InputEventMouseButton:
-		if Input.is_action_pressed("shoot_add"):
-			firing_type = Bullet.BULLET_TYPE.ADD
-			firing = true
-			firing_tick = OS.get_ticks_msec()
-			#shoot_bullet()
-			if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
-				Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape)
-		elif Input.is_action_pressed("shoot_del"):
-			firing_type = Bullet.BULLET_TYPE.DELETE
-			firing = true
-			firing_tick = OS.get_ticks_msec()
-			#shoot_bullet()
-			if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
-				Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape)
-		elif Input.is_action_just_released("shoot_add") or Input.is_action_just_released("shoot_del"):
-			firing = false
+			
+		elif event is InputEventMouseMotion: 
+			
+			# Rotate the camera around the player vertically
+			$CamNode.rotate_x(deg2rad(-event.relative.y * MOUSE_SENSITIVITY * 0.90625))
+			var rot = $CamNode.rotation_degrees
+			rot.x = clamp(rot.x, -60, 85)
+			$CamNode.rotation_degrees = rot
+	
+			# Rotate the gun up and down aligned with the player 
+			$Body/Shoulder.rotate_x(deg2rad(-event.relative.y * MOUSE_SENSITIVITY))
+			rot = $Body/Shoulder.rotation_degrees
+			rot.x = clamp(rot.x, -80, 80)
+			$Body/Shoulder.rotation_degrees = rot
+			$GunCollisionShape.global_transform = $Body/Shoulder/Gun.global_transform
+			
+			# Rotate Player left and right
+			self.rotate_y(deg2rad(event.relative.x * MOUSE_SENSITIVITY * -1))
+	
+	
+		elif event is InputEventMouseButton:
+			if Input.is_action_pressed("shoot_add"):
+				firing_type = Bullet.BULLET_TYPE.ADD
+				firing = true
+				firing_tick = OS.get_ticks_msec()
+				#shoot_bullet()
+				if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
+					Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape, SDF_VALUE)
+			elif Input.is_action_pressed("shoot_del"):
+				firing_type = Bullet.BULLET_TYPE.DELETE
+				firing = true
+				firing_tick = OS.get_ticks_msec()
+				#shoot_bullet()
+				if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
+					Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape, SDF_VALUE)
+			elif Input.is_action_just_released("shoot_add") or Input.is_action_just_released("shoot_del"):
+				firing = false
 

@@ -5,6 +5,7 @@ var _action_remove = false
 var _head = null
 var _terrain = null
 
+var sdf_smoothness = 100.0;
 
 func _ready():
 	_head = get_parent().get_node("Camera")
@@ -23,6 +24,12 @@ func _input(event):
 		if event.pressed:
 			if event.scancode == KEY_P:
 				print_map_slice()
+			if event.scancode == KEY_Y:
+				sdf_smoothness += 10.0
+				print("sdf_smoothness ", sdf_smoothness)
+			if event.scancode == KEY_U:
+				sdf_smoothness -= 10.0
+				print("sdf_smoothness ", sdf_smoothness)
 
 
 func _process(delta):
@@ -45,7 +52,8 @@ func do_sphere(center, fradius, add):
 		vt.mode = VoxelTool.MODE_ADD
 	else:
 		vt.mode = VoxelTool.MODE_REMOVE
-	vt.do_sphere(center, fradius)
+	#vt.do_sphere(center, fradius, sdf_smoothness)
+	vt.do_box(center, center + Vector3(fradius,fradius,fradius), sdf_smoothness)
 
 
 func print_map_slice():

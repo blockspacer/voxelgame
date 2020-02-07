@@ -1,0 +1,127 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://fps_demo/FadeInRect.gd" type="Script" id=1]
+
+[sub_resource type="Animation" id=1]
+resource_name = "fade_in"
+step = 0.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 0, 0, 0 ), Color( 0, 0, 0, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("VBoxContainer/HBoxContainer/ProgressCircle:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+
+[sub_resource type="Shader" id=2]
+code = "// see https://kosro.de/loading-circle-shader/
+// see https://www.shadertoy.com/view/Xd3cR8
+
+shader_type canvas_item;
+render_mode blend_mix,unshaded;
+
+uniform vec4 color_tint : hint_color = vec4(0.3, .44, 1.0, 0.8);
+uniform float PI = 3.14159;
+uniform float THICCNESS = 0.03;
+uniform float RADIUS = 0.2;
+uniform float SPEED = 4.0;
+
+float circle(vec2 uv, vec2 pos, float rad) {
+	return 1.0 - smoothstep(rad,rad+0.005,length(uv-pos));
+}
+
+float ring(float aa, vec2 uv, vec2 pos, float innerRad, float outerRad) {
+	return (1.0 - smoothstep(outerRad,outerRad+aa,length(uv-pos))) * smoothstep(innerRad-aa,innerRad,length(uv-pos));
+}
+
+void fragment() {
+	vec2 Resolution = 1./SCREEN_PIXEL_SIZE;
+	float aa = 2.0 / min(Resolution.x,Resolution.y);
+	
+	vec2 uv = UV.xy;
+	uv -= vec2(0.5);
+	
+	float geo = 0.0;
+	
+	geo += ring(aa, uv, vec2(0.0),RADIUS-THICCNESS,RADIUS);
+	
+	float rot = -TIME * SPEED;
+	
+	uv *= mat2(vec2(cos(rot), sin(rot)), vec2(-sin(rot), cos(rot)));
+	
+	float a = atan(uv.x,uv.y)*PI*0.05 + 0.5;
+	
+	a = max(a,circle(uv,vec2(0.0,-RADIUS+THICCNESS/2.0),THICCNESS/2.0));
+	
+	COLOR = vec4(a*geo);
+	COLOR *= color_tint;
+}"
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 2 )
+shader_param/color_tint = Color( 0.3, 0.44, 1, 0.8 )
+shader_param/PI = 3.14159
+shader_param/THICCNESS = 0.03
+shader_param/RADIUS = 0.2
+shader_param/SPEED = 4.0
+
+[node name="FadeInRect" type="ColorRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0, 0, 0, 0 )
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+anim_player_path = NodePath("FadeInAnimation")
+
+[node name="FadeInAnimation" type="AnimationPlayer" parent="."]
+anims/fade_in = SubResource( 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+size_flags_horizontal = 2
+size_flags_vertical = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+margin_left = 412.0
+margin_top = 200.0
+margin_right = 612.0
+margin_bottom = 400.0
+mouse_filter = 2
+size_flags_horizontal = 6
+size_flags_vertical = 6
+
+[node name="ProgressCircle" type="ColorRect" parent="VBoxContainer/HBoxContainer"]
+material = SubResource( 3 )
+margin_right = 200.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 200, 200 )
+mouse_filter = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0

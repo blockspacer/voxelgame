@@ -16,12 +16,16 @@ _global_script_class_icons={
 [application]
 
 config/name="Voxel Tools Demo"
-run/main_scene="res://fps_demo/noise_smooth_lod.tscn"
+run/main_scene="res://fps_demo/title_screen.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
+DebUtil="*res://fps_demo/scripts/DebUtil.gd"
 DDD="*res://common/ddd.gd"
+ItemDB="*res://fps_demo/scripts/ItemDB.gd"
+InventoryItemContainer="*res://fps_demo/scripts/InventoryItemContainer.gd"
+InventoryItemBase="*res://fps_demo/scripts/InventoryItemBase.gd"
 
 [display]
 
@@ -87,6 +91,21 @@ throw_grenade={
 toggle_weapon_spotlight={
 "deadzone": 0.5,
 "events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":76,"unicode":0,"echo":false,"script":null)
+ ]
+}
+sdf_add={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":89,"unicode":0,"echo":false,"script":null)
+ ]
+}
+sdf_del={
+"deadzone": 0.5,
+"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":85,"unicode":0,"echo":false,"script":null)
+ ]
+}
+inv_grab={
+"deadzone": 0.5,
+"events": [ Object(InputEventMouseButton,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"button_mask":0,"position":Vector2( 0, 0 ),"global_position":Vector2( 0, 0 ),"factor":1.0,"button_index":1,"pressed":false,"doubleclick":false,"script":null)
  ]
 }
 

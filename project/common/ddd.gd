@@ -39,7 +39,7 @@ func _get_line_material():
 	return _line_material
 
 
-func _process(delta):
+func _process(_delta):
 	var i = 0
 	while i < len(_lines):
 		var d = _lines[i]

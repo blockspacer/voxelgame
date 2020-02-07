@@ -41,7 +41,7 @@ static func _format_memory(m):
 	var mbr = m % 1000000
 	return str(mb, ".", mbr, " Mb")
 
-func _process(delta):
+func _process(_delta):
 	var dm = OS.get_dynamic_memory_usage()
 	var sm = OS.get_static_memory_usage()
 	UI_Noise.get_child(5).text = "Dynamic memory: " + _format_memory(dm)

@@ -20,9 +20,11 @@ image = ExtResource( 3 )
 channel = 1
 
 [sub_resource type="Voxel" id=4]
+color = Color( 0.180392, 0.0705882, 0.0705882, 1 )
 transparent = true
 
 [sub_resource type="Voxel" id=5]
+color = Color( 0.690196, 0.462745, 0.462745, 1 )
 geometry_type = 1
 cube_geometry/padding_y = 0.0
 cube_tiles/left = Vector2( 0, 0 )

@@ -1,7 +1,5 @@
 extends RigidBody
 
-signal painting
-
 enum BULLET_TYPE {
 	BALL = -1,                      # Bouncy ball
 	ADD = 0,                        # Add terrain
@@ -14,11 +12,12 @@ enum BULLET_SHAPE {
 	BOX = 1
 }
 
-var terrain
-var type 						= BULLET_TYPE.BALL
+var _terrain
+var _type 						= BULLET_TYPE.BALL
 var edit_shape					= BULLET_SHAPE.SPHERE
 var GROWTH_SPEED:Vector3 		= Vector3(0.01,0.01,0.01)
 var EDIT_SIZE:float				= 3.5
+var SDF_VALUE:float				= 0.0
 onready var MIN_DISTANCE:float	= EDIT_SIZE*.75
 var LIFE_TIME:int				= 60
 var growth_ticker:int			= 0
@@ -26,20 +25,21 @@ var sound_played:bool 			= false
 
 
 func _ready():	
-	if(type != BULLET_TYPE.BALL):
-		terrain = get_node("../VoxelTerrain")
+	if(_type != BULLET_TYPE.BALL):
+		_terrain = get_node("../VoxelTerrain")
 	
 	bounce = 2.0
 	
 	# Enable bullet collision detection
 	contact_monitor = true
 	contacts_reported = 1
-	connect("body_entered", self, "_on_bullet_hit")
+	var result = connect("body_entered", self, "_on_bullet_hit")
+	DebUtil.debCheck(result != null, "logic error")
 
 	var mat = SpatialMaterial.new()
-	if(type == BULLET_TYPE.ADD):
+	if(_type == BULLET_TYPE.ADD):
 		mat.albedo_color = Color(1,1,1,1)
-	elif type == BULLET_TYPE.DELETE:
+	elif _type == BULLET_TYPE.DELETE:
 		mat.albedo_color = Color(0,0,0,1)
 	else:
 		mat.albedo_color = Color( rand_range(0,1), rand_range(0,1), rand_range(0,1), 1 )
@@ -47,7 +47,9 @@ func _ready():
 
 	var death_timer = Timer.new()
 	add_child(death_timer)
-	death_timer.connect("timeout", self, "_on_life_timeout")
+	if true: # scope
+		var err = death_timer.connect("timeout", self, "_on_life_timeout")
+		DebUtil.debCheck(!err, "logic error")
 	death_timer.start(LIFE_TIME)
 
 
@@ -56,12 +58,12 @@ func _on_bullet_hit(body):
 		$AudioStreamPlayer3D.play()
 		sound_played = true
 		
-	if type == BULLET_TYPE.BALL and OS.get_ticks_msec() - growth_ticker > 100:
+	if _type == BULLET_TYPE.BALL and OS.get_ticks_msec() - growth_ticker > 100:
 		scale += GROWTH_SPEED
 		mass += GROWTH_SPEED.x
 		growth_ticker = OS.get_ticks_msec()
-	if type != BULLET_TYPE.BALL and body.name == "VoxelTerrain":
-		paint_shape(terrain, global_transform.origin, Vector3(EDIT_SIZE, EDIT_SIZE, EDIT_SIZE), type, edit_shape)
+	if _type != BULLET_TYPE.BALL and body.name == "VoxelTerrain":
+		paint_shape(_terrain, global_transform.origin, Vector3(EDIT_SIZE, EDIT_SIZE, EDIT_SIZE), _type, edit_shape, SDF_VALUE)
 		queue_free()
 
 			
@@ -70,7 +72,7 @@ func _on_life_timeout():
 	queue_free()
 
 
-static func paint_shape(terrain, origin, size, type, shape):
+static func paint_shape(terrain, origin, size, type, shape, sdf_value):
 	
 	# Creates a new VoxelTool each call, so if you want to retain data, put it in a global function (not in Bullet since it gets destroyed)
 	var vt = terrain.get_voxel_tool()
@@ -90,10 +92,10 @@ static func paint_shape(terrain, origin, size, type, shape):
 		vt.value = 0
 	
 	if(shape == BULLET_SHAPE.POINT):
-		vt.do_point(origin)
+		vt.do_point(origin, sdf_value)
 	
 	if(shape == BULLET_SHAPE.SPHERE):
-		vt.do_sphere(origin, size.x)
+		vt.do_sphere(origin, size.x, sdf_value)
 	
 	if(shape == BULLET_SHAPE.BOX):
-		vt.do_box(origin, origin + size)
+		vt.do_box(origin, origin + size, sdf_value)
