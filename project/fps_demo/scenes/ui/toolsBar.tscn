@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://fps_demo/scenes/ui/toolsBar.gd" type="Script" id=1]
+[ext_resource path="res://fps_demo/scenes/ui/InventorySlot.tscn" type="PackedScene" id=2]
 
 [node name="toolsBar" type="Control"]
 anchor_right = 1.0
@@ -13,7 +14,28 @@ script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-_slots_path = NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer")
+_slots_dict = {
+"rows": [ {
+"columns": [ {
+"is_draggable_from": false,
+"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer/slot11")
+}, {
+"is_droppable_in": false,
+"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer/slot12")
+}, {
+"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer/slot13")
+} ]
+}, {
+"columns": [ {
+"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer2/slot21")
+}, {
+"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer2/slot22")
+}, {
+"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer2/slot23")
+} ]
+} ]
+}
+_bounding_areas_NodePaths = [ NodePath("VBoxContainer/MarginContainer") ]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 anchor_left = 0.5
@@ -21,7 +43,7 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -175.0
-margin_top = -90.0
+margin_top = -154.0
 margin_right = 175.0
 mouse_filter = 2
 size_flags_horizontal = 4
@@ -34,7 +56,7 @@ __meta__ = {
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer"]
 margin_left = 65.0
 margin_right = 285.0
-margin_bottom = 90.0
+margin_bottom = 154.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/margin_right = 15
@@ -46,7 +68,7 @@ custom_constants/margin_bottom = 15
 margin_left = 15.0
 margin_top = 15.0
 margin_right = 205.0
-margin_bottom = 75.0
+margin_bottom = 139.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 2
@@ -58,55 +80,30 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 custom_constants/separation = 5
 
-[node name="slot1" type="Control" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer"]
-margin_right = 60.0
-margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
+[node name="slot11" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer" instance=ExtResource( 2 )]
 
-[node name="ColorRect" type="ColorRect" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer/slot1"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color( 1, 1, 1, 0.109804 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="slot2" type="Control" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer"]
+[node name="slot12" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer" instance=ExtResource( 2 )]
 margin_left = 65.0
 margin_right = 125.0
-margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="ColorRect2" type="ColorRect" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer/slot2"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color( 1, 1, 1, 0.109804 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="slot3" type="Control" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer"]
+[node name="slot13" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer" instance=ExtResource( 2 )]
 margin_left = 130.0
 margin_right = 190.0
-margin_bottom = 60.0
-rect_min_size = Vector2( 60, 60 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="ColorRect3" type="ColorRect" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer/slot3"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-color = Color( 1, 1, 1, 0.109804 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="SlotsHBoxContainer2" type="HBoxContainer" parent="VBoxContainer/MarginContainer/VBoxRows"]
+margin_top = 64.0
+margin_right = 190.0
+margin_bottom = 124.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+custom_constants/separation = 5
+
+[node name="slot21" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer2" instance=ExtResource( 2 )]
+
+[node name="slot22" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer2" instance=ExtResource( 2 )]
+margin_left = 65.0
+margin_right = 125.0
+
+[node name="slot23" parent="VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer2" instance=ExtResource( 2 )]
+margin_left = 130.0
+margin_right = 190.0

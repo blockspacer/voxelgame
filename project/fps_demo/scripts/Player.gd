@@ -81,12 +81,16 @@ func _physics_process(delta):
 	
 	if Input.is_action_pressed("move_forward"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
 		direction -= facing_direction.z			
+
 	if Input.is_action_pressed("move_backward"):
 		direction += facing_direction.z
+
 	if Input.is_action_pressed("move_left"):
 		direction += -facing_direction.x
+
 	if Input.is_action_pressed("move_right"):
 		direction += +facing_direction.x
+
 	if  Input.is_action_pressed("jump") and (jump_is_jetpack or is_on_floor()):
 		velocity.y = JUMP_SPEED
 	
@@ -200,27 +204,31 @@ func _input(event):
 	if not is_menu_overlay_visible:
 		if Input.is_action_pressed("throw_grenade"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
 			shoot_bullet()
+
 		if Input.is_action_pressed("toggle_weapon_spotlight"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
 			$CamNode/Camera/SpotLight.visible = !$CamNode/Camera/SpotLight.visible
-		
 		
 		if event is InputEventKey and event.pressed:
 			if Input.is_action_pressed("sdf_add"):
 				SDF_VALUE+=5.0;
 				print('SDF_VALUE', SDF_VALUE)
+
 			if Input.is_action_pressed("sdf_del"):
 				SDF_VALUE-=5.0;
 				print('SDF_VALUE', SDF_VALUE)
+
 			if event.scancode == KEY_1:
 				edit_shape = Bullet.BULLET_SHAPE.POINT
 				hide_edit_cursors()
 				edit_cursor = get_node(edit_cursor_sphere_path)
 				print("firing_shape = 0 (do_point)")
+
 			if event.scancode == KEY_2:
 				edit_shape = Bullet.BULLET_SHAPE.SPHERE
 				hide_edit_cursors()
 				edit_cursor = get_node(edit_cursor_sphere_path)
 				print("firing_shape = 1 (do_sphere)")
+
 			if event.scancode == KEY_3:
 				edit_shape = Bullet.BULLET_SHAPE.BOX
 				hide_edit_cursors()
@@ -265,13 +273,15 @@ func _input(event):
 				#shoot_bullet()
 				if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
 					Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape, SDF_VALUE)
-			elif Input.is_action_pressed("shoot_del"):
-				firing_type = Bullet.BULLET_TYPE.DELETE
-				firing = true
-				firing_tick = OS.get_ticks_msec()
-				#shoot_bullet()
-				if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
-					Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape, SDF_VALUE)
-			elif Input.is_action_just_released("shoot_add") or Input.is_action_just_released("shoot_del"):
-				firing = false
+			
+				elif Input.is_action_pressed("shoot_del"):
+					firing_type = Bullet.BULLET_TYPE.DELETE
+					firing = true
+					firing_tick = OS.get_ticks_msec()
+					#shoot_bullet()
+					if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
+						Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape, SDF_VALUE)
+				
+				elif Input.is_action_just_released("shoot_add") or Input.is_action_just_released("shoot_del"):
+					firing = false
 

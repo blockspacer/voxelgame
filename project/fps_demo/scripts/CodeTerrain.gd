@@ -74,8 +74,10 @@ func create_terrain():
 ## A. VoxelTerrain
 
 	terrain.voxel_library = VoxelLibrary.new()
+	
 	if voxel_channel==1:
 		terrain.smooth_meshing_enabled = true	
+
 	terrain.view_distance = 256	
 	terrain.set_material(0, MATERIAL)
 

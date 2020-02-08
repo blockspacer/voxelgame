@@ -27,8 +27,6 @@ func _ready():
 		print(output_path)
 		dir.make_dir(output_path)
 	
-	
-	
 	set_process_input(true)
 	
 func _input(event):
@@ -48,12 +46,16 @@ func make_screenshot():
 
 func _update_tags():
 	var time
-	if (file_tag == 1): time = str(OS.get_unix_time())
+	if (file_tag == 1): 
+		time = str(OS.get_unix_time())
 	else:
 		time = OS.get_datetime()
 		time = "%s_%02d_%02d_%02d%02d%02d" % [time['year'], time['month'], time['day'], 
 											time['hour'], time['minute'], time['second']]
-	if (_tag == time): _index += 1
+
+	if (_tag == time): 
+		_index += 1
 	else:
 		_index = 0
+		
 	_tag = time	

@@ -14,9 +14,11 @@ func prepare(item_bg_path, item_texture_path, item_durability_path):
 
 func set_texture(texture:Texture):
 	DebUtil.debCheck(texture != null, "logic error")
+
 	if _item_texture == null:
 		print('failed to set item texture')
 		DebUtil.debCheck(false, "logic error")
+		
 	_item_texture.texture = texture
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

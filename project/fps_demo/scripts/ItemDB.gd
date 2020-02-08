@@ -2,26 +2,59 @@ extends Node
  
 const ICON_PATH = "res://fps_demo/textures/icons/"
 
-enum ITEM_ID {sword, breastplate, potato, error}
+enum ITEM_ID {sword, breastplate, potato, internal_error, internal_reference}
 
 const ITEMS = {
 	ITEM_ID.sword: {
 		"icon": ICON_PATH + "cross_white_unique.png",
-		"allowed_slot_category": "MAIN_HAND"
+		"allowed_slot_category": "MAIN_HAND",
+		"name": "cross_white_unique",
+		"description": "asd asdsdfsd",
+		"is_consumable": false,
+		"weight": 0.1,
+		"stack_size": 1,
+		"size_in_slots": [1,2,1]
 	},
 	ITEM_ID.breastplate: {
 		"icon": ICON_PATH + "drop-of-liquid_white_unique.png",
-		"allowed_slot_category": "CHEST"
+		"allowed_slot_category": "CHEST",
+		"name": "drop-of-liquid",
+		"description": "sdfs dffdfd",
+		"is_consumable": true,
+		"weight": 10.1,
+		"stack_size": 2,
+		"size_in_slots": [1]
 	},
 	ITEM_ID.potato: {
 		"icon": ICON_PATH + "food_white_unique.png",
-		"allowed_slot_category": "ALL"
+		"allowed_slot_category": "ALL",
+		"name": "food_white_unique",
+		"description": "123",
+		"is_consumable": true,
+		"weight": 2.1,
+		"stack_size": 3,
+		"size_in_slots": [2,2]
 	},
-	ITEM_ID.error:{
+	ITEM_ID.internal_error:{
 		"icon": ICON_PATH + "found_error_white_unique.png",
-		"allowed_slot_category": "ALL"
+		"allowed_slot_category": "ALL",
+		"name": "found_error_white_unique",
+		"description": "adas asdasd",
+		"is_consumable": false,
+		"weight": 3.4,
+		"stack_size": 1,
+		"size_in_slots": [1]
 	}
 }
+
+func get_item_data(item, key):
+	if item.has_meta(key):
+		# item can have custom name, last_owner, e.t.c.
+		return item.get_meta(key)
+	DebUtil.debCheck(item.has_meta("item_id"), "logic error")
+	var item_data = ITEMS[item.get_meta("item_id")]
+	DebUtil.debCheck(item_data.has(key), "logic error")
+	return item_data[key]
 
 func create_item(parent, item_base, item_id):
 	var item:InventoryItemBase = item_base.instance() as InventoryItemBase
@@ -37,3 +70,13 @@ func get_item(item_id):
 		return ITEMS[item_id]
 	else:
 		return ITEMS["error"]
+
+func has_slot_item(slot):
+	return slot.has_meta(self.name + "_stored_item") and ItemDB.get_slot_item(slot) != null
+	
+func get_slot_item(slot):
+	return slot.get_meta(self.name + "_stored_item")
+
+# NOTE: does not position item in slot, prefer replace_slot_item
+func set_slot_item_unchecked(slot, item):
+	slot.set_meta(self.name + "_stored_item", item)

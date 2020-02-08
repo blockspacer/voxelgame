@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://fps_demo/scripts/InventorySlotFlat.gd" type="Script" id=1]
+[ext_resource path="res://fps_demo/scenes/ui/slotTooltip.tscn" type="PackedScene" id=2]
+
+[node name="slot" type="Control"]
+margin_right = 60.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 60, 60 )
+size_flags_horizontal = 7
+size_flags_vertical = 7
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+_tooltip_hovered_PackedScene = ExtResource( 2 )
+_bg_NodePath = NodePath("ColorRect")
+_tween_scale_NodePath = NodePath("TweenScale")
+_tween_color_NodePath = NodePath("TweenColor")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 1, 1, 1, 0.109804 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TweenScale" type="Tween" parent="."]
+
+[node name="TweenColor" type="Tween" parent="."]

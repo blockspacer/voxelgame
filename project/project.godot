@@ -21,6 +21,8 @@ config/icon="res://icon.png"
 
 [autoload]
 
+InventorySlot="*res://fps_demo/scripts/InventorySlot.gd"
+NetworkIDs="*res://fps_demo/scripts/NetworkIDs.gd"
 DebUtil="*res://fps_demo/scripts/DebUtil.gd"
 DDD="*res://common/ddd.gd"
 ItemDB="*res://fps_demo/scripts/ItemDB.gd"
