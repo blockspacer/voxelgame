@@ -1,0 +1,298 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://fps_demo/scenes/ui/TimeoutSceneChanger.tscn" type="PackedScene" id=1]
+[ext_resource path="res://fps_demo/textures/logo/logo_size_dummy.jpg" type="Texture" id=2]
+[ext_resource path="res://fps_demo/fonts/arial/arial.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://fps_demo/scripts/LogoScreen.gd" type="Script" id=5]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+render_mode blend_mix,unshaded;
+
+// Inspired by:
+//  http://cmdrkitten.tumblr.com/post/172173936860
+// https://www.shadertoy.com/view/MsGczV
+
+uniform float PI = 3.14159265359;
+uniform float count = 4.0;
+
+uniform float outer_geart = 6.0; 			// Time
+uniform float outer_gearR = 0.8;		// Gear radius
+uniform float outer_gearteethH = 0.08;		// Teeth height
+uniform float outer_gearteethR = 4.0;		// Teeth \"roundness\"
+uniform float outer_gearteethCount = 32.0;	// Teeth count
+uniform float outer_geardiskR = 0.92;		// Inner or outer border radius
+uniform vec4  outer_gearcolor:hint_color = vec4(0.63, 0.42, 0.075, 1.0); //vec4(0.84, 0.56, 0.1, 1.0);			// Color
+
+uniform float inner_geart = 1.0; 			// Time
+uniform float inner_gearR = 0.4;		// Gear radius
+uniform float inner_gearteethH = 0.08;		// Teeth height
+uniform float inner_gearteethR = 6.0;		// Teeth \"roundness\"
+uniform float inner_gearteethCount = 16.0;	// Teeth count
+uniform float inner_geardiskR = 0.3;		// Inner or outer border radius
+uniform vec4  inner_gearcolor:hint_color = vec4(1.0, 0.71, 0.12, 1.0);			// Color
+    
+float GearFunction(vec2 uv, 
+    float geart,			// Time
+    float gearR,		// Gear radius
+    float gearteethH,		// Teeth height
+    float gearteethR,		// Teeth \"roundness\"
+    float gearteethCount,	// Teeth count
+    float geardiskR,		// Inner or outer border radius
+    inout vec3 gearcolor			// Color
+	)
+{
+    float r = length(uv);
+    float a = atan(uv.y, uv.x);
+    
+    // Gear polar function:
+    //  A sine squashed by a logistic function gives a convincing
+    //  gear shape!
+    float p = gearR-0.5*gearteethH + 
+              gearteethH/(1.0+exp(gearteethR*sin(geart + gearteethCount*a)));
+
+    float gear = r - p;
+    float disk = r - geardiskR;
+    
+    return gearR > geardiskR ? max(-disk, gear) : max(disk, -gear);
+}
+
+
+float GearDe(vec2 uv, 
+    float geart,			// Time
+    float gearR,		// Gear radius
+    float gearteethH,		// Teeth height
+    float gearteethR,		// Teeth \"roundness\"
+    float gearteethCount,	// Teeth count
+    float geardiskR,		// Inner or outer border radius
+    vec3 gearcolor			// Color
+    )
+{
+    // IQ's f/|Grad(f)| distance estimator:
+    float f = GearFunction(uv, 
+     geart,			// Time
+     gearR,		// Gear radius
+     gearteethH,		// Teeth height
+     gearteethR,		// Teeth \"roundness\"
+     gearteethCount,	// Teeth count
+     geardiskR,		// Inner or outer border radius
+     gearcolor			// Color
+	);
+    vec2 eps = vec2(0.0001, 0);
+    vec2 grad = vec2(
+        GearFunction(uv + eps.xy, 
+		     geart,			// Time
+		     gearR,		// Gear radius
+		     gearteethH,		// Teeth height
+		     gearteethR,		// Teeth \"roundness\"
+		     gearteethCount,	// Teeth count
+		     geardiskR,		// Inner or outer border radius
+		     gearcolor			// Color
+		) 
+		- GearFunction(uv - eps.xy, 
+		     geart,			// Time
+		     gearR,		// Gear radius
+		     gearteethH,		// Teeth height
+		     gearteethR,		// Teeth \"roundness\"
+		     gearteethCount,	// Teeth count
+		     geardiskR,		// Inner or outer border radius
+		     gearcolor			// Color
+		),
+        GearFunction(uv + eps.yx, 
+		     geart,			// Time
+		     gearR,		// Gear radius
+		     gearteethH,		// Teeth height
+		     gearteethR,		// Teeth \"roundness\"
+		     gearteethCount,	// Teeth count
+		     geardiskR,		// Inner or outer border radius
+		     gearcolor			// Color
+		) 
+		- GearFunction(uv - eps.yx, 
+		     geart,			// Time
+		     gearR,		// Gear radius
+		     gearteethH,		// Teeth height
+		     gearteethR,		// Teeth \"roundness\"
+		     gearteethCount,	// Teeth count
+		     geardiskR,		// Inner or outer border radius
+		     gearcolor			// Color
+		)) / (2.0*eps.x);
+    
+    return (f)/length(grad);
+}
+
+
+
+float GearShadow(vec2 uv, 
+    float geart,			// Time
+    float gearR,		// Gear radius
+    float gearteethH,		// Teeth height
+    float gearteethR,		// Teeth \"roundness\"
+    float gearteethCount,	// Teeth count
+    float geardiskR,		// Inner or outer border radius
+    vec3 gearcolor			// Color
+  )
+{
+    float r = length(uv+vec2(0.1));
+    float de = r - geardiskR + 0.0*(geardiskR - gearR);
+    float eps = 0.4*geardiskR;
+    return smoothstep(eps, 0., abs(de));
+}
+
+
+void DrawGear(inout vec3 color, vec2 uv, 
+    float geart,			// Time
+    float gearR,		// Gear radius
+    float gearteethH,		// Teeth height
+    float gearteethR,		// Teeth \"roundness\"
+    float gearteethCount,	// Teeth count
+    float geardiskR,		// Inner or outer border radius
+    vec3 gearcolor,			// Color
+  float eps)
+{
+	float d = smoothstep(eps, -eps, GearDe(uv, 
+		     geart,			// Time
+		     gearR,		// Gear radius
+		     gearteethH,		// Teeth height
+		     gearteethR,		// Teeth \"roundness\"
+		     gearteethCount,	// Teeth count
+		     geardiskR,		// Inner or outer border radius
+		     gearcolor			// Color
+	));
+    float s = 1.0 - 0.7*GearShadow(uv, 
+		     geart,			// Time
+		     gearR,		// Gear radius
+		     gearteethH,		// Teeth height
+		     gearteethR,		// Teeth \"roundness\"
+		     gearteethCount,	// Teeth count
+		     geardiskR,		// Inner or outer border radius
+		     gearcolor			// Color
+	);
+    color = mix(s*color, gearcolor, d);
+}
+
+void fragment()  
+{
+    float t = 0.5*TIME;
+	vec2 resolution = 1./TEXTURE_PIXEL_SIZE;
+	//vec2 resolution = 1./SCREEN_PIXEL_SIZE;
+    vec2 uv = 2.0*(UV- 0.5);
+    float eps = 2.0/resolution.y;
+    
+    // Draw inner gears back to front:
+    vec3 color = vec3(0.0);
+    for(float i=0.0; i<count; i++)
+    {
+        t += 2.0*PI/count;
+		vec2 gearSeparation = 0.4*vec2(cos(t),sin(t));
+        DrawGear(color, uv+gearSeparation, 
+          inner_geart*16.0*t+outer_geart*TIME,
+          inner_gearR,
+          inner_gearteethH,
+          inner_gearteethR,
+          inner_gearteethCount,
+          inner_geardiskR,
+          (inner_gearcolor * (0.45 + 0.7*i/(count-1.0)) ).rgb,
+          eps);
+    }
+    
+    // Draw outer gear:
+    DrawGear(color, uv, 
+          outer_geart*TIME,
+          outer_gearR,
+          outer_gearteethH,
+          outer_gearteethR,
+          outer_gearteethCount,
+          outer_geardiskR,
+          (outer_gearcolor).rgb,
+          eps);
+    
+    
+    COLOR = vec4(color,length(color.rgb));
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/PI = 3.14159
+shader_param/count = 4.0
+shader_param/outer_geart = 6.0
+shader_param/outer_gearR = 0.8
+shader_param/outer_gearteethH = 0.08
+shader_param/outer_gearteethR = 4.0
+shader_param/outer_gearteethCount = 32.0
+shader_param/outer_geardiskR = 0.92
+shader_param/outer_gearcolor = Color( 0.84, 0.56, 0.1, 1 )
+shader_param/inner_geart = 1.0
+shader_param/inner_gearR = 0.4
+shader_param/inner_gearteethH = 0.08
+shader_param/inner_gearteethR = 6.0
+shader_param/inner_gearteethCount = 16.0
+shader_param/inner_geardiskR = 0.3
+shader_param/inner_gearcolor = Color( 0.84, 0.56, 0.1, 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 96
+outline_size = 1
+outline_color = Color( 0.329412, 0.329412, 0.329412, 1 )
+font_data = ExtResource( 4 )
+
+[node name="World" type="Spatial"]
+
+[node name="LogoScreen" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -512.0
+margin_top = -300.0
+margin_right = 512.0
+margin_bottom = 300.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+script = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BG" type="ColorRect" parent="LogoScreen"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0.137255, 0.176471, 0.12549, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="LogoScreen"]
+material = SubResource( 2 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -256.0
+margin_top = -256.0
+margin_right = 256.0
+margin_bottom = 256.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="LogoScreen"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -204.5
+margin_top = -54.0
+margin_right = 204.5
+margin_bottom = 54.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 1, 0.894118, 0.666667, 1 )
+text = "TninkCog"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TimeoutSceneChanger" parent="LogoScreen" instance=ExtResource( 1 )]
+scene_to_load_path = "res://fps_demo/scenes/ui/engine_logo_screen.tscn"

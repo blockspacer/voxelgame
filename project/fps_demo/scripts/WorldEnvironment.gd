@@ -1,5 +1,7 @@
 extends WorldEnvironment
 
+export var enabled:bool = true
+
 # Debug label
 export (NodePath) var dlabel
 
@@ -46,6 +48,11 @@ var hor_c:Color = day_color_horizon
 var fog_c:Color = hor_c
 
 func _ready():
+	if not enabled:
+		set_process(false)
+		set_process_input(false)
+		return
+	
 	dlabel = get_node(dlabel)
 	
 	sun = get_node(sun)
@@ -86,6 +93,8 @@ func _ready():
 	
 
 func _process(delta):
+	DebUtil.debCheck(enabled, "logic error")
+	
 	# Update infolabel
 	var s = str("Fps: ", Performance.get_monitor(Performance.TIME_FPS), "\n")
 	var pos = get_viewport().get_camera().global_transform.origin
@@ -120,6 +129,7 @@ func _process(delta):
 
 
 func upd_time_of_day(delta):
+	DebUtil.debCheck(enabled, "logic error")
 	
 #	if(paused == false):
 	time_of_day += delta * game_timescale
@@ -139,6 +149,8 @@ func upd_time_of_day(delta):
 		time_of_day += 86400.0
 
 func upd_wind(delta):
+	DebUtil.debCheck(enabled, "logic error")
+	
 	if(use_wind == false):
 		return
 	
@@ -156,6 +168,8 @@ func upd_wind(delta):
 		n.material_override.set_shader_param("wind_speed", wind_speed)
 	
 func upd_sun():
+	DebUtil.debCheck(enabled, "logic error")
+	
 	var a = day_phase + PI/3.0
 	
 	# Directional Light angle
@@ -220,6 +234,8 @@ func upd_sun():
 
 
 func upd_fog():
+	DebUtil.debCheck(enabled, "logic error")
+	
 	fog_c = sky_c.linear_interpolate(hor_c, 0.8)
 	env.set_fog_color(fog_c)
 	env.set_fog_sun_color(hor_c)

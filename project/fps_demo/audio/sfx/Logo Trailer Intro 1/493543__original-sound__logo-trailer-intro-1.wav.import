@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/493543__original-sound__logo-trailer-intro-1.wav-9bcee2171d21361897080f835f68c5d5.sample"
+
+[deps]
+
+source_file="res://fps_demo/audio/sfx/Logo Trailer Intro 1/493543__original-sound__logo-trailer-intro-1.wav"
+dest_files=[ "res://.import/493543__original-sound__logo-trailer-intro-1.wav-9bcee2171d21361897080f835f68c5d5.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

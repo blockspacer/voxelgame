@@ -11,7 +11,7 @@ func _ready():
 	update_noise_ui()
 	
 func _input(event):
-	if event is InputEventKey and Input.is_key_pressed(KEY_N):
+	if event is InputEventKey and OS.is_debug_build() and Input.is_key_pressed(KEY_N):
 		randomize_terrain()
 	
 

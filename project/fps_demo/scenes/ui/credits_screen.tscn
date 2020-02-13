@@ -1,0 +1,238 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://fps_demo/scenes/ui/AnimatedSceneChanger.tscn" type="PackedScene" id=1]
+[ext_resource path="res://fps_demo/scripts/MenuButton.gd" type="Script" id=2]
+[ext_resource path="res://fps_demo/scripts/CreditsScreen.gd" type="Script" id=3]
+[ext_resource path="res://icon.png" type="Texture" id=4]
+[ext_resource path="res://fps_demo/fonts/arial_48.tres" type="DynamicFontData" id=5]
+[ext_resource path="res://fps_demo/scenes/ui/interactiveShader.tscn" type="PackedScene" id=6]
+
+[sub_resource type="DynamicFont" id=1]
+size = 48
+use_filter = true
+font_data = ExtResource( 5 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 48
+use_filter = true
+font_data = ExtResource( 5 )
+
+[node name="World" type="Spatial"]
+
+[node name="interactiveShader" parent="." instance=ExtResource( 6 )]
+
+[node name="AnimatedSceneChanger" parent="." instance=ExtResource( 1 )]
+
+[node name="CreditsScreen" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+all_btn_container_path = NodePath("MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons")
+animated_scene_changer_path = NodePath("../AnimatedSceneChanger")
+
+[node name="MarginContainer" type="MarginContainer" parent="CreditsScreen"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -180.0
+margin_right = 180.0
+margin_bottom = 210.0
+size_flags_horizontal = 6
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxMenu" type="VBoxContainer" parent="CreditsScreen/MarginContainer"]
+margin_right = 397.0
+margin_bottom = 511.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="CreditsScreen/MarginContainer/VBoxMenu"]
+margin_left = 166.0
+margin_right = 230.0
+margin_bottom = 64.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource( 4 )
+stretch_mode = 6
+
+[node name="HBoxButtons" type="HBoxContainer" parent="CreditsScreen/MarginContainer/VBoxMenu"]
+margin_top = 68.0
+margin_right = 397.0
+margin_bottom = 430.0
+size_flags_horizontal = 7
+size_flags_vertical = 2
+custom_constants/separation = 20
+alignment = 1
+
+[node name="VBoxButtons" type="VBoxContainer" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons"]
+margin_right = 397.0
+margin_bottom = 362.0
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 2
+custom_constants/separation = 20
+alignment = 1
+
+[node name="NewGameBtn" type="Button" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons"]
+margin_left = 18.0
+margin_right = 378.0
+margin_bottom = 61.0
+rect_min_size = Vector2( 360, 60 )
+rect_clip_content = true
+focus_mode = 0
+mouse_filter = 1
+size_flags_horizontal = 6
+size_flags_vertical = 6
+custom_fonts/font = SubResource( 1 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.780392, 0.780392, 0.780392, 1 )
+custom_colors/font_color_pressed = Color( 0.898039, 1, 0.811765, 1 )
+custom_constants/hseparation = 2
+text = "New game"
+flat = true
+script = ExtResource( 2 )
+scene_to_load = "res://fps_demo/noise_smooth_lod.tscn"
+
+[node name="ExitToMainMenuBtn" type="Button" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons"]
+margin_top = 81.0
+margin_right = 397.0
+margin_bottom = 142.0
+rect_min_size = Vector2( 360, 60 )
+rect_clip_content = true
+mouse_filter = 1
+size_flags_horizontal = 6
+size_flags_vertical = 6
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_color_hover = Color( 0.780392, 0.780392, 0.780392, 1 )
+custom_colors/font_color_pressed = Color( 0.898039, 1, 0.811765, 1 )
+custom_constants/hseparation = 2
+text = "Exit to main menu"
+flat = true
+script = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": ""
+}
+scene_to_load = "res://fps_demo/scenes/ui/title_screen.tscn"
+
+[node name="MarginContainer" type="MarginContainer" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons"]
+margin_top = 162.0
+margin_right = 397.0
+margin_bottom = 362.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons/MarginContainer"]
+margin_right = 397.0
+margin_bottom = 200.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons/MarginContainer/VBoxContainer"]
+margin_right = 397.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 300, 200 )
+focus_mode = 2
+size_flags_horizontal = 7
+size_flags_vertical = 7
+bbcode_enabled = true
+bbcode_text = "Music by FoolBoyMedia
+www.FoolBoyMedia.co.uk
+
+Music by Matthew Pablo
+www.matthewpablo.com
+
+Music by Alexander Skeppstedt  AKA lasesrcheese 
+https://soundcloud.com/laserost
+
+Music by Telaron
+https://opengameart.org/users/telaron
+
+Music by Jamius
+https://freesound.org/people/Jamius/
+
+Music by Nbs Dark
+https://freesound.org/people/Nbs%20Dark/
+
+Music by CS279
+https://freesound.org/people/CS279/
+
+Music by LloydEvans09
+https://freesound.org/people/LloydEvans09/
+
+Music by Magntron
+https://freesound.org/people/Magntron/
+
+Music by tyops
+https://freesound.org/people/tyops
+
+Music by Leszek_Szary
+https://freesound.org/people/Leszek_Szary
+
+Music by J.Zazvurek
+https://freesound.org/people/J.Zazvurek
+
+Music by jorickhoofd
+https://freesound.org/people/jorickhoofd
+
+Music by LiamG_SFX
+https://freesound.org/people/LiamG_SFX
+
+Music by SoundFlakes
+https://freesound.org/people/SoundFlakes
+
+Music by Breviceps
+https://freesound.org/people/Breviceps"
+text = "Music by FoolBoyMedia
+www.FoolBoyMedia.co.uk
+
+Music by Matthew Pablo
+www.matthewpablo.com
+
+Music by Alexander Skeppstedt  AKA lasesrcheese 
+https://soundcloud.com/laserost
+
+Music by Telaron
+https://opengameart.org/users/telaron
+
+Music by Jamius
+https://freesound.org/people/Jamius/
+
+Music by Nbs Dark
+https://freesound.org/people/Nbs%20Dark/
+
+Music by CS279
+https://freesound.org/people/CS279/
+
+Music by LloydEvans09
+https://freesound.org/people/LloydEvans09/
+
+Music by Magntron
+https://freesound.org/people/Magntron/
+
+Music by tyops
+https://freesound.org/people/tyops
+
+Music by Leszek_Szary
+https://freesound.org/people/Leszek_Szary
+
+Music by J.Zazvurek
+https://freesound.org/people/J.Zazvurek
+
+Music by jorickhoofd
+https://freesound.org/people/jorickhoofd
+
+Music by LiamG_SFX
+https://freesound.org/people/LiamG_SFX
+
+Music by SoundFlakes
+https://freesound.org/people/SoundFlakes
+
+Music by Breviceps
+https://freesound.org/people/Breviceps"
+selection_enabled = true

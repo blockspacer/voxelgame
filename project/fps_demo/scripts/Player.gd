@@ -166,22 +166,25 @@ func move_camera(lerp_val:float) -> void:
 
 
 func shoot_bullet():
+	if _terrain == null:
+		return
+		
 	$AudioStreamPlayer.play()
 
-	var bullet = preload("res://fps_demo/support/bullet.tscn").instance()
+	var bullet = preload("res://fps_demo/scenes/bullet.tscn").instance()
 	var start_pos = $Body/Shoulder/Gun.global_transform.translated(Vector3(0,-1.15,0))
 	bullet.set_transform(start_pos)
 	bullet.scale = Vector3(.3,.3,.3)
 		
 	if Input.is_key_pressed(KEY_CONTROL):
-		bullet.type = Bullet.BULLET_TYPE.BALL
+		bullet._type = Bullet.BULLET_TYPE.BALL
 	else:
-		bullet.type = firing_type
+		bullet._type = firing_type
 
 	bullet.set_linear_velocity(velocity - $Body/Shoulder/Gun.global_transform.basis.y * 30)
-	if true: # scope
-		var err = bullet.connect("painting", self, "_on_terrain_addition")
-		DebUtil.debCheck(!err, "logic error")
+	#if true: # scope
+	#	var err = bullet.connect("painting", self, "_on_terrain_addition")
+	#	DebUtil.debCheck(!err, "logic error")
 	bullet.add_to_group("bullets")
 	get_parent().add_child(bullet)
 
@@ -199,7 +202,6 @@ func get_edit_cursor_size() -> Vector3:
 	return edit_cursor.get_transformed_aabb().size
 	
 func _input(event):
-	
 	var is_menu_overlay_visible = Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE
 	if not is_menu_overlay_visible:
 		if Input.is_action_pressed("throw_grenade"):		# Fix: Can move around in the air, no momentum, so can also climb steep walls.
@@ -265,7 +267,7 @@ func _input(event):
 			self.rotate_y(deg2rad(event.relative.x * MOUSE_SENSITIVITY * -1))
 	
 	
-		elif event is InputEventMouseButton:
+		elif event is InputEventMouseButton and _terrain != null :
 			if Input.is_action_pressed("shoot_add"):
 				firing_type = Bullet.BULLET_TYPE.ADD
 				firing = true
@@ -274,14 +276,14 @@ func _input(event):
 				if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
 					Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape, SDF_VALUE)
 			
-				elif Input.is_action_pressed("shoot_del"):
-					firing_type = Bullet.BULLET_TYPE.DELETE
-					firing = true
-					firing_tick = OS.get_ticks_msec()
-					#shoot_bullet()
-					if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
-						Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape, SDF_VALUE)
-				
-				elif Input.is_action_just_released("shoot_add") or Input.is_action_just_released("shoot_del"):
-					firing = false
+			elif Input.is_action_pressed("shoot_del") and _terrain != null :
+				firing_type = Bullet.BULLET_TYPE.DELETE
+				firing = true
+				firing_tick = OS.get_ticks_msec()
+				#shoot_bullet()
+				if(last_raycast_on_terrain != null and edit_cursor.is_visible()):
+					Bullet.paint_shape(_terrain, last_raycast_on_terrain, get_edit_cursor_size(), firing_type, edit_shape, SDF_VALUE)
+			
+			elif Input.is_action_just_released("shoot_add") or Input.is_action_just_released("shoot_del"):
+				firing = false
 

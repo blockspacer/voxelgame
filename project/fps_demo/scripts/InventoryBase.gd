@@ -17,6 +17,10 @@ signal item_dragged_to_area
 enum DRAG_ON_SLOT_BEHAVIOR {swap_existing_item, keep_existing_item}
 
 export(DRAG_ON_SLOT_BEHAVIOR) var _drag_on_slot_behavior = DRAG_ON_SLOT_BEHAVIOR.keep_existing_item
+ 
+export(NodePath) var _drop_confirm_dialog_NodePath = null
+
+var _drop_confirm_dialog:WindowDialog = null
 
 # can drag'n'drop items between connected containers
 var _allowed_containers:Array = []
@@ -39,9 +43,24 @@ var _last_cursor_pos:Vector2 = Vector2()
 
 const FLOAT_DELTHA = 0.0000001
 
+var _is_ui_frozen:bool = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	# TODO: self.z_index = 99 # make sure that dragged node in front
+		
+	if true: # scope
+		var node = get_node(_drop_confirm_dialog_NodePath)
+		DebUtil.debCheck(node != null, "logic error")
+		_drop_confirm_dialog = node
+
+	if true: # scope
+		var err = _drop_confirm_dialog.connect("drop_confirm", self, "_on_drop_confirm")
+		DebUtil.debCheck(!err, "logic error")
+
+	if true: # scope
+		var err = _drop_confirm_dialog.connect("drop_cancel", self, "_on_drop_cancel")
+		DebUtil.debCheck(!err, "logic error")
 
 	if _allowed_trash_area_paths != null:
 		for path in _allowed_trash_area_paths:
@@ -70,7 +89,13 @@ func handle_mouse_drag(cursor_pos):
 			grab(cursor_pos)
 		if Input.is_action_just_released("inv_grab"):
 			release(cursor_pos)
-		update_item_held_pos(cursor_pos)
+		if not _is_ui_frozen:
+			update_item_held_pos(cursor_pos)
+
+func notify_ui_frozen():
+	DebUtil.debCheck(_is_ui_frozen, "logic error")
+	if _drop_confirm_dialog.visible:
+		_drop_confirm_dialog.reset_rect()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _input(_delta):
@@ -79,6 +104,20 @@ func _input(_delta):
 	handle_mouse_drag(cursor_pos)
 	_last_cursor_pos = cursor_pos
 		
+func freeze_ui():
+	DebUtil.debCheck(not _is_ui_frozen, "logic error")
+	_is_ui_frozen = true
+	if _item_held != null:
+		_item_held.visible = false
+
+func unfreeze_ui():
+	DebUtil.debCheck(_is_ui_frozen, "logic error")
+	_is_ui_frozen = false
+	if _item_held != null:
+		var cursor_pos = get_global_mouse_position()
+		update_item_held_pos(cursor_pos)
+		_item_held.visible = true
+
 func update_item_held_pos(cursor_pos):
 	if _item_held != null:
 		DebUtil.debCheck(_item_held_slot != null, "logic error")
@@ -86,15 +125,13 @@ func update_item_held_pos(cursor_pos):
 		_item_held.rect_global_position = cursor_pos + _item_offset
 		# TODO: _item_held.z_index = 99 # make sure that dragged node in front
 
-func reparent(target, new_parent):
-	DebUtil.debCheck(target != null, "logic error")
-	DebUtil.debCheck(new_parent != null, "logic error")
-	target.get_parent().remove_child(target)
-	new_parent.add_child(target)
-
 func grab(cursor_pos):
 	var pointed_container = get_container_under_cursor(cursor_pos)
 	if pointed_container != null:
+		if _is_ui_frozen:
+			notify_ui_frozen()
+			return
+
 		DebUtil.debCheck(pointed_container.has_method("grab_item"), "logic error")
 		var grab_result = pointed_container.grab_item(cursor_pos)
 		if grab_result != null:
@@ -119,11 +156,41 @@ func is_in_trash_area(cursor_pos):
 		if c.get_global_rect().has_point(cursor_pos):
 			return c
 
+func _on_drop_confirm():
+	#print('_on_drop_confirm')
+	_drop_confirm_dialog.hide()
+	DebUtil.debCheck(_item_held_slot != null, "logic error")
+	DebUtil.debCheck(_item_held != null, "logic error")
+	unfreeze_ui()
+	delete_held_item()
+
+func _on_drop_cancel():
+	#print('_on_drop_cancel')
+	_drop_confirm_dialog.hide()
+	DebUtil.debCheck(_item_held_slot != null, "logic error")
+	DebUtil.debCheck(_item_held != null, "logic error")
+	_item_held.visible = true
+	unfreeze_ui()
+
+func show_drop_dialog():
+	freeze_ui()
+	DebUtil.debCheck(_item_held_slot != null, "logic error")
+	DebUtil.debCheck(_item_held != null, "logic error")
+	_drop_confirm_dialog.set_text_body( \
+		tr("Do you want to remove item ") \
+		+ tr(ItemDB.get_item_data(_item_held, "name")) \
+		+ " ?") 
+	_drop_confirm_dialog.show()
+
 func release(cursor_pos):
 	if _item_held == null:
 		return
 
 	DebUtil.debCheck(_item_held_slot != null, "logic error")
+
+	if _is_ui_frozen:
+		notify_ui_frozen()
+		return
 
 	var pointed_container = get_container_under_cursor(cursor_pos)
 	if pointed_container == null and is_in_trash_area(cursor_pos):
@@ -136,7 +203,7 @@ func release(cursor_pos):
 			}
 			emit_signal("item_trash_start", signal_data)
 		_last_grabbed_container.change_all_slots_selection(false)
-		delete_held_item()
+		show_drop_dialog()
 		return
 
 	if pointed_container == null:

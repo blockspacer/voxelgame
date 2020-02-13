@@ -1,8 +1,8 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://fps_demo/support/procedural_environment.tres" type="Environment" id=1]
-[ext_resource path="res://fps_demo/support/WorldEnvironment.gd" type="Script" id=2]
-[ext_resource path="res://fps_demo/support/Clouds.gd" type="Script" id=3]
+[ext_resource path="res://fps_demo/scenes/procedural_environment.tres" type="Environment" id=1]
+[ext_resource path="res://fps_demo/scripts/WorldEnvironment.gd" type="Script" id=2]
+[ext_resource path="res://fps_demo/scripts/Clouds.gd" type="Script" id=3]
 
 [sub_resource type="OpenSimplexNoise" id=1]
 seed = 3

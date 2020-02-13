@@ -15,19 +15,24 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Voxel Tools Demo"
-run/main_scene="res://fps_demo/title_screen.tscn"
+config/name="Nova Matter"
+run/main_scene="res://fps_demo/scenes/ui/logo_screen.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
+DebUtil="*res://fps_demo/scripts/DebUtil.gd"
+Helpers="*res://fps_demo/scripts/Helpers.gd"
+GameGlobals="*res://fps_demo/scripts/GameGlobals.gd"
+settings="*res://fps_demo/scripts/settings.gd"
+game_resource_queue="*res://fps_demo/scripts/game_resource_queue.gd"
+GameWindow="*res://fps_demo/scripts/GameWindow.gd"
 InventorySlot="*res://fps_demo/scripts/InventorySlot.gd"
 NetworkIDs="*res://fps_demo/scripts/NetworkIDs.gd"
-DebUtil="*res://fps_demo/scripts/DebUtil.gd"
-DDD="*res://common/ddd.gd"
 ItemDB="*res://fps_demo/scripts/ItemDB.gd"
 InventoryItemContainer="*res://fps_demo/scripts/InventoryItemContainer.gd"
 InventoryItemBase="*res://fps_demo/scripts/InventoryItemBase.gd"
+DDD="*res://common/ddd.gd"
 
 [display]
 

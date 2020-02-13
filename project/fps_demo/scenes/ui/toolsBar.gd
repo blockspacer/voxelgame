@@ -5,14 +5,47 @@ extends InventoryItemContainer
 # 	{"columns": [{"node_path":...}, {"node_path":...}, ...]},
 # 	{"columns": [{"node_path":...}, {"node_path":...}, ...]},
 # ]
-export(Dictionary) var _slots_dict = {}
+export(Dictionary) var _slots_dict = {
+	"rows": [ 
+		# 1 row
+		{
+			"columns": [ 
+				{
+				"is_draggable_from": false,
+				"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer/slot11")
+				}, 
+				{
+				"is_droppable_in": false,
+				"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer/slot12")
+				}, 
+				{
+				"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer/slot13")
+				} 
+			]
+		}, 
+		# 2 row
+		{
+			"columns": [ 
+				{
+				"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer2/slot21")
+				}, 
+				{
+				"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer2/slot22")
+				}, 
+				{
+				"node_path": NodePath("VBoxContainer/MarginContainer/VBoxRows/SlotsHBoxContainer2/slot23")
+				} 
+			]
+		} 
+	]
+}
 
 export(Array, NodePath) var _bounding_areas_NodePaths = null
 
 export(NetworkIDs.NETWORK_CONTAINER_ID) var _network_cointainer_id = null
 
 var _bounding_areas:Array = []
- 
+
 func change_slots_selection(slots1D:Array, is_selected:bool):
 	DebUtil.check(slots1D.size() > 0, "logic error")
 	for slot in slots1D:
@@ -34,7 +67,7 @@ func _ready():
 		var node = get_node(path)
 		DebUtil.debCheck(node != null, "logic error")
 		_bounding_areas.append(node)
-		
+
 	DebUtil.debCheck(_slots_dict.has("rows"), "logic error")
 	var _rows_data = _slots_dict.get("rows")
 	DebUtil.debCheck(_rows_data.size() > 0, "logic error")

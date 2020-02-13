@@ -1,10 +1,9 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://fps_demo/FadeInRect.gd" type="Script" id=1]
+[ext_resource path="res://fps_demo/scripts/FadeInRect.gd" type="Script" id=1]
 
 [sub_resource type="Animation" id=1]
 resource_name = "fade_in"
-step = 0.5
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:color")
 tracks/0/interp = 1
@@ -109,15 +108,16 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
-margin_left = 412.0
-margin_top = 200.0
-margin_right = 612.0
-margin_bottom = 400.0
+margin_left = 512.0
+margin_top = 300.0
+margin_right = 512.0
+margin_bottom = 300.0
 mouse_filter = 2
 size_flags_horizontal = 6
 size_flags_vertical = 6
 
 [node name="ProgressCircle" type="ColorRect" parent="VBoxContainer/HBoxContainer"]
+visible = false
 material = SubResource( 3 )
 margin_right = 200.0
 margin_bottom = 200.0

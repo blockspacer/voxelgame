@@ -128,4 +128,4 @@ func set_tip_title(text):
 	_tip_title.text = text
 	
 func set_tip_body(text):
-	_tip_body.text = text
+	_tip_body.bbcode_text = text

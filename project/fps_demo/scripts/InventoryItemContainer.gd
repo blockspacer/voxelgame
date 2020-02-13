@@ -74,17 +74,11 @@ func init_slot(row_idx, column_idx, slot, initial_item):
 	ItemDB.set_slot_item_unchecked(slot, initial_item)
 	if OS.is_debug_build():
 		print("added slot ", slot.name, " with id ", get_slot_row(slot), "x", get_slot_column(slot))
-	
-func reparent(target, new_parent):
-	DebUtil.debCheck(target != null, "logic error")
-	DebUtil.debCheck(new_parent != null, "logic error")
-	target.get_parent().remove_child(target)
-	new_parent.add_child(target)
 	 
 func position_item_in_slot(item:InventoryItemBase, slot):
 	DebUtil.debCheck(item != null, "logic error")
 	DebUtil.debCheck(slot != null, "logic error")
-	call_deferred("reparent", item, slot)
+	Helpers.call_deferred("reparent", item, slot)
 	item.rect_position = Vector2(0.0,0.0)
 	# TODO: item.z_index = 0 # make sure to reset changes in z_index
 	

@@ -10,7 +10,8 @@ const ITEMS = {
 		"allowed_slot_category": "MAIN_HAND",
 		"name": "cross_white_unique",
 		"description": "asd asdsdfsd",
-		"is_consumable": false,
+		"hit_damage": 10.1,
+		"aid_hp": 2.1,
 		"weight": 0.1,
 		"stack_size": 1,
 		"size_in_slots": [1,2,1]
@@ -20,17 +21,17 @@ const ITEMS = {
 		"allowed_slot_category": "CHEST",
 		"name": "drop-of-liquid",
 		"description": "sdfs dffdfd",
-		"is_consumable": true,
+		"armor": 4.1,
 		"weight": 10.1,
 		"stack_size": 2,
 		"size_in_slots": [1]
 	},
 	ITEM_ID.potato: {
 		"icon": ICON_PATH + "food_white_unique.png",
-		"allowed_slot_category": "ALL",
+		"allowed_slot_category": "TOOL",
 		"name": "food_white_unique",
 		"description": "123",
-		"is_consumable": true,
+		"nutritional_value": 6.8,
 		"weight": 2.1,
 		"stack_size": 3,
 		"size_in_slots": [2,2]
@@ -40,7 +41,6 @@ const ITEMS = {
 		"allowed_slot_category": "ALL",
 		"name": "found_error_white_unique",
 		"description": "adas asdasd",
-		"is_consumable": false,
 		"weight": 3.4,
 		"stack_size": 1,
 		"size_in_slots": [1]
@@ -75,6 +75,8 @@ func has_slot_item(slot):
 	return slot.has_meta(self.name + "_stored_item") and ItemDB.get_slot_item(slot) != null
 	
 func get_slot_item(slot):
+	if not slot.has_meta(self.name + "_stored_item"):
+		return null
 	return slot.get_meta(self.name + "_stored_item")
 
 # NOTE: does not position item in slot, prefer replace_slot_item

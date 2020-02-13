@@ -70,13 +70,13 @@ func _ready():
 	change_selection(_is_selected, true)
 	change_hover(_is_hovered, true)
 	
-func _on_tween_scale_complete(obj, key):
-	#print("tween_scale_complete : obj = ",obj,", key = ", key)
+func _on_tween_scale_complete(_obj, _key):
+	#print("tween_scale_complete : obj = ",_obj,", key = ", _key)
 	if _tooltip_hovered != null:
 		toggle_tooltip(_tooltip_hovered, _is_hovered)
 	
-func _on_tween_color_complete(obj, key):
-	#print("tween_color_complete : obj = ",obj,", key = ", key)
+func _on_tween_color_complete(_obj, _key):
+	#print("tween_color_complete : obj = ",_obj,", key = ", _key)
 	pass
 	
 func toggle_tooltip(tooltip, need_show):
@@ -85,9 +85,15 @@ func toggle_tooltip(tooltip, need_show):
 		return
 
 	if _tooltip_area != null:
-		_tooltip_area.add_child(tooltip) # must call _ready before everything else
+		Helpers.reparent(tooltip, _tooltip_area)
+		#if not _tooltip_area.has_child(tooltip):
+		#	_tooltip_area.add_child(tooltip) # must call _ready before everything else
 	else:
-		get_tree().get_root().add_child(tooltip) # must call _ready before everything else
+		#var current_root = get_tree().get_current_scene()
+		var current_root = get_tree().get_root()
+		Helpers.reparent(tooltip, current_root)
+		#if not current_root.has_child(tooltip):
+		#	current_root.add_child(tooltip) # must call _ready before everything else
 
 	tooltip.set_follow_mouse(false)
 	
@@ -96,8 +102,8 @@ func toggle_tooltip(tooltip, need_show):
 		tooltip.hide()
 		return
 		
-	tooltip.set_tip_title(ItemDB.get_item_data(slot_item, "name"))
-	tooltip.set_tip_body(ItemDB.get_item_data(slot_item, "description"))
+	tooltip.set_tip_title(tr(ItemDB.get_item_data(slot_item, "name")))
+	tooltip.set_tip_body(tr(ItemDB.get_item_data(slot_item, "description")))
 	# NOTE: fully configure tooltip before moving it anywhere
 	tooltip.move_to(self.rect_global_position)
 	tooltip.show()
