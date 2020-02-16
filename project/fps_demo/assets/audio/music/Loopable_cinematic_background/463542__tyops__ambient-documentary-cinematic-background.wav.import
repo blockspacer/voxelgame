@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/463542__tyops__ambient-documentary-cinematic-background.wav-da83ec8bce1c63056fc89583a790d694.sample"
+
+[deps]
+
+source_file="res://fps_demo/assets/audio/music/Loopable_cinematic_background/463542__tyops__ambient-documentary-cinematic-background.wav"
+dest_files=[ "res://.import/463542__tyops__ambient-documentary-cinematic-background.wav-da83ec8bce1c63056fc89583a790d694.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

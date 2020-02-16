@@ -79,7 +79,8 @@ func _ready():
 	
 	# Setup wind nodes
 	wind_nodes = get_tree().get_nodes_in_group("Wind")
-	print(wind_nodes.size(), " nodes in Wind group")
+	GlobalLogger.info(self, \
+		str(wind_nodes.size()) + " nodes in Wind group")
 	for n in wind_nodes:
 		n.use_only_lod = !use_wind
 		n.material_override.set_shader_param("texture_wind", wind_tex)

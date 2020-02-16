@@ -4,11 +4,16 @@ signal mouse_captured
 signal mouse_visible
 
 func _ready():
-	get_tree().get_root().connect("size_changed", self, "_on_size_changed")
-	
+	if true: # scope
+		var err = get_tree().get_root().connect("size_changed", self, "_on_size_changed")
+		DebUtil.debCheck(!err, "logic error")
+		
 func _on_size_changed():
-	print("Resizied viewport to: ", get_viewport_rect().size)
-	print("Resizied window_size to: ", OS.window_size)
+	GlobalLogger.info(self, \
+		"Resizied viewport to: " + str(get_viewport_rect().size))
+	#
+	GlobalLogger.info(self, \
+		"Resizied window_size to: " + str(OS.window_size))
 
 func _on_World_mouse_captured():
 	emit_signal("mouse_captured")

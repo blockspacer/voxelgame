@@ -25,11 +25,11 @@ func _process(delta):
 	if _scene_path_to_load != null:
 		DebUtil.debCheck(_rect_fade_in.visible, "logic error")
 		var progress = game_resource_queue.get_progress(_scene_path_to_load)
-		print("loading ", _scene_path_to_load, " progress = ", progress)
+		#print("loading ", _scene_path_to_load, " progress = ", progress)
 		var scene = game_resource_queue.get_resource(_scene_path_to_load)
 		var is_not_scheduled:bool = progress == -1
 		if scene and is_not_scheduled:
-			print("loaded ", _scene_path_to_load, " progress = ", progress)
+			#print("loaded ", _scene_path_to_load, " progress = ", progress)
 			_scheduled_scene = scene
 	#
 	# TODO: refactor to task queue with individual task delay
@@ -41,10 +41,14 @@ func _process(delta):
 			_time_waited = 0
 				
 func handle_scene_loaded(scene):
+	# TODO
+	#get_tree().set_current_scene( scene.instance() )
+	
 	var err = get_tree().change_scene_to(scene)
 	if (err != OK):
-		print("Failure during change_scene!")
-	#
+		GlobalLogger.info(self, \
+			"Failure during change_scene!")
+	
 	DebUtil.debCheck(_rect_fade_in.visible, "logic error")
 	_rect_fade_in.hide()
 	#
@@ -52,7 +56,8 @@ func handle_scene_loaded(scene):
 	_scene_path_to_load = null
 	
 func _on_FadeInRect_fade_finished():
-	print('_on_FadeInRect_fade_finished')
+	GlobalLogger.info(self, \
+		'_on_FadeInRect_fade_finished')
 	
 func is_loading():
 	return _scene_path_to_load != null
@@ -61,10 +66,12 @@ func change_scene_to(scene_to_load):
 	DebUtil.debCheck(scene_to_load != null, "logic error")
 	#
 	if _scene_path_to_load != null:
-		print('already scheduled scene loading, skipping', scene_to_load)
+		GlobalLogger.info(self, \
+			'already scheduled scene loading, skipping' + scene_to_load)
 		return
 	#
-	print('scheduled scene loading ', scene_to_load)
+	GlobalLogger.info(self, \
+		'scheduled scene loading ' + scene_to_load)
 	DebUtil.debCheck(!_rect_fade_in.visible, "logic error")
 	_rect_fade_in.show()
 	_rect_fade_in.fade_in()

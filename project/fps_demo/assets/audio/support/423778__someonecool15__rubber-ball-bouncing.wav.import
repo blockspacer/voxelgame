@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/423778__someonecool15__rubber-ball-bouncing.wav-734eb9499d61539f871bfbe27641c0f3.sample"
+
+[deps]
+
+source_file="res://fps_demo/assets/audio/support/423778__someonecool15__rubber-ball-bouncing.wav"
+dest_files=[ "res://.import/423778__someonecool15__rubber-ball-bouncing.wav-734eb9499d61539f871bfbe27641c0f3.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=true
+edit/normalize=true
+edit/loop=false
+compress/mode=0

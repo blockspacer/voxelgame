@@ -1,6 +1,6 @@
 extends Node
  
-const ICON_PATH = "res://fps_demo/textures/icons/"
+const ICON_PATH = "res://fps_demo/assets/textures/icons/"
 
 enum ITEM_ID {sword, breastplate, potato, internal_error, internal_reference}
 

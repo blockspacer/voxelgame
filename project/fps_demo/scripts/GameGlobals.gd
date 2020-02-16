@@ -25,10 +25,19 @@ enum GAME_GLOBALS {
 	GAME_DIR_NAME,
 	GAME_DIR_PATH,
 	GAME_SETTINGS_DIR_PATH,
-	GAME_SETTINGS_FILE_PATH
+	GAME_SETTINGS_FILE_PATH,
+	GAME_VERSION
 }
 
 var _game_globals_values = {}
+
+var _console = null
+
+func set_console(console):
+	_console = console
+
+func console():
+	return _console
 
 func get_key_name(key:int):
 	return GAME_GLOBALS.keys()[key] as String
@@ -64,18 +73,39 @@ func set_defaults():
 	set_key_value(GAME_GLOBALS.GAME_SETTINGS_FILE_PATH, 
 		get_key_value(GAME_GLOBALS.GAME_SETTINGS_DIR_PATH) + "settings.ini"
 	)
+	#
+	var version = "1.0.0"
+	if OS.is_debug_build():
+		version += "d"
+	set_key_value(GAME_GLOBALS.GAME_VERSION, 
+		version
+	)
 
 # Called when the object is initialized.
 func _init() -> void:
 	if _is_debug_mode == null:
 		_is_debug_mode = OS.is_debug_build()
-		print("game globals initialized")
+		GlobalLogger.info(self, "game globals initialized")
 	#
 	if true: # scope
 		var err = connect("game_globals_changed", self, "_on_game_globals_changed")
 		DebUtil.debCheck(!err, "logic error")
 	#
 	set_defaults()
+
+func _ready():
+	GlobalLogger.info(self, "game globals ready")
+	#
+	if not _is_debug_mode:
+		return
+	#
+	var Console = preload("res://fps_demo/scenes/bullet.tscn").instance()
+	#load("res://fps_demo/tools/Console/Console.tscn").instance()
+	var current_root = get_tree().get_root()
+	#var current_root = get_tree().get_current_scene()
+	DebUtil.debCheck(Console != null, "logic error")
+	DebUtil.debCheck(current_root != null, "logic error")
+	Helpers.call_deferred("reparent", Console, current_root)
 
 func get_key_value(key:int):
 	DebUtil.debCheck(valid_key(key), "logic error")
@@ -92,4 +122,9 @@ func set_key_value(key:int, value) -> void:
 func _on_game_globals_changed(key:int, previous, new):
 	DebUtil.debCheck(valid_key(key), "logic error")
 	if _is_debug_mode:
-		print("game_globals_changed ", get_key_name(key), " from ", previous, " to ", new)
+		GlobalLogger.info(self, "game_globals_changed " \
+			+ get_key_name(key) \
+			+ " from " \
+			+ str(previous) \
+			+ " to " \
+			+ str(new))

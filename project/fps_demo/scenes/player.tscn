@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://fps_demo/scripts/Player.gd" type="Script" id=1]
-[ext_resource path="res://fps_demo/materials/gun-metal.material" type="Material" id=2]
-[ext_resource path="res://fps_demo/materials/player.material" type="Material" id=3]
-[ext_resource path="res://fps_demo/support/13283__schademans__pipe2.wav" type="AudioStream" id=4]
+[ext_resource path="res://fps_demo/assets/materials/gun-metal.material" type="Material" id=2]
+[ext_resource path="res://fps_demo/assets/materials/player.material" type="Material" id=3]
+[ext_resource path="res://fps_demo/assets/audio/support/13283__schademans__pipe2.wav" type="AudioStream" id=4]
+[ext_resource path="res://fps_demo/scenes/motion_blur/motion_blur.tscn" type="PackedScene" id=5]
+[ext_resource path="res://fps_demo/scripts/ImmediateGeometry.gd" type="Script" id=6]
 
 [sub_resource type="CubeMesh" id=1]
 size = Vector3( 1, 2, 0.4 )
@@ -45,6 +47,12 @@ spot_angle = 29.0878
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.259938 )
 enabled = true
 cast_to = Vector3( 0, 0, -50 )
+
+[node name="motion_blur" parent="CamNode/Camera" instance=ExtResource( 5 )]
+
+[node name="ImmediateGeometry" type="ImmediateGeometry" parent="CamNode/Camera"]
+visible = false
+script = ExtResource( 6 )
 
 [node name="Body" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0 )

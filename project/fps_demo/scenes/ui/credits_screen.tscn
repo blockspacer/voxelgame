@@ -1,18 +1,418 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://fps_demo/scenes/ui/AnimatedSceneChanger.tscn" type="PackedScene" id=1]
 [ext_resource path="res://fps_demo/scripts/MenuButton.gd" type="Script" id=2]
 [ext_resource path="res://fps_demo/scripts/CreditsScreen.gd" type="Script" id=3]
-[ext_resource path="res://icon.png" type="Texture" id=4]
-[ext_resource path="res://fps_demo/fonts/arial_48.tres" type="DynamicFontData" id=5]
+[ext_resource path="res://fps_demo/scripts/CreditsInteractiveShader.gd" type="Script" id=4]
+[ext_resource path="res://fps_demo/assets/fonts/arial_48.tres" type="DynamicFontData" id=5]
 [ext_resource path="res://fps_demo/scenes/ui/interactiveShader.tscn" type="PackedScene" id=6]
+[ext_resource path="res://fps_demo/assets/audio/music/Magntron_melody/335571__magntron__gamemusic.wav" type="AudioStream" id=7]
+[ext_resource path="res://fps_demo/scripts/BgAudioStreamPlayer.gd" type="Script" id=8]
 
-[sub_resource type="DynamicFont" id=1]
-size = 48
-use_filter = true
-font_data = ExtResource( 5 )
+[sub_resource type="Shader" id=1]
+code = "// https://www.shadertoy.com/view/4ts3z2
 
-[sub_resource type="DynamicFont" id=2]
+shader_type canvas_item;
+
+uniform vec2 mouse_position;
+uniform float audio;
+
+
+uniform float FREQ_RANGE = 64.0;
+uniform float PI = 3.1415;
+uniform float RADIUS = 0.9;
+uniform float BRIGHTNESS = 0.1;
+uniform float SPEED = 0.5;
+
+uniform float NUM_LAYERS = 4.0;
+
+//#define SIMPLE
+
+// credit: https://www.shadertoy.com/view/4tGXzt
+
+
+float N21(vec2 p) {
+	vec3 a = fract(vec3(p.xyx) * vec3(213.897, 653.453, 253.098));
+    a += dot(a, a.yzx + 79.76);
+    return fract((a.x + a.y) * a.z);
+}
+
+vec2 GetPos(vec2 id, vec2 offs, float t) {
+    float n = N21(id+offs);
+    float n1 = fract(n*10.);
+    float n2 = fract(n*100.);
+    float a = t+n;
+    return offs + vec2(sin(a*n1), cos(a*n2))*.4;
+}
+
+float GetT(vec2 ro, vec2 rd, vec2 p) {
+	return dot(p-ro, rd); 
+}
+
+float LineDist(vec3 a, vec3 b, vec3 p) {
+	return length(cross(b-a, p-a))/length(p-a);
+}
+
+float df_line( in vec2 a, in vec2 b, in vec2 p)
+{
+    vec2 pa = p - a, ba = b - a;
+	float h = clamp(dot(pa,ba) / dot(ba,ba), 0., 1.);	
+	return length(pa - ba * h);
+}
+
+float line(vec2 a, vec2 b, vec2 uv) {
+    float r1 = .04;
+    float r2 = .01;
+    
+    float d = df_line(a, b, uv);
+    float d2 = length(a-b);
+    float fade = smoothstep(1.5, .5, d2);
+    
+    fade += smoothstep(.05, .02, abs(d2-.75));
+    return smoothstep(r1, r2, d)*fade;
+}
+
+float NetLayer(vec2 st, float n, float t) {
+    vec2 id = floor(st)+n;
+
+    st = fract(st)-.5;
+   
+    vec2 p[9];
+    int i=0;
+    for(float y=-1.; y<=1.; y++) {
+    	for(float x=-1.; x<=1.; x++) {
+            p[i++] = GetPos(id, vec2(x,y), t);
+    	}
+    }
+    
+    float m = 0.;
+    float sparkle = 0.;
+    
+    for(i=0; i<9; i++) {
+        m += line(p[4], p[i], st);
+
+        float d = length(st-p[i]);
+
+        float s = (.005/(d*d));
+        s *= smoothstep(1., .7, d);
+        float pulse = sin((fract(p[i].x)+fract(p[i].y)+t)*5.)*.4+.6;
+        pulse = pow(pulse, 20.);
+
+        s *= pulse;
+        sparkle += s;
+    }
+    
+    m += line(p[1], p[3], st);
+	m += line(p[1], p[5], st);
+    m += line(p[7], p[5], st);
+    m += line(p[7], p[3], st);
+    
+    float sPhase = (sin(t+n)+sin(t*.1))*.25+.5;
+    sPhase += pow(sin(t*.1)*.5+.5, 50.)*5.;
+    m += sparkle*sPhase;//(*.5+.5);
+    
+    return m;
+}
+
+//convert HSV to RGB
+vec3 hsv2rgb(vec3 c){
+    vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
+    vec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);
+    return c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);
+}
+
+float luma(vec3 color) {
+  return dot(color, vec3(0.299, 0.587, 0.114));
+}
+
+float getfrequency(float x) {
+	//return texture(iChannel0, vec2(floor(x * FREQ_RANGE + 1.0) / FREQ_RANGE, 0.25)).x + 0.06;
+	//return sin(length(mouse_position))/2.0+0.5 ;
+	return audio + 0.06;
+}
+
+float getfrequency_smooth(float x) {
+	float index = floor(x * FREQ_RANGE) / FREQ_RANGE;
+    float next = floor(x * FREQ_RANGE + 1.0) / FREQ_RANGE;
+	return mix(getfrequency(index), getfrequency(next), smoothstep(0.0, 1.0, fract(x * FREQ_RANGE)));
+}
+
+float getfrequency_blend(float x) {
+    return mix(getfrequency(x), getfrequency_smooth(x), 0.5);
+}
+
+vec3 doHalo(vec2 resolution, float time, vec2 fragment, float radius) {
+	float dist = length(fragment);
+	float ring = 1.0 / abs(dist - radius);
+	
+	float b = dist < radius ? BRIGHTNESS * 0.3 : BRIGHTNESS;
+	
+	vec3 col = vec3(0.0);
+	
+	float angle = atan(fragment.x, fragment.y);
+	float frequency = max(getfrequency_blend(abs(angle / PI)) - 0.02, 0.0);
+	col += hsv2rgb( vec3( ( angle + time * 0.25 ) / (PI * 2.0), 1.0, 1.0 ) ) * ring * b;
+	
+	col *= frequency;
+	
+    vec3 colS = vec3(0.0);
+    if (dist < radius){
+        vec2 uv = fragment;
+        vec2 M = mouse_position.xy/resolution.xy-.5;
+
+        float t = time*.1+0.1;
+
+        float s = sin(t);
+        float c = cos(t);
+        mat2 rot = mat2(vec2(c, -s), vec2(s, c));
+        vec2 st = uv*rot;  
+        M *= rot*2.;
+
+        float m = 0.;
+        for(float i=0.; i<1.; i+=1./NUM_LAYERS) {
+            float z = fract(t+i);
+            float size = mix(15., 1., z);
+            float fade = smoothstep(0., .6, z)*smoothstep(1., .8, z);
+
+            m += fade * NetLayer(st*size-M*z, i, time);
+        }
+
+        //float fft  = texelFetch( iChannel0, ivec2(.7,0), 0 ).x;
+        float fft  = sin(time)/2.0+0.5;
+        
+        float glow = -uv.y*fft*2.;
+
+        vec3 baseCol = vec3(s, cos(t*.4), -sin(t*.24))*.4+.6;
+        colS = baseCol*m;
+        colS += baseCol*glow;
+
+        colS *= 1.-dot(uv,uv);
+        t = mod(time, 230.); 
+		
+        colS *= smoothstep(0., 20., t)*smoothstep(224., 200., t);
+    }
+    
+	return mix(col, colS, 0.5);
+}
+
+
+void fragment() 
+{	
+	vec2 resolution = 1.0/SCREEN_PIXEL_SIZE;
+	/*vec2 p = FRAGCOORD.xy/resolution.xy-0.5;
+    vec2 q = FRAGCOORD.xy/resolution.xy;
+	p.x*=resolution.x/resolution.y;
+    vec2 mo = mouse_position.xy / resolution.xy-.5;
+    mo = (mo==vec2(-.5)) ? (mo=vec2(-0.1,0.07)) : mo;
+	mo.x *= resolution.x/resolution.y;
+	
+	vec3 ro = vec3(smoothstep(0.,1.,tri(TIME*.45)*2.)*0.1, smoothstep(0.,1.,tri(TIME*0.9)*2.)*0.07, -TIME*0.6);
+    ro.y -= height(ro.zx)+0.05;
+    mo.x += smoothstep(0.6,1.,sin(TIME*.6)*0.5+0.5)-1.5;
+    vec3 eyedir = normalize(vec3(cos(mo.x),mo.y*2.-0.2+sin(TIME*0.45*1.57)*0.1,sin(mo.x)));
+    vec3 rightdir = normalize(vec3(cos(mo.x+1.5708),0.,sin(mo.x+1.5708)));
+    vec3 updir = normalize(cross(rightdir,eyedir));
+	vec3 rd=normalize((p.x*rightdir+p.y*updir)*1.+eyedir);
+	
+    vec3 ligt = normalize( vec3(.5, .05, -.2) );
+    vec3 ligt2 = normalize( vec3(.5, -.1, -.2) );
+    
+	float rz = march(TIME, ro,rd);
+	
+    vec3 fogb = mix(vec3(.7,.8,.8	)*0.3, vec3(1.,1.,.77)*.95, pow(dot(rd,ligt2)+1.2, 2.5)*.25);
+    fogb *= clamp(rd.y*.5+.6, 0., 1.);
+    vec3 col = fogb;
+    
+    if ( rz < FAR )
+    {
+        vec3 pos = ro+rz*rd;
+        vec3 nor= normal(TIME, pos );
+        float d = distance(pos,ro);
+        nor = bump(TIME, pos,nor,d);
+        float crv = clamp(curv(TIME, pos, .4),.0,10.);
+        float shd = shadow(TIME, pos,ligt,0.1,3.);
+        float dif = clamp( dot( nor, ligt ), 0.0, 1.0 )*shd;
+        float spe = pow(clamp( dot( reflect(rd,nor), ligt ), 0.0, 1.0 ),50.)*shd;
+        float fre = pow( clamp(1.0+dot(nor,rd),0.0,1.0), 1.5 );
+        vec3 brdf = vec3(0.10,0.11,0.13);
+        brdf += 1.5*dif*vec3(1.00,0.90,0.7);
+        col = mix(vec3(0.1,0.2,1),vec3(.3,.5,1),pos.y*.5)*0.2+.1;
+        col *= (sin(bnoise(TIME, pos)*900.)*0.2+0.8);
+        col = col*brdf + col*spe*.5 + fre*vec3(.7,1.,0.2)*.3*crv;
+    }
+    
+    //ordinary distance fog first
+    col = mix(col, fogb, smoothstep(FAR-7.,FAR,rz));
+    
+    //then volumetric fog
+    col = fog(TIME, col, ro, rd, rz);
+    
+    //post
+    col = pow(col,vec3(0.8));
+    col *= 1.-smoothstep(0.1,2.,length(p));*/
+	
+
+    vec2 fragPos = FRAGCOORD.xy / resolution.xy;
+	fragPos = (fragPos - 0.5) * 2.0;
+    fragPos.x *= resolution.x / resolution.y;
+	
+	vec3 colorMus = vec3(0.0134, 0.052, 0.1);
+	colorMus += doHalo(resolution, TIME+11.2, fragPos, RADIUS);
+	
+	colorMus += max(luma(colorMus) - 1.0, 0.0);
+    
+	COLOR = vec4( colorMus, 1.0 );
+}
+
+/*void fragment() 
+{
+	vec2 resolution = 1.0/SCREEN_PIXEL_SIZE;
+    vec2 uv = SCREEN_UV;//vec2(floor(FRAGCOORD.x/8./zoom)*8.*zoom,floor(FRAGCOORD.y/12./zoom)*12.*zoom)/resolution;
+	//uv = uv;
+    ivec2 pos = ivec2(int(mod(FRAGCOORD.x/zoom,8.)),int(mod(FRAGCOORD.y/zoom,12.)));
+    vec4 tex = texture(SCREEN_TEXTURE,uv);
+    float cha = 0.;
+    float g = gray(tex.xyz);
+    if( g < .125 )
+    {
+        cha = P(pos, cha, 11,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 10,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 9,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 8,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 7,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 6,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 5,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 4,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 3,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 2,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 1,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 0,0,0,0,0,0,0,0,0);
+    }
+    else if( g < .25 ) // .
+    {
+        cha = P(pos, cha, 11,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 10,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 9,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 8,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 7,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 6,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 5,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 4,0,0,0,1,1,0,0,0);
+        cha = P(pos, cha, 3,0,0,0,1,1,0,0,0);
+        cha = P(pos, cha, 2,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 1,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 0,0,0,0,0,0,0,0,0);
+    }
+    else if( g < .375 ) // ,
+    {
+        cha = P(pos, cha, 11,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 10,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 9,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 8,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 7,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 6,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 5,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 4,0,0,0,1,1,0,0,0);
+        cha = P(pos, cha, 3,0,0,0,1,1,0,0,0);
+        cha = P(pos, cha, 2,0,0,0,0,1,0,0,0);
+        cha = P(pos, cha, 1,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 0,0,0,0,0,0,0,0,0);
+    }
+    else if( g < .5 ) // -
+    {
+        cha = P(pos, cha, 11,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 10,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 9,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 8,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 7,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 6,1,1,1,1,1,1,1,0);
+        cha = P(pos, cha, 5,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 4,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 3,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 2,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 1,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 0,0,0,0,0,0,0,0,0);
+    }
+    else if(g < .625 ) // +
+    {
+        cha = P(pos, cha, 11,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 10,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 9,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 8,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 7,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 6,1,1,1,1,1,1,1,0);
+        cha = P(pos, cha, 5,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 4,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 3,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 2,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 1,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 0,0,0,0,0,0,0,0,0);
+    }
+    else if(g < .75 ) // *
+    {
+        cha = P(pos, cha, 11,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 10,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 9,1,0,0,1,0,0,1,0);
+        cha = P(pos, cha, 8,0,1,0,1,0,1,0,0);
+        cha = P(pos, cha, 7,0,0,1,1,1,0,0,0);
+        cha = P(pos, cha, 6,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 5,0,0,1,1,1,0,0,0);
+        cha = P(pos, cha, 4,0,1,0,1,0,1,0,0);
+        cha = P(pos, cha, 3,1,0,0,1,0,0,1,0);
+        cha = P(pos, cha, 2,0,0,0,1,0,0,0,0);
+        cha = P(pos, cha, 1,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 0,0,0,0,0,0,0,0,0);
+    }
+    else if(g < .875 ) // #
+    {
+        cha = P(pos, cha, 11,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 10,0,0,1,0,0,1,0,0);
+        cha = P(pos, cha, 9,0,0,1,0,0,1,0,0);
+        cha = P(pos, cha, 8,1,1,1,1,1,1,1,0);
+        cha = P(pos, cha, 7,0,0,1,0,0,1,0,0);
+        cha = P(pos, cha, 6,0,0,1,0,0,1,0,0);
+        cha = P(pos, cha, 5,0,1,0,0,1,0,0,0);
+        cha = P(pos, cha, 4,0,1,0,0,1,0,0,0);
+        cha = P(pos, cha, 3,1,1,1,1,1,1,1,0);
+        cha = P(pos, cha, 2,0,1,0,0,1,0,0,0);
+        cha = P(pos, cha, 1,0,1,0,0,1,0,0,0);
+        cha = P(pos, cha, 0,0,0,0,0,0,0,0,0);
+    }
+    else // @
+    {
+        cha = P(pos, cha, 11,0,0,0,0,0,0,0,0);
+        cha = P(pos, cha, 10,0,0,1,1,1,1,0,0);
+        cha = P(pos, cha, 9,0,1,0,0,0,0,1,0);
+        cha = P(pos, cha, 8,1,0,0,0,1,1,1,0);
+        cha = P(pos, cha, 7,1,0,0,1,0,0,1,0);
+        cha = P(pos, cha, 6,1,0,0,1,0,0,1,0);
+        cha = P(pos, cha, 5,1,0,0,1,0,0,1,0);
+        cha = P(pos, cha, 4,1,0,0,1,0,0,1,0);
+        cha = P(pos, cha, 3,1,0,0,1,1,1,1,0);
+        cha = P(pos, cha, 2,0,1,0,0,0,0,0,0);
+        cha = P(pos, cha, 1,0,0,1,1,1,1,1,0);
+        cha = P(pos, cha, 0,0,0,0,0,0,0,0,0);
+    }
+    
+    vec3 col = tex.xyz/max(tex.x,max(tex.y,tex.z));
+    COLOR = vec4(cha*col,1.);
+    //COLOR = vec4(col,1.);
+    //COLOR = vec4(cha*tex.xyz,1.);
+	//COLOR = tex;
+}*/"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/mouse_position = null
+shader_param/audio = null
+shader_param/FREQ_RANGE = 64.0
+shader_param/PI = 3.1415
+shader_param/RADIUS = 0.9
+shader_param/BRIGHTNESS = 0.1
+shader_param/SPEED = 0.5
+shader_param/NUM_LAYERS = 4.0
+
+[sub_resource type="DynamicFont" id=3]
 size = 48
 use_filter = true
 font_data = ExtResource( 5 )
@@ -20,6 +420,21 @@ font_data = ExtResource( 5 )
 [node name="World" type="Spatial"]
 
 [node name="interactiveShader" parent="." instance=ExtResource( 6 )]
+visible = false
+
+[node name="CreditsInteractiveShader" type="ColorRect" parent="."]
+material = SubResource( 2 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BgAudioStreamPlayer" type="AudioStreamPlayer" parent="CreditsInteractiveShader"]
+stream = ExtResource( 7 )
+script = ExtResource( 8 )
 
 [node name="AnimatedSceneChanger" parent="." instance=ExtResource( 1 )]
 
@@ -36,87 +451,59 @@ all_btn_container_path = NodePath("MarginContainer/VBoxMenu/HBoxButtons/VBoxButt
 animated_scene_changer_path = NodePath("../AnimatedSceneChanger")
 
 [node name="MarginContainer" type="MarginContainer" parent="CreditsScreen"]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -180.0
-margin_right = 180.0
-margin_bottom = 210.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 size_flags_horizontal = 6
 size_flags_vertical = 6
+custom_constants/margin_right = 60
+custom_constants/margin_top = 60
+custom_constants/margin_left = 60
+custom_constants/margin_bottom = 60
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="VBoxMenu" type="VBoxContainer" parent="CreditsScreen/MarginContainer"]
-margin_right = 397.0
-margin_bottom = 511.0
+margin_left = 60.0
+margin_top = 60.0
+margin_right = 964.0
+margin_bottom = 540.0
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TextureRect" type="TextureRect" parent="CreditsScreen/MarginContainer/VBoxMenu"]
-margin_left = 166.0
-margin_right = 230.0
-margin_bottom = 64.0
-size_flags_horizontal = 4
-size_flags_vertical = 4
-texture = ExtResource( 4 )
-stretch_mode = 6
-
 [node name="HBoxButtons" type="HBoxContainer" parent="CreditsScreen/MarginContainer/VBoxMenu"]
-margin_top = 68.0
-margin_right = 397.0
-margin_bottom = 430.0
+margin_right = 904.0
+margin_bottom = 480.0
 size_flags_horizontal = 7
-size_flags_vertical = 2
+size_flags_vertical = 3
 custom_constants/separation = 20
 alignment = 1
 
 [node name="VBoxButtons" type="VBoxContainer" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons"]
-margin_right = 397.0
-margin_bottom = 362.0
+margin_right = 904.0
+margin_bottom = 480.0
 rect_clip_content = true
-size_flags_horizontal = 3
-size_flags_vertical = 2
-custom_constants/separation = 20
-alignment = 1
-
-[node name="NewGameBtn" type="Button" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons"]
-margin_left = 18.0
-margin_right = 378.0
-margin_bottom = 61.0
-rect_min_size = Vector2( 360, 60 )
-rect_clip_content = true
-focus_mode = 0
-mouse_filter = 1
-size_flags_horizontal = 6
-size_flags_vertical = 6
-custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_hover = Color( 0.780392, 0.780392, 0.780392, 1 )
-custom_colors/font_color_pressed = Color( 0.898039, 1, 0.811765, 1 )
-custom_constants/hseparation = 2
-text = "New game"
-flat = true
-script = ExtResource( 2 )
-scene_to_load = "res://fps_demo/noise_smooth_lod.tscn"
+size_flags_horizontal = 7
+size_flags_vertical = 5
+custom_constants/separation = 0
 
 [node name="ExitToMainMenuBtn" type="Button" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons"]
-margin_top = 81.0
-margin_right = 397.0
-margin_bottom = 142.0
-rect_min_size = Vector2( 360, 60 )
+margin_left = 785.0
+margin_top = 419.0
+margin_right = 904.0
+margin_bottom = 480.0
 rect_clip_content = true
 mouse_filter = 1
-size_flags_horizontal = 6
-size_flags_vertical = 6
-custom_fonts/font = SubResource( 2 )
+size_flags_horizontal = 10
+size_flags_vertical = 10
+custom_fonts/font = SubResource( 3 )
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_colors/font_color_hover = Color( 0.780392, 0.780392, 0.780392, 1 )
 custom_colors/font_color_pressed = Color( 0.898039, 1, 0.811765, 1 )
 custom_constants/hseparation = 2
-text = "Exit to main menu"
+text = "Back"
 flat = true
 script = ExtResource( 2 )
 __meta__ = {
@@ -124,18 +511,10 @@ __meta__ = {
 }
 scene_to_load = "res://fps_demo/scenes/ui/title_screen.tscn"
 
-[node name="MarginContainer" type="MarginContainer" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons"]
-margin_top = 162.0
-margin_right = 397.0
-margin_bottom = 362.0
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons/MarginContainer"]
-margin_right = 397.0
-margin_bottom = 200.0
-
-[node name="RichTextLabel" type="RichTextLabel" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons/MarginContainer/VBoxContainer"]
-margin_right = 397.0
-margin_bottom = 200.0
+[node name="RichTextLabel" type="RichTextLabel" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons"]
+visible = false
+margin_right = 904.0
+margin_bottom = 480.0
 rect_min_size = Vector2( 300, 200 )
 focus_mode = 2
 size_flags_horizontal = 7
@@ -236,3 +615,30 @@ https://freesound.org/people/SoundFlakes
 Music by Breviceps
 https://freesound.org/people/Breviceps"
 selection_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons"]
+margin_top = 480.0
+margin_right = 904.0
+margin_bottom = 480.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CreditsScreen/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons/MarginContainer"]
+margin_right = 904.0
+
+[node name="VBoxContainerCenter" type="VBoxContainer" parent="CreditsScreen"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -16.5
+margin_top = -16.5
+margin_right = 16.5
+margin_bottom = 16.5
+rect_clip_content = true
+size_flags_horizontal = 6
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}

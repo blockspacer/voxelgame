@@ -213,29 +213,34 @@ func _input(event):
 		if event is InputEventKey and event.pressed:
 			if Input.is_action_pressed("sdf_add"):
 				SDF_VALUE+=5.0;
-				print('SDF_VALUE', SDF_VALUE)
+				GlobalLogger.info(self, \
+					'SDF_VALUE' + str(SDF_VALUE))
 
 			if Input.is_action_pressed("sdf_del"):
 				SDF_VALUE-=5.0;
-				print('SDF_VALUE', SDF_VALUE)
+				GlobalLogger.info(self, \
+					'SDF_VALUE' + str(SDF_VALUE))
 
 			if event.scancode == KEY_1:
 				edit_shape = Bullet.BULLET_SHAPE.POINT
 				hide_edit_cursors()
 				edit_cursor = get_node(edit_cursor_sphere_path)
-				print("firing_shape = 0 (do_point)")
+				GlobalLogger.info(self, \
+					"firing_shape = 0 (do_point)")
 
 			if event.scancode == KEY_2:
 				edit_shape = Bullet.BULLET_SHAPE.SPHERE
 				hide_edit_cursors()
 				edit_cursor = get_node(edit_cursor_sphere_path)
-				print("firing_shape = 1 (do_sphere)")
+				GlobalLogger.info(self, \
+					"firing_shape = 1 (do_sphere)")
 
 			if event.scancode == KEY_3:
 				edit_shape = Bullet.BULLET_SHAPE.BOX
 				hide_edit_cursors()
 				edit_cursor = get_node(edit_cursor_box_path)
-				print("firing_shape = 2 (do_box)")
+				GlobalLogger.info(self, \
+					"firing_shape = 2 (do_box)")
 				
 		if event is InputEventMouseButton and Input.is_mouse_button_pressed(BUTTON_WHEEL_UP):
 			#camera_max_lerp -= .1

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/493544__original-sound__corporate-logo-intro-1.wav-62f2c5631a5658bca7dea2f7de0e17d0.sample"
+
+[deps]
+
+source_file="res://fps_demo/assets/audio/sfx/Corporate_Logo_Intro1/493544__original-sound__corporate-logo-intro-1.wav"
+dest_files=[ "res://.import/493544__original-sound__corporate-logo-intro-1.wav-62f2c5631a5658bca7dea2f7de0e17d0.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

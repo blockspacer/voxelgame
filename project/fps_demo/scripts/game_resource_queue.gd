@@ -18,16 +18,16 @@ var sem
 var queue = []
 var pending = {}
 
-func _lock(caller):
+func _lock(_caller):
 	mutex.lock()
 
-func _unlock(caller):
+func _unlock(_caller):
 	mutex.unlock()
 
-func _post(caller):
+func _post(_caller):
 	sem.post()
 
-func _wait(caller):
+func _wait(_caller):
 	sem.wait()
 
 func queue_resource(path, p_in_front = false):
@@ -36,7 +36,7 @@ func queue_resource(path, p_in_front = false):
 		_unlock("queue_resource")
 		return
 
-	elif ResourceLoader.has(path):
+	elif ResourceLoader.exists(path):
 		var res = ResourceLoader.load(path)
 		pending[path] = res
 		_unlock("queue_resource")
@@ -144,7 +144,7 @@ func thread_process():
 	_unlock("process")
 
 
-func thread_func(u):
+func thread_func(_u):
 	while true:
 		thread_process()
 

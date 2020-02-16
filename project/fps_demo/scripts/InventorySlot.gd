@@ -1,7 +1,7 @@
 extends Control
 
-signal slot_changed_selection 
-signal slot_changed_hover
+#signal slot_changed_selection 
+#signal slot_changed_hover
 
 func change_selection(_is_selected:bool, _force_change:bool = false):
 	DebUtil.check(false, "not implemented") # will be redefined

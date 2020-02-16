@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/cross_white_unique.png-bc57c0e1688f978d5f4a7cbc50a72bdf.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://fps_demo/assets/textures/icons/cross_white_unique.png"
+dest_files=[ "res://.import/cross_white_unique.png-bc57c0e1688f978d5f4a7cbc50a72bdf.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.0
+compress/hdr_mode=1
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0

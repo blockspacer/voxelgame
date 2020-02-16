@@ -28,8 +28,8 @@ func _ready():
 	
 	var dir = Directory.new()
 	if not dir.dir_exists(output_path):
-		print("Create folder for screenshots")
-		print(output_path)
+		GlobalLogger.info(self, \
+			"Create folder for screenshots = " + output_path)
 		dir.make_dir(output_path)
 	
 	set_process_input(true)
@@ -41,7 +41,8 @@ func _input(event):
 		make_screenshot()
 
 func make_screenshot():
-	print('called make_screenshot')
+	GlobalLogger.info(self, \
+		'called make_screenshot')
 	DebUtil.debCheck(enabled, "logic error")
 	#
 	get_viewport().set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)

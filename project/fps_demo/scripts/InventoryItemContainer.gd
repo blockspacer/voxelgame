@@ -73,7 +73,10 @@ func init_slot(row_idx, column_idx, slot, initial_item):
 	DebUtil.debCheck(ItemDB.get_slot_item(slot) == null, "logic error: slot is busy, can`t use it again")
 	ItemDB.set_slot_item_unchecked(slot, initial_item)
 	if OS.is_debug_build():
-		print("added slot ", slot.name, " with id ", get_slot_row(slot), "x", get_slot_column(slot))
+		GlobalLogger.info(self, \
+			"added slot " + str(slot.name)
+			+ " with id " + str(get_slot_row(slot))
+			+  "x" + str(get_slot_column(slot)))
 	 
 func position_item_in_slot(item:InventoryItemBase, slot):
 	DebUtil.debCheck(item != null, "logic error")

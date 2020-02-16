@@ -1,11 +1,11 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://fps_demo/textures/hbar/noise.png" type="Texture" id=1]
-[ext_resource path="res://fps_demo/textures/hbar/glass.png" type="Texture" id=2]
-[ext_resource path="res://fps_demo/textures/hbar/stars_red.png" type="Texture" id=3]
-[ext_resource path="res://fps_demo/textures/hbar/rect_mask.png" type="Texture" id=4]
-[ext_resource path="res://fps_demo/textures/hbar/stars.png" type="Texture" id=5]
-[ext_resource path="res://fps_demo/textures/hbar/Redgreen.png" type="Texture" id=6]
+[ext_resource path="res://fps_demo/assets/textures/hbar/noise.png" type="Texture" id=1]
+[ext_resource path="res://fps_demo/assets/textures/hbar/glass.png" type="Texture" id=2]
+[ext_resource path="res://fps_demo/assets/textures/hbar/stars_red.png" type="Texture" id=3]
+[ext_resource path="res://fps_demo/assets/textures/hbar/rect_mask.png" type="Texture" id=4]
+[ext_resource path="res://fps_demo/assets/textures/hbar/stars.png" type="Texture" id=5]
+[ext_resource path="res://fps_demo/assets/textures/hbar/Redgreen.png" type="Texture" id=6]
 
 [sub_resource type="Shader" id=1]
 code = "// see https://simonschreibt.de/gat/diablo-3-resource-bubbles/

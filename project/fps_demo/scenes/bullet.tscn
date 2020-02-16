@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://fps_demo/scripts/Bullet.gd" type="Script" id=1]
-[ext_resource path="res://fps_demo/support/423778__someonecool15__rubber-ball-bouncing.wav" type="AudioStream" id=2]
+[ext_resource path="res://fps_demo/assets/audio/support/423778__someonecool15__rubber-ball-bouncing.wav" type="AudioStream" id=2]
 
 [sub_resource type="SphereMesh" id=1]
 

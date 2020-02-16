@@ -15,7 +15,8 @@ var _offset = Vector3()
 func _ready():
 	_offset = get_translation()
 	if capture_mouse:
-		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+		if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
+			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func _input(event):
@@ -23,7 +24,8 @@ func _input(event):
 		if event.pressed and Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
 			if capture_mouse:
 				# Capture the mouse
-				Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+				if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
+					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		
 		if event.button_index == BUTTON_WHEEL_UP:
 			distance = max(distance - 1 - distance * 0.1, 0)
@@ -56,7 +58,8 @@ func _input(event):
 		if event.pressed:
 			if event.scancode == KEY_ESCAPE:
 				# Get the mouse back
-				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+				if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
+					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			
 			elif event.scancode == KEY_I:
 				var pos = get_translation()

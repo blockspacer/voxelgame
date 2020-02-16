@@ -12,9 +12,9 @@ func _ready():
 	pass
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(_delta):
 	var mouse = get_global_mouse_position();
-	var screen = get_viewport().size
+	#var screen = get_viewport().size
 	mouse.x = -mouse.x
 	#mouse.x /= screen.x
 	#mouse.y /= screen.y

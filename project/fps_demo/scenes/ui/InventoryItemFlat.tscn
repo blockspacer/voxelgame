@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://fps_demo/textures/icons/found_error_white_unique.png" type="Texture" id=1]
+[ext_resource path="res://fps_demo/assets/textures/icons/found_error_white_unique.png" type="Texture" id=1]
 [ext_resource path="res://fps_demo/scripts/InventoryItemFlat.gd" type="Script" id=2]
 
 [node name="InventoryItemFlat" type="Control"]

@@ -16,10 +16,10 @@ func _ready():
 func fade_in():
 	#show()
 	var anim_name = "fade_in";
-	print('animation started: ', anim_name)
+	#print('animation started: ', anim_name)
 	_anim_player.play(anim_name)
 
-func _on_FadeInAnimation_animation_finished(anim_name):
-	print('animation finished: ', anim_name)
+func _on_FadeInAnimation_animation_finished(_anim_name):
+	#print('animation finished: ', anim_name)
 	emit_signal("fade_finished")
 	#hide()

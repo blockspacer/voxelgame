@@ -1,13 +1,16 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://fps_demo/scripts/SettingsScreen.gd" type="Script" id=1]
 [ext_resource path="res://fps_demo/scripts/MenuButton.gd" type="Script" id=2]
 [ext_resource path="res://fps_demo/scenes/ui/AnimatedSceneChanger.tscn" type="PackedScene" id=3]
-[ext_resource path="res://fps_demo/fonts/arial_48.tres" type="DynamicFontData" id=5]
+[ext_resource path="res://fps_demo/assets/themes/accept_button.tres" type="Theme" id=4]
+[ext_resource path="res://fps_demo/assets/fonts/arial_48.tres" type="DynamicFontData" id=5]
 [ext_resource path="res://fps_demo/scenes/ui/interactiveShader.tscn" type="PackedScene" id=6]
+[ext_resource path="res://fps_demo/assets/themes/tab_theme.tres" type="Theme" id=7]
+[ext_resource path="res://fps_demo/scenes/ui/InputListContainer.gd" type="Script" id=8]
 
 [sub_resource type="DynamicFont" id=1]
-size = 48
+size = 28
 use_filter = true
 font_data = ExtResource( 5 )
 
@@ -20,29 +23,20 @@ font_data = ExtResource( 5 )
 [node name="SettingsScreen" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+theme = ExtResource( 7 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-all_btn_container_path = NodePath("ScrollContainer/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons")
+all_btn_container_path = NodePath("MarginContainer/VBoxMenu/HBoxButtons")
 animated_scene_changer_path = NodePath("../AnimatedSceneChanger")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="SettingsScreen"]
+[node name="MarginContainer" type="MarginContainer" parent="SettingsScreen"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+rect_clip_content = true
 size_flags_horizontal = 7
-size_flags_vertical = 7
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="MarginContainer" type="MarginContainer" parent="SettingsScreen/ScrollContainer"]
-margin_left = 298.0
-margin_top = 509.0
-margin_right = 725.0
-margin_bottom = 600.0
-size_flags_horizontal = 6
-size_flags_vertical = 10
+size_flags_vertical = 11
 custom_constants/margin_right = 15
 custom_constants/margin_top = 15
 custom_constants/margin_left = 15
@@ -51,48 +45,909 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="VBoxMenu" type="VBoxContainer" parent="SettingsScreen/ScrollContainer/MarginContainer"]
+[node name="VBoxMenu" type="VBoxContainer" parent="SettingsScreen/MarginContainer"]
 margin_left = 15.0
 margin_top = 15.0
-margin_right = 412.0
-margin_bottom = 76.0
+margin_right = 1009.0
+margin_bottom = 585.0
+custom_constants/separation = 20
 alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxButtons" type="HBoxContainer" parent="SettingsScreen/ScrollContainer/MarginContainer/VBoxMenu"]
-margin_right = 397.0
-margin_bottom = 61.0
-size_flags_horizontal = 7
-size_flags_vertical = 2
-custom_constants/separation = 20
-alignment = 1
-
-[node name="VBoxButtons" type="VBoxContainer" parent="SettingsScreen/ScrollContainer/MarginContainer/VBoxMenu/HBoxButtons"]
-margin_right = 397.0
-margin_bottom = 61.0
-rect_clip_content = true
+[node name="TabContainer" type="TabContainer" parent="SettingsScreen/MarginContainer/VBoxMenu"]
+margin_right = 994.0
+margin_bottom = 490.0
 size_flags_horizontal = 3
-size_flags_vertical = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 128.0
+
+[node name="Graphics" type="Tabs" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 26.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer"]
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 969.0
+margin_bottom = 439.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer"]
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer"]
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySpaceHBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+margin_right = 175.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="ContentHBoxContainer2" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+margin_left = 179.0
+margin_right = 764.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2"]
+margin_right = 585.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 15
+
+[node name="ResolutionContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 10.0
+margin_right = 585.0
+margin_bottom = 35.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/ResolutionContainer"]
+margin_top = 2.0
+margin_right = 468.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+text = "Resolution"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/ResolutionContainer"]
+margin_left = 472.0
+margin_right = 585.0
+margin_bottom = 25.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="WidthLineEdit" type="LineEdit" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/ResolutionContainer/HBoxContainer"]
+margin_right = 49.0
+margin_bottom = 25.0
+text = "1024"
+
+[node name="LabelX" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/ResolutionContainer/HBoxContainer"]
+margin_left = 53.0
+margin_top = 2.0
+margin_right = 60.0
+margin_bottom = 23.0
+text = "x"
+
+[node name="HeightLineEdit" type="LineEdit" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/ResolutionContainer/HBoxContainer"]
+margin_left = 64.0
+margin_right = 113.0
+margin_bottom = 25.0
+text = "768"
+
+[node name="FullscreenContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 66.0
+margin_right = 585.0
+margin_bottom = 98.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/FullscreenContainer"]
+margin_top = 5.0
+margin_right = 517.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+text = "Fullscreen"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/FullscreenContainer"]
+margin_left = 521.0
+margin_right = 585.0
+margin_bottom = 32.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="FullscreenCheckButton" type="CheckButton" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/FullscreenContainer/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 32.0
+
+[node name="VSyncContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 126.0
+margin_right = 585.0
+margin_bottom = 158.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/VSyncContainer"]
+margin_top = 5.0
+margin_right = 517.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+text = "VSync"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/VSyncContainer"]
+margin_left = 521.0
+margin_right = 585.0
+margin_bottom = 32.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="VSyncCheckButton" type="CheckButton" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/VSyncContainer/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 32.0
+
+[node name="FpsContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 186.0
+margin_right = 585.0
+margin_bottom = 218.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/FpsContainer"]
+margin_top = 5.0
+margin_right = 517.0
+margin_bottom = 26.0
+size_flags_horizontal = 3
+text = "Show FPS"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/FpsContainer"]
+margin_left = 521.0
+margin_right = 585.0
+margin_bottom = 32.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="CheckButton" type="CheckButton" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/FpsContainer/HBoxContainer"]
+margin_right = 64.0
+margin_bottom = 32.0
+
+[node name="AntistropticFilterContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 251.0
+margin_right = 585.0
+margin_bottom = 274.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/AntistropticFilterContainer"]
+margin_top = 1.0
+margin_right = 528.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+text = "Antistroptic filtering"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/AntistropticFilterContainer"]
+margin_left = 532.0
+margin_right = 585.0
+margin_bottom = 23.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="OptionButton" type="OptionButton" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/AntistropticFilterContainer/HBoxContainer"]
+margin_right = 53.0
+margin_bottom = 23.0
+text = "2x"
+items = [ "off", null, false, 0, null, "2x", null, false, 2, null, "4x", null, false, 4, null, "8x", null, false, 8, null, "16x", null, false, 16, null ]
+selected = 1
+
+[node name="MSAAContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 313.0
+margin_right = 585.0
+margin_bottom = 336.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MSAAContainer"]
+margin_top = 1.0
+margin_right = 528.0
+margin_bottom = 22.0
+size_flags_horizontal = 3
+text = "MSAA"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MSAAContainer"]
+margin_left = 532.0
+margin_right = 585.0
+margin_bottom = 23.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="MsaaOptionButton" type="OptionButton" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MSAAContainer/HBoxContainer"]
+margin_right = 53.0
+margin_bottom = 23.0
+text = "2x"
+items = [ "off", null, false, 0, null, "2x", null, false, 2, null, "4x", null, false, 4, null, "8x", null, false, 8, null, "16x", null, false, 16, null ]
+selected = 1
+
+[node name="EmptySpaceHBoxContainer3" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+margin_left = 768.0
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="HBoxButtons2" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer"]
+margin_left = 102.0
+margin_top = 354.0
+margin_right = 842.0
+margin_bottom = 414.0
+size_flags_horizontal = 6
+size_flags_vertical = 11
+size_flags_stretch_ratio = 0.0
 custom_constants/separation = 20
 alignment = 1
 
-[node name="ExitToMainMenu" type="Button" parent="SettingsScreen/ScrollContainer/MarginContainer/VBoxMenu/HBoxButtons/VBoxButtons"]
-margin_right = 397.0
-margin_bottom = 61.0
+[node name="ApplyBtn" type="Button" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/HBoxButtons2"]
+margin_right = 360.0
+margin_bottom = 60.0
 rect_min_size = Vector2( 360, 60 )
 rect_clip_content = true
-focus_mode = 0
 mouse_filter = 1
 size_flags_horizontal = 6
 size_flags_vertical = 6
+theme = ExtResource( 4 )
 custom_fonts/font = SubResource( 1 )
-custom_colors/font_color = Color( 1, 1, 1, 1 )
-custom_colors/font_color_hover = Color( 0.780392, 0.780392, 0.780392, 1 )
-custom_colors/font_color_pressed = Color( 0.898039, 1, 0.811765, 1 )
 custom_constants/hseparation = 2
-text = "Exit to main menu"
-flat = true
+text = "Apply"
+script = ExtResource( 2 )
+
+[node name="DefaultsBtn" type="Button" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/HBoxButtons2"]
+margin_left = 380.0
+margin_right = 740.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 360, 60 )
+rect_clip_content = true
+mouse_filter = 1
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme = ExtResource( 4 )
+custom_fonts/font = SubResource( 1 )
+custom_constants/hseparation = 2
+text = "Default"
+script = ExtResource( 2 )
+
+[node name="Sound" type="Tabs" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer"]
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 969.0
+margin_bottom = 439.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer"]
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer"]
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySpaceHBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+margin_right = 175.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="ContentHBoxContainer2" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+margin_left = 179.0
+margin_right = 764.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2"]
+margin_right = 585.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 15
+
+[node name="MasterVolumeContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 25.0
+margin_right = 585.0
+margin_bottom = 50.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MasterVolumeContainer"]
+margin_top = 2.0
+margin_right = 378.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+text = "Master volume"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MasterVolumeContainer"]
+margin_left = 382.0
+margin_right = 585.0
+margin_bottom = 25.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MasterVolumeContainer/HBoxContainer"]
+margin_right = 150.0
+margin_bottom = 25.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+
+[node name="HSlider" type="HSlider" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MasterVolumeContainer/HBoxContainer/CenterContainer"]
+margin_top = 4.0
+margin_right = 150.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 7
+size_flags_vertical = 7
+value = 100.0
+rounded = true
+tick_count = 5
+ticks_on_borders = true
+
+[node name="LineEdit" type="LineEdit" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MasterVolumeContainer/HBoxContainer"]
+margin_left = 154.0
+margin_right = 203.0
+margin_bottom = 25.0
+text = "100"
+
+[node name="EffectsVolumeContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 116.0
+margin_right = 585.0
+margin_bottom = 141.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/EffectsVolumeContainer"]
+margin_top = 2.0
+margin_right = 378.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+text = "Effects volume"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/EffectsVolumeContainer"]
+margin_left = 382.0
+margin_right = 585.0
+margin_bottom = 25.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/EffectsVolumeContainer/HBoxContainer"]
+margin_right = 150.0
+margin_bottom = 25.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+
+[node name="HSlider" type="HSlider" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/EffectsVolumeContainer/HBoxContainer/CenterContainer"]
+margin_top = 4.0
+margin_right = 150.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 7
+size_flags_vertical = 7
+value = 100.0
+rounded = true
+tick_count = 5
+ticks_on_borders = true
+
+[node name="LineEdit" type="LineEdit" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/EffectsVolumeContainer/HBoxContainer"]
+margin_left = 154.0
+margin_right = 203.0
+margin_bottom = 25.0
+text = "100"
+
+[node name="MusicVolumeContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 207.0
+margin_right = 585.0
+margin_bottom = 232.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MusicVolumeContainer"]
+margin_top = 2.0
+margin_right = 378.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+text = "Music volume"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MusicVolumeContainer"]
+margin_left = 382.0
+margin_right = 585.0
+margin_bottom = 25.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MusicVolumeContainer/HBoxContainer"]
+margin_right = 150.0
+margin_bottom = 25.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+
+[node name="HSlider" type="HSlider" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MusicVolumeContainer/HBoxContainer/CenterContainer"]
+margin_top = 4.0
+margin_right = 150.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 7
+size_flags_vertical = 7
+value = 100.0
+rounded = true
+tick_count = 5
+ticks_on_borders = true
+
+[node name="LineEdit" type="LineEdit" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/MusicVolumeContainer/HBoxContainer"]
+margin_left = 154.0
+margin_right = 203.0
+margin_bottom = 25.0
+text = "100"
+
+[node name="VoiceVolumeContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_top = 299.0
+margin_right = 585.0
+margin_bottom = 324.0
+size_flags_horizontal = 7
+size_flags_vertical = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/VoiceVolumeContainer"]
+margin_top = 2.0
+margin_right = 378.0
+margin_bottom = 23.0
+size_flags_horizontal = 3
+text = "Voice volume"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/VoiceVolumeContainer"]
+margin_left = 382.0
+margin_right = 585.0
+margin_bottom = 25.0
+size_flags_horizontal = 9
+size_flags_vertical = 3
+
+[node name="CenterContainer" type="CenterContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/VoiceVolumeContainer/HBoxContainer"]
+margin_right = 150.0
+margin_bottom = 25.0
+size_flags_horizontal = 7
+size_flags_vertical = 7
+
+[node name="HSlider" type="HSlider" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/VoiceVolumeContainer/HBoxContainer/CenterContainer"]
+margin_top = 4.0
+margin_right = 150.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 150, 0 )
+size_flags_horizontal = 7
+size_flags_vertical = 7
+value = 100.0
+rounded = true
+tick_count = 5
+ticks_on_borders = true
+
+[node name="LineEdit" type="LineEdit" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/VoiceVolumeContainer/HBoxContainer"]
+margin_left = 154.0
+margin_right = 203.0
+margin_bottom = 25.0
+text = "100"
+
+[node name="EmptySpaceHBoxContainer3" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+margin_left = 768.0
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.3
+
+[node name="HBoxButtons3" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer"]
+margin_left = 102.0
+margin_top = 354.0
+margin_right = 842.0
+margin_bottom = 414.0
+size_flags_horizontal = 6
+size_flags_vertical = 11
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="ApplyBtn" type="Button" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/HBoxButtons3"]
+margin_right = 360.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 360, 60 )
+rect_clip_content = true
+mouse_filter = 1
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme = ExtResource( 4 )
+custom_fonts/font = SubResource( 1 )
+custom_constants/hseparation = 2
+text = "Apply"
+script = ExtResource( 2 )
+
+[node name="DefaultsBtn" type="Button" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Sound/MarginContainer/VBoxContainer/HBoxButtons3"]
+margin_left = 380.0
+margin_right = 740.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 360, 60 )
+rect_clip_content = true
+mouse_filter = 1
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme = ExtResource( 4 )
+custom_fonts/font = SubResource( 1 )
+custom_constants/hseparation = 2
+text = "Default"
+script = ExtResource( 2 )
+
+[node name="Input" type="Tabs" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 26.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/margin_right = 25
+custom_constants/margin_top = 25
+custom_constants/margin_left = 25
+custom_constants/margin_bottom = 25
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer"]
+margin_left = 25.0
+margin_top = 25.0
+margin_right = 969.0
+margin_bottom = 439.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer"]
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer"]
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer"]
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="EmptySpaceHBoxContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+
+[node name="ContentHBoxContainer2" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+margin_left = 4.0
+margin_right = 940.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2"]
+margin_right = 936.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_constants/separation = 15
+
+[node name="InputListContainer" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer"]
+margin_right = 936.0
+margin_bottom = 33.0
+script = ExtResource( 8 )
+PopupControlPath = NodePath("../../../../../../../../../../../../PopupControl")
+
+[node name="Col1Container" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer"]
+margin_right = 309.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col1Container"]
+margin_right = 309.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col1Container/VBoxContainer"]
+margin_right = 309.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+text = "Action"
+
+[node name="HSeparator" type="HSeparator" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col1Container"]
+margin_top = 25.0
+margin_right = 309.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Col1Data" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col1Container"]
+margin_top = 33.0
+margin_right = 309.0
+margin_bottom = 33.0
+
+[node name="Col2Container" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer"]
+margin_left = 313.0
+margin_right = 622.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col2Container"]
+margin_right = 309.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label2" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col2Container/VBoxContainer2"]
+margin_right = 309.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+text = "Control"
+
+[node name="HSeparator2" type="HSeparator" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col2Container"]
+margin_top = 25.0
+margin_right = 309.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Col2Data" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col2Container"]
+margin_top = 33.0
+margin_right = 309.0
+margin_bottom = 33.0
+
+[node name="Col3Container" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer"]
+margin_left = 626.0
+margin_right = 936.0
+margin_bottom = 33.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col3Container"]
+margin_right = 310.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label3" type="Label" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col3Container/VBoxContainer3"]
+margin_right = 310.0
+margin_bottom = 21.0
+size_flags_horizontal = 3
+text = "Change"
+
+[node name="HSeparator3" type="HSeparator" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col3Container"]
+margin_top = 25.0
+margin_right = 310.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Col3Data" type="VBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer/ContentHBoxContainer2/VBoxContainer/InputListContainer/Col3Container"]
+margin_top = 33.0
+margin_right = 310.0
+margin_bottom = 33.0
+
+[node name="EmptySpaceHBoxContainer3" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/HBoxContainer"]
+margin_left = 944.0
+margin_right = 944.0
+margin_bottom = 350.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+
+[node name="HBoxButtons3" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer"]
+margin_left = 102.0
+margin_top = 354.0
+margin_right = 842.0
+margin_bottom = 414.0
+size_flags_horizontal = 6
+size_flags_vertical = 11
+size_flags_stretch_ratio = 0.0
+custom_constants/separation = 20
+alignment = 1
+
+[node name="ApplyBtn" type="Button" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/HBoxButtons3"]
+margin_right = 360.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 360, 60 )
+rect_clip_content = true
+mouse_filter = 1
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme = ExtResource( 4 )
+custom_fonts/font = SubResource( 1 )
+custom_constants/hseparation = 2
+text = "Apply"
+script = ExtResource( 2 )
+
+[node name="DefaultsBtn" type="Button" parent="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Input/MarginContainer/VBoxContainer/HBoxButtons3"]
+margin_left = 380.0
+margin_right = 740.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 360, 60 )
+rect_clip_content = true
+mouse_filter = 1
+size_flags_horizontal = 6
+size_flags_vertical = 6
+theme = ExtResource( 4 )
+custom_fonts/font = SubResource( 1 )
+custom_constants/hseparation = 2
+text = "Default"
+script = ExtResource( 2 )
+
+[node name="HBoxButtons" type="HBoxContainer" parent="SettingsScreen/MarginContainer/VBoxMenu"]
+margin_top = 510.0
+margin_right = 994.0
+margin_bottom = 570.0
+size_flags_horizontal = 7
+size_flags_vertical = 10
+custom_constants/separation = 20
+alignment = 1
+
+[node name="ExitToMainMenuBtn" type="Button" parent="SettingsScreen/MarginContainer/VBoxMenu/HBoxButtons"]
+margin_left = 634.0
+margin_right = 994.0
+margin_bottom = 60.0
+rect_min_size = Vector2( 360, 60 )
+rect_clip_content = true
+mouse_filter = 1
+size_flags_horizontal = 10
+size_flags_vertical = 14
+theme = ExtResource( 4 )
+custom_fonts/font = SubResource( 1 )
+custom_constants/hseparation = 2
+text = "Back"
 script = ExtResource( 2 )
 scene_to_load = "res://fps_demo/scenes/ui/title_screen.tscn"
+
+[node name="PopupControl" type="Control" parent="SettingsScreen"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="SettingsScreen/PopupControl"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color( 0.875, 0.875, 0.875, 0.9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="SettingsScreen/PopupControl"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -389.5
+margin_top = -10.5
+margin_right = 389.5
+margin_bottom = 10.5
+text = "Input any key..."
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="SettingsScreen/MarginContainer/VBoxMenu/TabContainer/Graphics/MarginContainer/VBoxContainer/HBoxButtons2/ApplyBtn" to="SettingsScreen" method="_on_GraphicsApplyBtn_pressed"]

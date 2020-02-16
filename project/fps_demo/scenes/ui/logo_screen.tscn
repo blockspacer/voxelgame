@@ -1,8 +1,8 @@
 [gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://fps_demo/scenes/ui/TimeoutSceneChanger.tscn" type="PackedScene" id=1]
-[ext_resource path="res://fps_demo/textures/logo/logo_size_dummy.jpg" type="Texture" id=2]
-[ext_resource path="res://fps_demo/fonts/arial/arial.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://fps_demo/assets/textures/logo/logo_size_dummy.jpg" type="Texture" id=2]
+[ext_resource path="res://fps_demo/assets/fonts/arial/arial.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://fps_demo/scripts/LogoScreen.gd" type="Script" id=5]
 
 [sub_resource type="Shader" id=1]

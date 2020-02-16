@@ -2,11 +2,13 @@ extends "WorldCommon.gd"
 
 onready var terrain = $VoxelTerrain
 
-const MATERIAL = preload("res://fps_demo/materials/grass-rock2.material")
+export(Material) var MATERIAL = preload("res://fps_demo/assets/materials/grass-rock2.material")
 
-export (NodePath) var UI_Noise # Directional light for the sun
+export(NodePath) var UI_Noise # Directional light for the sun
 
 func _ready():
+	AudioManager.stop_all()
+	#
 	UI_Noise = get_node(UI_Noise)
 	update_noise_ui()
 	

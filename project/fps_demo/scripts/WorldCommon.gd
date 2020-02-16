@@ -8,7 +8,8 @@ func _init():
 
 func _ready():
 	randomize()
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	if Input.get_mouse_mode() != Input.MOUSE_MODE_CAPTURED:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	emit_signal("mouse_captured")
 
 
@@ -40,6 +41,7 @@ func _input(event):
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 			emit_signal("mouse_captured")
 		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			if Input.get_mouse_mode() != Input.MOUSE_MODE_VISIBLE:
+				Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 			emit_signal("mouse_visible")
 

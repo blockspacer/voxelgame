@@ -89,7 +89,7 @@ func toggle_tooltip(tooltip, need_show):
 		#if not _tooltip_area.has_child(tooltip):
 		#	_tooltip_area.add_child(tooltip) # must call _ready before everything else
 	else:
-		#var current_root = get_tree().get_current_scene()
+		#var current_root = get_tree().get_current_scene().get_root()
 		var current_root = get_tree().get_root()
 		Helpers.reparent(tooltip, current_root)
 		#if not current_root.has_child(tooltip):
@@ -110,7 +110,7 @@ func toggle_tooltip(tooltip, need_show):
 
 func change_selection(is_selected:bool, force_change:bool = false):
 	if _is_selected != is_selected or force_change:
-		emit_signal("slot_changed_selection", is_selected, self)
+		#emit_signal("slot_changed_selection", is_selected, self)
 		var color_from = bg_node.color
 		var color_to = default_bg_color
 		if is_selected:
@@ -137,7 +137,7 @@ func change_selection(is_selected:bool, force_change:bool = false):
 	
 func change_hover(is_hovered:bool, force_change:bool = false):
 	if _is_hovered != is_hovered or force_change:
-		emit_signal("slot_changed_hover", is_hovered, self)
+		#emit_signal("slot_changed_hover", is_hovered, self)
 		var scale_from = self.rect_scale
 		var pivot_from = self.rect_pivot_offset
 		var scale_to = Vector2(1.0,1.0)

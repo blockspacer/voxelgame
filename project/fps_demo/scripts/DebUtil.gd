@@ -13,14 +13,14 @@ func _ready():
 func check(condition, text):
 	if not condition:
 		var frame = get_stack()[1]
-		var msg = "%30s:%-4d %s" % [frame.source.get_file(), frame.line, text]
+		var msg = "%30s:%30s:%-4d %s" % [frame.source.get_file(), frame.function, frame.line, text]
 		push_error( msg )
 		assert(condition, msg)
 		
 func debCheck(condition, text):
 	if OS.is_debug_build() and not condition:
 		var frame = get_stack()[1]
-		var msg = "%30s:%-4d %s" % [frame.source.get_file(), frame.line, text]
+		var msg = "%30s:%30s:%-4d %s" % [frame.source.get_file(), frame.function, frame.line, text]
 		push_error( msg )
 		assert(condition, msg)
 

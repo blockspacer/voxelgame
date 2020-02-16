@@ -28,7 +28,7 @@ func _ready():
 	if(_type != BULLET_TYPE.BALL):
 		_terrain = get_node("../VoxelTerrain")
 	
-	bounce = 2.0
+	#bounce = 2.0 # deprecated
 	
 	# Enable bullet collision detection
 	contact_monitor = true

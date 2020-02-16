@@ -1,0 +1,168 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://fps_demo/scenes/ui/chat/Chat.gd" type="Script" id=1]
+
+[sub_resource type="DynamicFontData" id=1]
+font_path = "res://fps_demo/assets/fonts/arial/arial.ttf"
+
+[sub_resource type="DynamicFont" id=2]
+size = 14
+font_data = SubResource( 1 )
+
+[sub_resource type="Animation" id=3]
+resource_name = "hide"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:mouse_filter")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 2 ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "show"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:mouse_filter")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.3 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0 ]
+}
+
+[node name="Chat" type="Control"]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ChatRect" type="Control" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_top = -250.0
+margin_right = 400.0
+rect_min_size = Vector2( 400, 250 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="ChatRect"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_constants/margin_right = 15
+custom_constants/margin_top = 15
+custom_constants/margin_left = 15
+custom_constants/margin_bottom = 15
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bg" type="ColorRect" parent="ChatRect/MarginContainer"]
+margin_left = 15.0
+margin_top = 15.0
+margin_right = 385.0
+margin_bottom = 235.0
+color = Color( 0, 0, 0, 0.6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ChatRect/MarginContainer"]
+margin_left = 15.0
+margin_top = 15.0
+margin_right = 385.0
+margin_bottom = 235.0
+
+[node name="AllMsgsRichTextLabel" type="RichTextLabel" parent="ChatRect/MarginContainer/VBoxContainer"]
+margin_right = 370.0
+margin_bottom = 196.0
+size_flags_horizontal = 7
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ChatRect/MarginContainer/VBoxContainer"]
+margin_top = 200.0
+margin_right = 370.0
+margin_bottom = 220.0
+size_flags_horizontal = 11
+size_flags_vertical = 11
+size_flags_stretch_ratio = 0.0
+
+[node name="SelectChannelBtn" type="Button" parent="ChatRect/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_right = 39.0
+margin_bottom = 20.0
+text = "ALL:"
+
+[node name="InputMsgLabel" type="Label" parent="ChatRect/MarginContainer/VBoxContainer/HBoxContainer"]
+visible = false
+margin_left = 43.0
+margin_right = 319.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 20, 20 )
+mouse_filter = 0
+mouse_default_cursor_shape = 1
+size_flags_horizontal = 7
+size_flags_vertical = 7
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+text = "Input text..."
+valign = 1
+
+[node name="InputMsg" type="TextEdit" parent="ChatRect/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 43.0
+margin_right = 323.0
+margin_bottom = 20.0
+rect_min_size = Vector2( 15, 15 )
+rect_clip_content = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/font = SubResource( 2 )
+shortcut_keys_enabled = false
+caret_blink = true
+
+[node name="SendBtn" type="Button" parent="ChatRect/MarginContainer/VBoxContainer/HBoxContainer"]
+margin_left = 327.0
+margin_right = 370.0
+margin_bottom = 20.0
+text = "Send"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/hide = SubResource( 3 )
+anims/show = SubResource( 4 )
